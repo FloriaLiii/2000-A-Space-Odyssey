@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/likangjue/Desktop/**)",
+      "Bash(python -m markitdown resume.pptx)",
+      "Bash(python3 -c \"import markitdown; print\\(''ok''\\)\")",
+      "Bash(pip3 install:*)",
+      "Bash(python3 -m markitdown /Users/likangjue/Desktop/resume.pptx)",
+      "Bash(python3:*)",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(python -m markitdown /Users/likangjue/Desktop/planet.pptx)",
+      "Bash(file /tmp/planet-unpacked/ppt/media/image*.png)",
+      "Bash(ffprobe -v quiet -print_format json -show_streams '/Users/likangjue/Desktop/录屏2026-03-29 21.23.21.mov')",
+      "Bash(brew install:*)",
+      "Bash(mkdir -p /tmp/ppt-frames)",
+      "Bash(ffmpeg -i \"/Users/likangjue/Desktop/录屏2026-03-29 21.23.21.mov\" -vf \"fps=1\" -q:v 2 /tmp/ppt-frames/frame_%03d.jpg)",
+      "Bash(ffmpeg -i \"/Users/likangjue/Desktop/录屏2026-03-29 21.34.44.mov\" -vf \"fps=2\" -q:v 2 /tmp/ppt_frame_%03d.jpg)",
+      "Bash(cp \"/Users/likangjue/Desktop/素材/星球.png\" /Users/likangjue/project/resume/assets/planet-sphere.png)",
+      "Bash(cp \"/Users/likangjue/Desktop/素材/线条框.png\" /Users/likangjue/project/resume/assets/planet-wireframe.png)",
+      "Bash(cp \"/Users/likangjue/Desktop/素材/轨道环.png\" /Users/likangjue/project/resume/assets/planet-ring.png)",
+      "Bash(sips -g pixelWidth -g pixelHeight /Users/likangjue/project/resume/assets/planet-sphere.png /Users/likangjue/project/resume/assets/planet-wireframe.png /Users/likangjue/project/resume/assets/planet-ring.png)",
+      "Bash(ffmpeg -i \"/Users/likangjue/Desktop/录屏2026-03-29 21.34.44.mov\" -vf \"fps=2\" -q:v 2 /tmp/ppt_bg_%03d.jpg)"
+    ]
+  }
+}
