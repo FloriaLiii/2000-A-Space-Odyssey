@@ -7,17 +7,15 @@
   'use strict';
 
   // ==========================================
-  // Particle System (复刻 PPT 的星空粒子效果)
+  // Starfield System (PPT 繁星闪烁效果)
+  // Static white dots that twinkle — appear & disappear
   // ==========================================
   class ParticleSystem {
     constructor(canvas) {
       this.canvas = canvas;
       this.ctx = canvas.getContext('2d');
-      this.particles = [];
-      this.mouse = { x: -1000, y: -1000 };
-      this.connectionDistance = 120;
-      this.particleCount = this.getParticleCount();
-      this.rafId = null;
+      this.stars = [];
+      this.starCount = this.getStarCount();
 
       this.resize();
       this.init();
@@ -25,11 +23,11 @@
       this.animate();
     }
 
-    getParticleCount() {
+    getStarCount() {
       const w = window.innerWidth;
-      if (w < 640) return 60;
-      if (w < 1024) return 100;
-      return 160;
+      if (w < 640) return 80;
+      if (w < 1024) return 140;
+      return 220;
     }
 
     resize() {
@@ -38,156 +36,76 @@
     }
 
     init() {
-      this.particles = [];
-      for (let i = 0; i < this.particleCount; i++) {
-        this.particles.push(this.createParticle());
+      this.stars = [];
+      for (let i = 0; i < this.starCount; i++) {
+        this.stars.push(this.createStar());
       }
     }
 
-    createParticle() {
-      // Colors matching PPT palette
-      const colors = [
-        'rgba(204, 164, 174,',  // rose
-        'rgba(118, 70, 92,',    // primary
-        'rgba(243, 112, 67,',   // accent
-        'rgba(250, 154, 30,',   // gold
-        'rgba(156, 107, 128,',  // primary-light
-      ];
-      const color = colors[Math.floor(Math.random() * colors.length)];
-      const baseOpacity = 0.15 + Math.random() * 0.45;
+    createStar() {
+      // Most stars are white/light grey, a few slightly warm
+      const brightness = 180 + Math.floor(Math.random() * 75); // 180–255
+      const warmth = Math.random() < 0.15 ? Math.floor(Math.random() * 30) : 0;
+      const r = Math.min(255, brightness + warmth);
+      const g = Math.min(255, brightness);
+      const b = Math.min(255, brightness + Math.floor(warmth * 0.3));
 
       return {
         x: Math.random() * this.canvas.width,
         y: Math.random() * this.canvas.height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        radius: Math.random() * 2.5 + 0.5,
-        color: color,
-        baseOpacity: baseOpacity,
-        opacity: baseOpacity,
-        // Twinkle
-        twinkleSpeed: 0.005 + Math.random() * 0.015,
-        twinklePhase: Math.random() * Math.PI * 2,
+        radius: 0.8 + Math.random() * 2, // 0.8–2.8px
+        r, g, b,
+        twinkleSpeed: 0.006 + Math.random() * 0.02,
+        phase: Math.random() * Math.PI * 2,
+        maxOpacity: 0.5 + Math.random() * 0.5, // brighter: 0.5–1.0
       };
     }
 
     bindEvents() {
       window.addEventListener('resize', () => {
         this.resize();
-        this.particleCount = this.getParticleCount();
-        // Adjust particle count
-        while (this.particles.length < this.particleCount) {
-          this.particles.push(this.createParticle());
-        }
-        while (this.particles.length > this.particleCount) {
-          this.particles.pop();
-        }
-      });
-
-      window.addEventListener('mousemove', (e) => {
-        this.mouse.x = e.clientX;
-        this.mouse.y = e.clientY;
-      });
-
-      window.addEventListener('mouseout', () => {
-        this.mouse.x = -1000;
-        this.mouse.y = -1000;
+        this.starCount = this.getStarCount();
+        while (this.stars.length < this.starCount) this.stars.push(this.createStar());
+        while (this.stars.length > this.starCount) this.stars.pop();
       });
     }
 
     update() {
-      for (const p of this.particles) {
-        // Move
-        p.x += p.vx;
-        p.y += p.vy;
-
-        // Wrap around
-        if (p.x < -10) p.x = this.canvas.width + 10;
-        if (p.x > this.canvas.width + 10) p.x = -10;
-        if (p.y < -10) p.y = this.canvas.height + 10;
-        if (p.y > this.canvas.height + 10) p.y = -10;
-
-        // Twinkle
-        p.twinklePhase += p.twinkleSpeed;
-        p.opacity = p.baseOpacity * (0.5 + 0.5 * Math.sin(p.twinklePhase));
-
-        // Mouse repel
-        const dx = p.x - this.mouse.x;
-        const dy = p.y - this.mouse.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 150) {
-          const force = (150 - dist) / 150 * 0.02;
-          p.vx += dx * force;
-          p.vy += dy * force;
-        }
-
-        // Dampen velocity
-        p.vx *= 0.99;
-        p.vy *= 0.99;
+      for (const s of this.stars) {
+        s.phase += s.twinkleSpeed;
+        // Smooth twinkle: stars fade between dim and bright, never fully off
+        const raw = Math.sin(s.phase);
+        s.opacity = (0.15 + 0.85 * Math.max(0, raw)) * s.maxOpacity;
       }
     }
 
     draw() {
-      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      const ctx = this.ctx;
+      ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-      // Draw connections (constellation lines)
-      for (let i = 0; i < this.particles.length; i++) {
-        for (let j = i + 1; j < this.particles.length; j++) {
-          const a = this.particles[i];
-          const b = this.particles[j];
-          const dx = a.x - b.x;
-          const dy = a.y - b.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+      for (const s of this.stars) {
+        if (s.opacity < 0.02) continue; // skip invisible stars
 
-          if (dist < this.connectionDistance) {
-            const opacity = (1 - dist / this.connectionDistance) * 0.15;
-            this.ctx.strokeStyle = `rgba(118, 70, 92, ${opacity})`;
-            this.ctx.lineWidth = 0.5;
-            this.ctx.beginPath();
-            this.ctx.moveTo(a.x, a.y);
-            this.ctx.lineTo(b.x, b.y);
-            this.ctx.stroke();
-          }
+        // Soft glow for brighter stars
+        if (s.opacity > 0.3 && s.radius > 1) {
+          ctx.beginPath();
+          ctx.arc(s.x, s.y, s.radius * 3, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${s.r},${s.g},${s.b},${s.opacity * 0.08})`;
+          ctx.fill();
         }
-      }
 
-      // Mouse connections
-      for (const p of this.particles) {
-        const dx = p.x - this.mouse.x;
-        const dy = p.y - this.mouse.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-        if (dist < 200) {
-          const opacity = (1 - dist / 200) * 0.25;
-          this.ctx.strokeStyle = `rgba(243, 112, 67, ${opacity})`;
-          this.ctx.lineWidth = 0.8;
-          this.ctx.beginPath();
-          this.ctx.moveTo(p.x, p.y);
-          this.ctx.lineTo(this.mouse.x, this.mouse.y);
-          this.ctx.stroke();
-        }
-      }
-
-      // Draw particles
-      for (const p of this.particles) {
-        this.ctx.beginPath();
-        this.ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-        this.ctx.fillStyle = p.color + p.opacity + ')';
-        this.ctx.fill();
-
-        // Glow for larger particles
-        if (p.radius > 1.5) {
-          this.ctx.beginPath();
-          this.ctx.arc(p.x, p.y, p.radius * 3, 0, Math.PI * 2);
-          this.ctx.fillStyle = p.color + (p.opacity * 0.1) + ')';
-          this.ctx.fill();
-        }
+        // Core dot
+        ctx.beginPath();
+        ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(${s.r},${s.g},${s.b},${s.opacity})`;
+        ctx.fill();
       }
     }
 
     animate() {
       this.update();
       this.draw();
-      this.rafId = requestAnimationFrame(() => this.animate());
+      requestAnimationFrame(() => this.animate());
     }
   }
 

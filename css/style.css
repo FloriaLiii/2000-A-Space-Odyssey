@@ -53,7 +53,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  z-index: 0;
+  z-index: 1;
   pointer-events: none;
 }
 
@@ -166,7 +166,7 @@ body {
    SECTION 0: LANDING (PPT-faithful planet)
    ============================================ */
 .section-landing {
-  background: var(--bg-deep);
+  background: transparent; /* let particles canvas show through */
   overflow: hidden;
 }
 
