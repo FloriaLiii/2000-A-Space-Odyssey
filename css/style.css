@@ -213,11 +213,11 @@ body {
 
 .landing-content {
   position: absolute;
-  left: 33%;
-  right: 6%;
+  left: 36%;
   bottom: 18%;
   z-index: 10;
   text-align: left;
+  width: clamp(400px, 55vw, 750px);
 }
 
 /* ---- Planet Scene — large, centered like PPT ---- */
@@ -402,10 +402,9 @@ body {
 .landing-card {
   display: flex;
   align-items: center;
-  gap: clamp(24px, 3.5vw, 48px);
   background: rgba(20, 14, 32, 0.82);
   border-radius: 12px;
-  padding: 24px clamp(24px, 3.5vw, 44px);
+  padding: 20px clamp(18px, 2.5vw, 36px);
   margin-bottom: 30px;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -413,7 +412,7 @@ body {
 
 .card-title-img {
   display: block;
-  width: clamp(220px, 28vw, 400px);
+  width: clamp(200px, 25vw, 360px);
   height: auto;
   flex-shrink: 0;
   opacity: 0.85;
@@ -422,6 +421,7 @@ body {
 .card-text {
   flex: 1;
   min-width: 0;
+  text-align: center;
 }
 
 .info-label {
@@ -433,19 +433,21 @@ body {
 }
 
 .info-name {
-  font-family: "Orbitron", "Impact", sans-serif;
+  font-family: "Oriya MN", "Orbitron", "Impact", sans-serif;
   font-weight: 900;
-  font-size: clamp(26px, 3.5vw, 46px);
+  font-size: clamp(22px, 3vw, 40px);
   color: var(--text);
   letter-spacing: 0.08em;
   margin-bottom: 4px;
 }
 
 .info-subtitle {
-  font-family: "ZCOOL QingKe HuangYou", "Noto Serif SC", sans-serif;
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-weight: 900;
   font-size: clamp(22px, 3vw, 40px);
   color: var(--text);
   letter-spacing: 0.15em;
+  margin-top: -4px;
   margin-bottom: 10px;
 }
 
@@ -462,9 +464,11 @@ body {
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  color: var(--text-dim);
+  color: var(--text);
+  opacity: 0.7;
   font-size: 12px;
   letter-spacing: 0.2em;
+  margin-left: 55%;
 }
 
 .scroll-mouse {

@@ -20,7 +20,10 @@
       "Bash(cp \"/Users/likangjue/Desktop/素材/轨道环.png\" /Users/likangjue/project/resume/assets/planet-ring.png)",
       "Bash(sips -g pixelWidth -g pixelHeight /Users/likangjue/project/resume/assets/planet-sphere.png /Users/likangjue/project/resume/assets/planet-wireframe.png /Users/likangjue/project/resume/assets/planet-ring.png)",
       "Bash(ffmpeg -i \"/Users/likangjue/Desktop/录屏2026-03-29 21.34.44.mov\" -vf \"fps=2\" -q:v 2 /tmp/ppt_bg_%03d.jpg)",
-      "Bash(fc-list)"
+      "Bash(fc-list)",
+      "Bash(python scripts/office/unpack.py /Users/likangjue/Desktop/planet.pptx /tmp/planet-unpacked/)",
+      "Bash(unzip -o /Users/likangjue/Desktop/planet.pptx -d /tmp/planet-unpacked/)",
+      "Bash(fc-list :lang=zh)"
     ]
   }
 }
