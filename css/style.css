@@ -7,6 +7,16 @@
    辅助: #CCA4AE (玫瑰粉)
    ============================================ */
 
+/* === Custom Fonts === */
+@font-face {
+  font-family: "HYChaoJiZhanJia";
+  src:
+    local("汉仪超级战甲简"), local("HYChaoJiZhanJiaJ"),
+    local("HY-ChaoJiZhanJia");
+  font-weight: normal;
+  font-display: swap;
+}
+
 /* === Reset & Base === */
 *,
 *::before,
@@ -197,16 +207,16 @@ body {
 .landing-split {
   position: relative;
   width: 100%;
-  height: 100%;
-  z-index: 2;
+  min-height: 100vh;
+  z-index: 3;
 }
 
 .landing-content {
   position: absolute;
-  right: 5%;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 3;
+  left: 33%;
+  right: 6%;
+  bottom: 18%;
+  z-index: 10;
   text-align: left;
 }
 
@@ -388,40 +398,62 @@ body {
   }
 }
 
-/* Hero Text */
-.hero-title {
+/* ---- Landing Card (dark semi-transparent horizontal bar) ---- */
+.landing-card {
+  display: flex;
+  align-items: center;
+  gap: clamp(24px, 3.5vw, 48px);
+  background: rgba(20, 14, 32, 0.82);
+  border-radius: 12px;
+  padding: 24px clamp(24px, 3.5vw, 44px);
+  margin-bottom: 30px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.card-title-img {
+  display: block;
+  width: clamp(220px, 28vw, 400px);
+  height: auto;
+  flex-shrink: 0;
+  opacity: 0.85;
+}
+
+.card-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.info-label {
+  font-family: "Noto Serif SC", serif;
+  font-size: clamp(13px, 1.4vw, 18px);
+  color: var(--rose);
+  letter-spacing: 0.3em;
+  margin-bottom: 6px;
+}
+
+.info-name {
   font-family: "Orbitron", "Impact", sans-serif;
   font-weight: 900;
-  line-height: 1.2;
-  margin-bottom: 24px;
-  position: relative;
+  font-size: clamp(26px, 3.5vw, 46px);
+  color: var(--text);
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
 }
 
-.title-line-1 {
-  display: block;
+.info-subtitle {
   font-family: "ZCOOL QingKe HuangYou", "Noto Serif SC", sans-serif;
-  font-size: clamp(32px, 5vw, 52px);
-  color: var(--rose);
-  letter-spacing: 0.25em;
+  font-size: clamp(22px, 3vw, 40px);
+  color: var(--text);
+  letter-spacing: 0.15em;
+  margin-bottom: 10px;
 }
 
-.title-line-2 {
-  display: block;
-  font-family: "ZCOOL QingKe HuangYou", "Noto Serif SC", sans-serif;
-  font-size: clamp(48px, 8vw, 86px);
-  background: linear-gradient(135deg, var(--accent), var(--accent-gold));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: 0.2em;
-}
-
-.hero-subtitle {
+.info-desc {
   font-family: "Noto Serif SC", serif;
-  font-size: 18px;
+  font-size: clamp(12px, 1.2vw, 16px);
   color: var(--primary-light);
-  letter-spacing: 0.5em;
-  margin-bottom: 60px;
+  letter-spacing: 0.4em;
 }
 
 /* Scroll Hint */
