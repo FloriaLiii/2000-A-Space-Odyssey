@@ -122,7 +122,7 @@
 
       if (!this.trail || !this.rocket || !this.mask) return;
 
-      // Use the mask path for drawing animation
+      // Use the mask to control how much of the dashed trail is visible
       this.pathLength = this.mask.getTotalLength();
       this.mask.style.strokeDasharray = this.pathLength;
       this.mask.style.strokeDashoffset = this.pathLength;
@@ -150,11 +150,11 @@
           ? 2 * rawProgress * rawProgress
           : 1 - Math.pow(-2 * rawProgress + 2, 2) / 2;
 
-        // Draw trail behind rocket via mask
+        // Draw trail behind rocket via mask reveal
         const drawLength = this.pathLength * progress;
         this.mask.style.strokeDashoffset = this.pathLength - drawLength;
 
-        // Move rocket along path (fixed direction, no rotation)
+        // Move rocket along path
         const point = this.mask.getPointAtLength(drawLength);
         const containerRect = this.section.querySelector('.voyage-container').getBoundingClientRect();
 
@@ -164,6 +164,7 @@
 
         this.rocket.style.left = rocketX + 'px';
         this.rocket.style.top = rocketY + 'px';
+        this.rocket.style.transform = 'translate(-50%, -50%)';
 
         // Reveal planets when rocket passes their trigger point
         this.triggers.forEach((trigger, i) => {
@@ -176,7 +177,6 @@
         if (rawProgress < 1) {
           requestAnimationFrame(animate);
         }
-        // Rocket stays visible at the end position (top-right)
       };
 
       // Small delay before launch

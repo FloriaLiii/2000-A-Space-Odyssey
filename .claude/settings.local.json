@@ -29,7 +29,11 @@
       "Bash(cp /tmp/planet-unpacked/ppt/media/image7.png /Users/likangjue/project/resume/assets/planet-blue.png)",
       "Bash(cp /tmp/planet-unpacked/ppt/media/image8.png /Users/likangjue/project/resume/assets/planet-purple-ring.png)",
       "Bash(cp /tmp/planet-unpacked/ppt/media/image11.png /Users/likangjue/project/resume/assets/planet-gray-ring.png)",
-      "Bash(cp /tmp/planet-unpacked/ppt/media/image4.png /Users/likangjue/project/resume/assets/planet-red-texture.png)"
+      "Bash(cp /tmp/planet-unpacked/ppt/media/image4.png /Users/likangjue/project/resume/assets/planet-red-texture.png)",
+      "Bash(ls /Users/likangjue/Desktop/素材/星球小标题*)",
+      "Bash(ls /Users/likangjue/Desktop/素材/*锐* /Users/likangjue/Desktop/素材/*Zhang* /Users/likangjue/Desktop/素材/*.ttf)",
+      "Bash(xxd -l 16 /Users/likangjue/project/resume/assets/ZhangHaiShanRuiXie.ttf)",
+      "Bash(pip3 show:*)"
     ]
   }
 }

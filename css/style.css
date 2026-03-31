@@ -812,12 +812,11 @@ body {
    SECTION 2: 航行日志 (VOYAGE LOG)
    ============================================ */
 .section-voyage {
-  background: linear-gradient(
-    160deg,
-    #1a1225 0%,
-    #2a1a30 30%,
-    #1e1528 60%,
-    #251a2e 100%
+  background: radial-gradient(
+    ellipse at 0% 30%,
+    rgba(156, 80, 110, 0.25) 0%,
+    rgba(118, 70, 92, 0.12) 30%,
+    transparent 60%
   );
   overflow: hidden;
 }
@@ -831,20 +830,40 @@ body {
 /* 标题 */
 .voyage-header {
   position: absolute;
-  top: clamp(30px, 5vh, 60px);
-  left: clamp(30px, 4vw, 80px);
+  top: clamp(20px, 3vh, 50px);
+  left: clamp(20px, 3vw, 60px);
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: clamp(8px, 1.5vw, 20px);
   z-index: 5;
 }
 
+.voyage-header-planet {
+  position: relative;
+  width: clamp(90px, 10vw, 150px);
+  height: clamp(90px, 10vw, 150px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-planet-img {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .voyage-num {
-  font-family: "Orbitron", monospace;
-  font-size: clamp(36px, 4vw, 56px);
+  position: relative;
+  font-family: "HYLiLiangHei", "HYChaoJiZhanJia", "Arial Black", sans-serif;
+  font-size: clamp(32px, 3.5vw, 50px);
   font-weight: 900;
-  color: #e84e34;
-  text-shadow: 0 0 20px rgba(232, 78, 52, 0.4);
+  color: var(--white);
+  z-index: 1;
+  line-height: 1;
+  letter-spacing: 0.05em;
+  margin-top: 1vw;
 }
 
 .voyage-title {
@@ -862,7 +881,7 @@ body {
   width: clamp(100px, 10vw, 160px);
   opacity: 0.5;
   z-index: 1;
-  filter: grayscale(0.8) brightness(0.6);
+  filter: grayscale(0.8) brightness(0.6) blur(2px);
 }
 
 .voyage-moon .moon-img {
@@ -911,14 +930,15 @@ body {
   flex-direction: column;
   align-items: center;
   opacity: 0;
-  transform: scale(0);
-  transition: opacity 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
-              transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transform: translateX(-50%) scale(0);
+  transition:
+    opacity 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .voyage-node.revealed {
   opacity: 1;
-  transform: scale(1);
+  transform: translateX(-50%) scale(1);
 }
 
 /* 气泡标签 */
@@ -968,22 +988,10 @@ body {
 }
 
 .node-planet .planet-img {
-  border-radius: 50%;
-  object-fit: cover;
+  object-fit: contain;
 }
 
-/* 轨道环 */
-.node-ring {
-  position: absolute;
-  width: 130%;
-  height: 30%;
-  border: 2px solid rgba(100, 240, 220, 0.6);
-  border-radius: 50%;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%) rotateX(70deg);
-  pointer-events: none;
-}
+/* 轨道环（图片自带，无需额外 CSS） */
 
 /* 地名标签 */
 .node-label {
@@ -996,10 +1004,14 @@ body {
   text-shadow: 0 0 10px rgba(243, 112, 67, 0.3);
 }
 
-/* 节点定位 & 大小 */
+/* 节点定位 & 大小
+   SVG path passes through these points (viewBox 0-180 x 0-100):
+   node-1: (22, 81), node-2: (62, 52), node-3: (105, 64), node-4: (153, 47)
+   CSS left = svgX / 180 * 100%, CSS top = svgY%
+   Offset top by bubble height (~44px) so planet center aligns with path */
 .node-1 {
-  left: 8%;
-  bottom: 10%;
+  left: 12.2%;
+  top: calc(81% - 44px - 32px);
 }
 .node-1 .node-planet .planet-img {
   width: clamp(50px, 5vw, 80px);
@@ -1007,8 +1019,8 @@ body {
 }
 
 .node-2 {
-  left: 30%;
-  bottom: 35%;
+  left: 34.4%;
+  top: calc(52% - 44px - 38px);
 }
 .node-2 .node-planet .planet-img {
   width: clamp(60px, 6vw, 90px);
@@ -1016,121 +1028,332 @@ body {
 }
 
 .node-3 {
-  left: 54%;
-  bottom: 22%;
+  left: 58.3%;
+  top: calc(64% - 44px - 45px);
 }
 .node-3 .node-planet .planet-img {
-  width: clamp(70px, 7vw, 110px);
-  height: clamp(70px, 7vw, 110px);
+  width: clamp(90px, 10vw, 140px);
+  height: clamp(90px, 10vw, 140px);
 }
 
 .node-4 {
-  right: 10%;
-  bottom: 40%;
+  left: 85%;
+  top: calc(40% - 44px - 88px);
 }
 .node-4 .node-planet .planet-img {
-  width: clamp(100px, 10vw, 170px);
-  height: clamp(100px, 10vw, 170px);
+  width: clamp(130px, 14vw, 220px);
+  height: clamp(130px, 14vw, 220px);
 }
 
-/* 右下角装饰碎片 */
+/* 右下角装饰碎片（3D三角体，错落分布） */
 .voyage-debris {
   position: absolute;
   right: 0;
   bottom: 0;
-  width: 280px;
-  height: 200px;
+  width: 400px;
+  height: 300px;
   z-index: 3;
   pointer-events: none;
 }
 
 .v-debris {
   position: absolute;
-  width: 0;
-  height: 0;
   opacity: 0;
 }
 
+.v-debris::before,
+.v-debris::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
 .section-voyage.in-view .v-debris {
-  animation: v-debris-fly 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-duration: 1.2s;
+  animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  animation-fill-mode: forwards;
 }
 
+/* 大深紫三角体 - 朝右倾 */
 .v-d1 {
-  border-left: 25px solid transparent;
-  border-right: 25px solid transparent;
-  border-bottom: 40px solid #3a2845;
-  right: 40px;
+  width: 80px;
+  height: 70px;
+  right: 15px;
   bottom: 60px;
-  animation-delay: 3.5s !important;
+  animation-name: vd-fly-1;
+  animation-delay: 3.5s;
 }
-.v-d2 {
-  border-left: 18px solid transparent;
-  border-right: 18px solid transparent;
-  border-bottom: 30px solid #5a3e6a;
-  right: 80px;
-  bottom: 30px;
-  animation-delay: 3.6s !important;
+.v-d1::before {
+  width: 80px;
+  height: 70px;
+  background: #4a3060;
+  clip-path: polygon(55% 0%, 10% 100%, 100% 100%);
 }
-.v-d3 {
-  border-left: 12px solid transparent;
-  border-right: 12px solid transparent;
-  border-bottom: 20px solid #e8a0b0;
-  right: 120px;
-  bottom: 80px;
-  animation-delay: 3.7s !important;
-}
-.v-d4 {
-  border-left: 15px solid transparent;
-  border-right: 15px solid transparent;
-  border-bottom: 25px solid #4fc3f7;
-  right: 60px;
-  bottom: 120px;
-  animation-delay: 3.8s !important;
-}
-.v-d5 {
-  border-left: 10px solid transparent;
-  border-right: 10px solid transparent;
-  border-bottom: 16px solid #f37043;
-  right: 150px;
-  bottom: 50px;
-  animation-delay: 3.9s !important;
-}
-.v-d6 {
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-bottom: 32px solid #7a5a8a;
-  right: 20px;
-  bottom: 10px;
-  animation-delay: 4.0s !important;
-}
-.v-d7 {
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-bottom: 14px solid #4fc3f7;
-  right: 100px;
-  bottom: 140px;
-  animation-delay: 4.1s !important;
-}
-.v-d8 {
-  border-left: 14px solid transparent;
-  border-right: 14px solid transparent;
-  border-bottom: 22px solid #c0c0c0;
-  right: 10px;
-  bottom: 100px;
-  animation-delay: 4.2s !important;
+.v-d1::after {
+  width: 80px;
+  height: 70px;
+  background: #2e1a40;
+  clip-path: polygon(55% 0%, 0% 50%, 10% 100%);
 }
 
-@keyframes v-debris-fly {
+/* 大粉色三角体 - 朝左倾 */
+.v-d2 {
+  width: 65px;
+  height: 55px;
+  right: 100px;
+  bottom: 15px;
+  animation-name: vd-fly-2;
+  animation-delay: 3.6s;
+}
+.v-d2::before {
+  width: 65px;
+  height: 55px;
+  background: #e8a0b0;
+  clip-path: polygon(45% 0%, 5% 100%, 100% 100%);
+}
+.v-d2::after {
+  width: 65px;
+  height: 55px;
+  background: #b06878;
+  clip-path: polygon(45% 0%, 0% 60%, 5% 100%);
+}
+
+/* 中青蓝三角体 - 向右上 */
+.v-d3 {
+  width: 50px;
+  height: 42px;
+  right: 190px;
+  bottom: 55px;
+  animation-name: vd-fly-3;
+  animation-delay: 3.7s;
+}
+.v-d3::before {
+  width: 50px;
+  height: 42px;
+  background: #4fc3f7;
+  clip-path: polygon(50% 0%, 8% 100%, 100% 100%);
+}
+.v-d3::after {
+  width: 50px;
+  height: 42px;
+  background: #2a8ab5;
+  clip-path: polygon(50% 0%, 0% 55%, 8% 100%);
+}
+
+/* 小橙色三角体 - 散落 */
+.v-d4 {
+  width: 18px;
+  height: 15px;
+  right: 155px;
+  bottom: 5px;
+  animation-name: vd-fly-4;
+  animation-delay: 3.8s;
+}
+.v-d4::before {
+  width: 18px;
+  height: 15px;
+  background: #f37043;
+  clip-path: polygon(50% 0%, 10% 100%, 100% 100%);
+}
+.v-d4::after {
+  width: 18px;
+  height: 15px;
+  background: #c04a25;
+  clip-path: polygon(50% 0%, 0% 55%, 10% 100%);
+}
+
+/* 灰银三角体 - 右上角 */
+.v-d5 {
+  width: 70px;
+  height: 60px;
+  right: -5px;
+  bottom: 140px;
+  animation-name: vd-fly-5;
+  animation-delay: 3.9s;
+}
+.v-d5::before {
+  width: 70px;
+  height: 60px;
+  background: #c0c0c0;
+  clip-path: polygon(48% 0%, 6% 100%, 100% 100%);
+}
+.v-d5::after {
+  width: 70px;
+  height: 60px;
+  background: #808080;
+  clip-path: polygon(48% 0%, 0% 58%, 6% 100%);
+}
+
+/* 小红三角体 - 远处散落 */
+.v-d6 {
+  width: 14px;
+  height: 11px;
+  right: 240px;
+  bottom: 20px;
+  animation-name: vd-fly-6;
+  animation-delay: 4s;
+}
+.v-d6::before {
+  width: 14px;
+  height: 11px;
+  background: #e84e34;
+  clip-path: polygon(50% 0%, 10% 100%, 100% 100%);
+}
+.v-d6::after {
+  width: 14px;
+  height: 11px;
+  background: #b03020;
+  clip-path: polygon(50% 0%, 0% 55%, 10% 100%);
+}
+
+/* 小青三角体 */
+.v-d7 {
+  width: 25px;
+  height: 20px;
+  right: 255px;
+  bottom: 75px;
+  animation-name: vd-fly-7;
+  animation-delay: 4.1s;
+}
+.v-d7::before {
+  width: 25px;
+  height: 20px;
+  background: #6edcd5;
+  clip-path: polygon(45% 0%, 8% 100%, 100% 100%);
+}
+.v-d7::after {
+  width: 25px;
+  height: 20px;
+  background: #3aada5;
+  clip-path: polygon(45% 0%, 0% 55%, 8% 100%);
+}
+
+/* 中淡紫三角体 - 倒挂 */
+.v-d8 {
+  width: 45px;
+  height: 38px;
+  right: 55px;
+  bottom: 110px;
+  animation-name: vd-fly-8;
+  animation-delay: 4.2s;
+}
+.v-d8::before {
+  width: 45px;
+  height: 38px;
+  background: #9a7aaa;
+  clip-path: polygon(52% 0%, 8% 100%, 100% 100%);
+}
+.v-d8::after {
+  width: 45px;
+  height: 38px;
+  background: #6a4a7a;
+  clip-path: polygon(52% 0%, 0% 52%, 8% 100%);
+}
+
+/* 每个三角体独立飞入方向和旋转 */
+@keyframes vd-fly-1 {
   0% {
     opacity: 0;
-    transform: translate(80px, 80px) rotate(0deg) scale(0.3);
+    transform: translate(50px, 70px) rotate(20deg) scale(0.2);
   }
   60% {
     opacity: 0.9;
   }
   100% {
-    opacity: 0.8;
-    transform: translate(0, 0) rotate(-15deg) scale(1);
+    opacity: 0.85;
+    transform: translate(0, 0) rotate(5deg) scale(1);
+  }
+}
+@keyframes vd-fly-2 {
+  0% {
+    opacity: 0;
+    transform: translate(40px, 50px) rotate(-30deg) scale(0.2);
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.85;
+    transform: translate(0, 0) rotate(-18deg) scale(1);
+  }
+}
+@keyframes vd-fly-3 {
+  0% {
+    opacity: 0;
+    transform: translate(60px, 40px) rotate(45deg) scale(0.2);
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.85;
+    transform: translate(0, 0) rotate(12deg) scale(1);
+  }
+}
+@keyframes vd-fly-4 {
+  0% {
+    opacity: 0;
+    transform: translate(30px, 50px) rotate(-15deg) scale(0.2);
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.85;
+    transform: translate(0, 0) rotate(25deg) scale(1);
+  }
+}
+@keyframes vd-fly-5 {
+  0% {
+    opacity: 0;
+    transform: translate(40px, 60px) rotate(10deg) scale(0.2);
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.85;
+    transform: translate(0, 0) rotate(-8deg) scale(1);
+  }
+}
+@keyframes vd-fly-6 {
+  0% {
+    opacity: 0;
+    transform: translate(20px, 40px) rotate(60deg) scale(0.2);
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.85;
+    transform: translate(0, 0) rotate(35deg) scale(1);
+  }
+}
+@keyframes vd-fly-7 {
+  0% {
+    opacity: 0;
+    transform: translate(50px, 30px) rotate(-40deg) scale(0.2);
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.85;
+    transform: translate(0, 0) rotate(-22deg) scale(1);
+  }
+}
+@keyframes vd-fly-8 {
+  0% {
+    opacity: 0;
+    transform: translate(30px, 60px) rotate(55deg) scale(0.2);
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0.85;
+    transform: translate(0, 0) rotate(160deg) scale(1);
   }
 }
 
