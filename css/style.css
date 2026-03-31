@@ -2195,314 +2195,789 @@ a.star-planet:nth-child(even):hover .planet-img {
 
 .debris-tri {
   position: absolute;
-  width: 0;
-  height: 0;
   opacity: 0;
+}
+/* 亮面 + 暗面 共享一条折线边 */
+.debris-tri::before,
+.debris-tri::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .section-starmap:has(.visible) .debris-tri {
   animation: debris-fly 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
-/* ---- 左侧（最高，轨迹向上走） ---- */
+/* ==== 左侧（最高，轨迹向上走）==== */
+/* 大蓝色三角体 */
 .tri-1 {
-  border-left: 50px solid transparent;
-  border-right: 50px solid transparent;
-  border-bottom: 80px solid #3a8bcd;
-  bottom: 80px; left: 2%;
+  width: 110px;
+  height: 90px;
+  bottom: 80px;
+  left: 2%;
   animation-name: debris-fly-1 !important;
   animation-delay: 1.3s !important;
 }
+.tri-1::before {
+  width: 110px;
+  height: 90px;
+  background: #5ba3d9;
+  clip-path: polygon(50% 0%, 10% 100%, 100% 100%);
+}
+.tri-1::after {
+  width: 110px;
+  height: 90px;
+  background: #2e6faa;
+  clip-path: polygon(50% 0%, 0% 60%, 10% 100%);
+}
+
+/* 中型青三角体 */
 .tri-2 {
-  border-left: 35px solid transparent;
-  border-right: 35px solid transparent;
-  border-bottom: 55px solid #4ecdc4;
-  bottom: 120px; left: 10%;
+  width: 80px;
+  height: 65px;
+  bottom: 120px;
+  left: 10%;
   animation-name: debris-fly-2 !important;
   animation-delay: 1.15s !important;
 }
-.tri-3 {
-  border-left: 18px solid transparent;
-  border-right: 18px solid transparent;
-  border-bottom: 30px solid #6d5a62;
-  bottom: 155px; left: 16%;
-  animation-name: debris-fly-3 !important;
-  animation-delay: 1.0s !important;
+.tri-2::before {
+  width: 80px;
+  height: 65px;
+  background: #6edcd5;
+  clip-path: polygon(45% 0%, 8% 100%, 100% 100%);
+}
+.tri-2::after {
+  width: 80px;
+  height: 65px;
+  background: #3aada5;
+  clip-path: polygon(45% 0%, 0% 55%, 8% 100%);
 }
 
-/* ---- 中偏左（轨迹渐低） ---- */
+/* 小深色三角体 */
+.tri-3 {
+  width: 42px;
+  height: 34px;
+  bottom: 155px;
+  left: 16%;
+  animation-name: debris-fly-3 !important;
+  animation-delay: 1s !important;
+}
+.tri-3::before {
+  width: 42px;
+  height: 34px;
+  background: #8a7078;
+  clip-path: polygon(55% 0%, 12% 100%, 100% 100%);
+}
+.tri-3::after {
+  width: 42px;
+  height: 34px;
+  background: #5a4048;
+  clip-path: polygon(55% 0%, 0% 60%, 12% 100%);
+}
+
+/* ==== 中偏左（轨迹渐低）==== */
 .tri-4 {
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-bottom: 14px solid #f37043;
-  bottom: 110px; left: 24%;
+  width: 20px;
+  height: 16px;
+  bottom: 110px;
+  left: 24%;
   animation-name: debris-fly-4 !important;
   animation-delay: 0.95s !important;
 }
+.tri-4::before {
+  width: 20px;
+  height: 16px;
+  background: #f37043;
+  clip-path: polygon(50% 0%, 10% 100%, 100% 100%);
+}
+.tri-4::after {
+  width: 20px;
+  height: 16px;
+  background: #c04a25;
+  clip-path: polygon(50% 0%, 0% 55%, 10% 100%);
+}
+
 .tri-5 {
-  border-left: 12px solid transparent;
-  border-right: 12px solid transparent;
-  border-bottom: 18px solid #4ecdc4;
-  bottom: 80px; left: 28%;
+  width: 28px;
+  height: 22px;
+  bottom: 85px;
+  left: 28%;
   animation-name: debris-fly-5 !important;
   animation-delay: 0.9s !important;
 }
-/* 中间中型灰紫三角 */
+.tri-5::before {
+  width: 28px;
+  height: 22px;
+  background: #6edcd5;
+  clip-path: polygon(50% 0%, 8% 100%, 100% 100%);
+}
+.tri-5::after {
+  width: 28px;
+  height: 22px;
+  background: #3aada5;
+  clip-path: polygon(50% 0%, 0% 50%, 8% 100%);
+}
+
+/* 中型灰紫三角体 */
 .tri-19 {
-  border-left: 25px solid transparent;
-  border-right: 25px solid transparent;
-  border-bottom: 42px solid #7a6070;
-  bottom: 55px; left: 32%;
+  width: 58px;
+  height: 50px;
+  bottom: 55px;
+  left: 32%;
   animation-name: debris-fly-19 !important;
   animation-delay: 0.85s !important;
 }
+.tri-19::before {
+  width: 58px;
+  height: 50px;
+  background: #9a7a8e;
+  clip-path: polygon(48% 0%, 10% 100%, 100% 100%);
+}
+.tri-19::after {
+  width: 58px;
+  height: 50px;
+  background: #6a4f62;
+  clip-path: polygon(48% 0%, 0% 55%, 10% 100%);
+}
 
-/* ---- 中间（较低，小碎片+中型点缀） ---- */
+/* ==== 中间（较低，碎片+中型点缀）==== */
 .tri-6 {
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
-  border-bottom: 12px solid #e84e34;
-  bottom: 70px; left: 37%;
+  width: 18px;
+  height: 14px;
+  bottom: 70px;
+  left: 37%;
   animation-name: debris-fly-6 !important;
   animation-delay: 0.82s !important;
 }
+.tri-6::before {
+  width: 18px;
+  height: 14px;
+  background: #e84e34;
+  clip-path: polygon(50% 0%, 10% 100%, 100% 100%);
+}
+.tri-6::after {
+  width: 18px;
+  height: 14px;
+  background: #b03020;
+  clip-path: polygon(50% 0%, 0% 50%, 10% 100%);
+}
+
 .tri-7 {
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-bottom: 10px solid #fa9a1e;
-  bottom: 35px; left: 41%;
+  width: 15px;
+  height: 12px;
+  bottom: 35px;
+  left: 41%;
   animation-name: debris-fly-7 !important;
   animation-delay: 0.78s !important;
 }
-/* 中间中型橙红三角 */
+.tri-7::before {
+  width: 15px;
+  height: 12px;
+  background: #fa9a1e;
+  clip-path: polygon(50% 0%, 8% 100%, 100% 100%);
+}
+.tri-7::after {
+  width: 15px;
+  height: 12px;
+  background: #c87515;
+  clip-path: polygon(50% 0%, 0% 55%, 8% 100%);
+}
+
+/* 中型橙红三角体 */
 .tri-20 {
-  border-left: 22px solid transparent;
-  border-right: 22px solid transparent;
-  border-bottom: 38px solid #e8654a;
-  bottom: 20px; left: 45%;
+  width: 55px;
+  height: 45px;
+  bottom: 30px;
+  left: 45%;
   animation-name: debris-fly-20 !important;
   animation-delay: 0.75s !important;
 }
+.tri-20::before {
+  width: 55px;
+  height: 45px;
+  background: #e87a5a;
+  clip-path: polygon(52% 0%, 12% 100%, 100% 100%);
+}
+.tri-20::after {
+  width: 55px;
+  height: 45px;
+  background: #b04535;
+  clip-path: polygon(52% 0%, 0% 60%, 12% 100%);
+}
+
 .tri-8 {
-  border-left: 9px solid transparent;
-  border-right: 9px solid transparent;
-  border-bottom: 14px solid #4ecdc4;
-  bottom: 50px; left: 49%;
+  width: 22px;
+  height: 18px;
+  bottom: 50px;
+  left: 49%;
   animation-name: debris-fly-8 !important;
   animation-delay: 0.7s !important;
 }
+.tri-8::before {
+  width: 22px;
+  height: 18px;
+  background: #6edcd5;
+  clip-path: polygon(50% 0%, 10% 100%, 100% 100%);
+}
+.tri-8::after {
+  width: 22px;
+  height: 18px;
+  background: #3aada5;
+  clip-path: polygon(50% 0%, 0% 55%, 10% 100%);
+}
+
 .tri-9 {
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-bottom: 9px solid #e84e34;
-  bottom: 15px; left: 53%;
+  width: 13px;
+  height: 11px;
+  bottom: 25px;
+  left: 53%;
   animation-name: debris-fly-9 !important;
   animation-delay: 0.68s !important;
 }
-/* 中偏右中型粉三角 */
+.tri-9::before {
+  width: 13px;
+  height: 11px;
+  background: #e84e34;
+  clip-path: polygon(50% 0%, 8% 100%, 100% 100%);
+}
+.tri-9::after {
+  width: 13px;
+  height: 11px;
+  background: #b03020;
+  clip-path: polygon(50% 0%, 0% 50%, 8% 100%);
+}
+
+/* 中型粉三角体 */
 .tri-21 {
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-bottom: 34px solid #cca4ae;
-  bottom: 40px; left: 57%;
+  width: 48px;
+  height: 40px;
+  bottom: 40px;
+  left: 57%;
   animation-name: debris-fly-21 !important;
   animation-delay: 0.65s !important;
 }
+.tri-21::before {
+  width: 48px;
+  height: 40px;
+  background: #ddb8c2;
+  clip-path: polygon(50% 0%, 10% 100%, 100% 100%);
+}
+.tri-21::after {
+  width: 48px;
+  height: 40px;
+  background: #aa8090;
+  clip-path: polygon(50% 0%, 0% 55%, 10% 100%);
+}
+
 .tri-10 {
-  border-left: 7px solid transparent;
-  border-right: 7px solid transparent;
-  border-bottom: 11px solid #a89298;
-  bottom: 60px; left: 62%;
+  width: 18px;
+  height: 14px;
+  bottom: 60px;
+  left: 62%;
   animation-name: debris-fly-10 !important;
   animation-delay: 0.6s !important;
 }
-/* 中偏右中型蓝三角 */
+.tri-10::before {
+  width: 18px;
+  height: 14px;
+  background: #bfa5ac;
+  clip-path: polygon(50% 0%, 10% 100%, 100% 100%);
+}
+.tri-10::after {
+  width: 18px;
+  height: 14px;
+  background: #8a7078;
+  clip-path: polygon(50% 0%, 0% 50%, 10% 100%);
+}
+
+/* 中型蓝三角体 */
 .tri-22 {
-  border-left: 18px solid transparent;
-  border-right: 18px solid transparent;
-  border-bottom: 30px solid #3a8bcd;
-  bottom: 10px; left: 66%;
+  width: 45px;
+  height: 38px;
+  bottom: 20px;
+  left: 66%;
   animation-name: debris-fly-22 !important;
   animation-delay: 0.55s !important;
 }
+.tri-22::before {
+  width: 45px;
+  height: 38px;
+  background: #5ba3d9;
+  clip-path: polygon(48% 0%, 10% 100%, 100% 100%);
+}
+.tri-22::after {
+  width: 45px;
+  height: 38px;
+  background: #2e6faa;
+  clip-path: polygon(48% 0%, 0% 55%, 10% 100%);
+}
 
-/* ---- 右侧（最低，轨迹起点） ---- */
+/* ==== 右侧（最低，轨迹起点）==== */
+/* 大灰白三角体 — 最右下 */
 .tri-11 {
-  border-left: 45px solid transparent;
-  border-right: 45px solid transparent;
-  border-bottom: 75px solid #c0c0c0;
-  bottom: -10px; right: 1%;
+  width: 105px;
+  height: 88px;
+  bottom: 15px;
+  right: 0%;
   animation-name: debris-fly-11 !important;
   animation-delay: 0.2s !important;
 }
+.tri-11::before {
+  width: 105px;
+  height: 88px;
+  background: #d8d8d8;
+  clip-path: polygon(50% 0%, 10% 100%, 100% 100%);
+}
+.tri-11::after {
+  width: 105px;
+  height: 88px;
+  background: #9a9a9a;
+  clip-path: polygon(50% 0%, 0% 55%, 10% 100%);
+}
+
+/* 大紫粉三角体 — 灰白左上方 */
 .tri-12 {
-  border-left: 38px solid transparent;
-  border-right: 38px solid transparent;
-  border-bottom: 65px solid #76465c;
-  bottom: 10px; right: 8%;
+  width: 90px;
+  height: 72px;
+  bottom: 55px;
+  right: 10%;
   animation-name: debris-fly-12 !important;
   animation-delay: 0.3s !important;
 }
+.tri-12::before {
+  width: 90px;
+  height: 72px;
+  background: #8e5a72;
+  clip-path: polygon(48% 0%, 10% 100%, 100% 100%);
+}
+.tri-12::after {
+  width: 90px;
+  height: 72px;
+  background: #5c3548;
+  clip-path: polygon(48% 0%, 0% 58%, 10% 100%);
+}
+
+/* 红色三角体 — 中偏右 */
 .tri-13 {
-  border-left: 28px solid transparent;
-  border-right: 28px solid transparent;
-  border-bottom: 45px solid #e84e34;
-  bottom: 35px; right: 14%;
+  width: 65px;
+  height: 52px;
+  bottom: 25px;
+  right: 20%;
   animation-name: debris-fly-13 !important;
   animation-delay: 0.4s !important;
 }
+.tri-13::before {
+  width: 65px;
+  height: 52px;
+  background: #e8654a;
+  clip-path: polygon(50% 0%, 12% 100%, 100% 100%);
+}
+.tri-13::after {
+  width: 65px;
+  height: 52px;
+  background: #b04030;
+  clip-path: polygon(50% 0%, 0% 55%, 12% 100%);
+}
+
+/* 粉色三角体 */
 .tri-14 {
-  border-left: 22px solid transparent;
-  border-right: 22px solid transparent;
-  border-bottom: 38px solid #cca4ae;
-  bottom: 0; right: 19%;
+  width: 50px;
+  height: 44px;
+  bottom: 70px;
+  right: 18%;
   animation-name: debris-fly-14 !important;
   animation-delay: 0.45s !important;
 }
+.tri-14::before {
+  width: 50px;
+  height: 44px;
+  background: #ddb8c2;
+  clip-path: polygon(52% 0%, 10% 100%, 100% 100%);
+}
+.tri-14::after {
+  width: 50px;
+  height: 44px;
+  background: #aa8090;
+  clip-path: polygon(52% 0%, 0% 60%, 10% 100%);
+}
+
+/* 小橙碎片 */
 .tri-15 {
-  border-left: 8px solid transparent;
-  border-right: 8px solid transparent;
-  border-bottom: 13px solid #f37043;
-  bottom: 55px; right: 22%;
+  width: 20px;
+  height: 15px;
+  bottom: 95px;
+  right: 25%;
   animation-name: debris-fly-15 !important;
   animation-delay: 0.5s !important;
 }
+.tri-15::before {
+  width: 20px;
+  height: 15px;
+  background: #f37043;
+  clip-path: polygon(50% 0%, 8% 100%, 100% 100%);
+}
+.tri-15::after {
+  width: 20px;
+  height: 15px;
+  background: #c04a25;
+  clip-path: polygon(50% 0%, 0% 55%, 8% 100%);
+}
+
+/* 小青碎片 */
 .tri-16 {
-  border-left: 12px solid transparent;
-  border-right: 12px solid transparent;
-  border-bottom: 18px solid #4ecdc4;
-  bottom: 20px; right: 26%;
+  width: 28px;
+  height: 22px;
+  bottom: 40px;
+  right: 30%;
   animation-name: debris-fly-16 !important;
   animation-delay: 0.52s !important;
 }
+.tri-16::before {
+  width: 28px;
+  height: 22px;
+  background: #6edcd5;
+  clip-path: polygon(50% 0%, 10% 100%, 100% 100%);
+}
+.tri-16::after {
+  width: 28px;
+  height: 22px;
+  background: #3aada5;
+  clip-path: polygon(50% 0%, 0% 50%, 10% 100%);
+}
+
+/* 小紫碎片 — 靠近灰白 */
 .tri-17 {
-  border-left: 14px solid transparent;
-  border-right: 14px solid transparent;
-  border-bottom: 22px solid #6d5a62;
-  bottom: 45px; right: 5%;
+  width: 32px;
+  height: 26px;
+  bottom: 90px;
+  right: 3%;
   animation-name: debris-fly-17 !important;
   animation-delay: 0.35s !important;
 }
+.tri-17::before {
+  width: 32px;
+  height: 26px;
+  background: #8a7078;
+  clip-path: polygon(48% 0%, 10% 100%, 100% 100%);
+}
+.tri-17::after {
+  width: 32px;
+  height: 26px;
+  background: #5a4048;
+  clip-path: polygon(48% 0%, 0% 55%, 10% 100%);
+}
+
+/* 小蓝碎片 */
 .tri-18 {
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-bottom: 10px solid #3a8bcd;
-  bottom: 65px; right: 11%;
+  width: 15px;
+  height: 12px;
+  bottom: 35px;
+  right: 9%;
   animation-name: debris-fly-18 !important;
   animation-delay: 0.48s !important;
+}
+.tri-18::before {
+  width: 15px;
+  height: 12px;
+  background: #5ba3d9;
+  clip-path: polygon(50% 0%, 8% 100%, 100% 100%);
+}
+.tri-18::after {
+  width: 15px;
+  height: 12px;
+  background: #2e6faa;
+  clip-path: polygon(50% 0%, 0% 50%, 8% 100%);
 }
 
 /* 每个碎片独立的飞入动画 — 不同起点、不同终止角度 */
 @keyframes debris-fly-1 {
-  0%   { opacity: 0; transform: translate(180px, 60px) rotate(-50deg) scale(0.2); }
-  60%  { opacity: 0.85; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(-15deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(180px, 60px) rotate(-50deg) scale(0.2);
+  }
+  60% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(-15deg) scale(1);
+  }
 }
 @keyframes debris-fly-2 {
-  0%   { opacity: 0; transform: translate(140px, 30px) rotate(80deg) scale(0.25); }
-  60%  { opacity: 0.9; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(22deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(140px, 30px) rotate(80deg) scale(0.25);
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(22deg) scale(1);
+  }
 }
 @keyframes debris-fly-3 {
-  0%   { opacity: 0; transform: translate(100px, 50px) rotate(-100deg) scale(0.3); }
-  55%  { opacity: 0.8; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(-40deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(100px, 50px) rotate(-100deg) scale(0.3);
+  }
+  55% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(-40deg) scale(1);
+  }
 }
 @keyframes debris-fly-4 {
-  0%   { opacity: 0; transform: translate(90px, 35px) rotate(120deg) scale(0.2); }
-  65%  { opacity: 0.9; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(65deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(90px, 35px) rotate(120deg) scale(0.2);
+  }
+  65% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(65deg) scale(1);
+  }
 }
 @keyframes debris-fly-5 {
-  0%   { opacity: 0; transform: translate(110px, 45px) rotate(-70deg) scale(0.3); }
-  60%  { opacity: 0.85; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(-55deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(110px, 45px) rotate(-70deg) scale(0.3);
+  }
+  60% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(-55deg) scale(1);
+  }
 }
 @keyframes debris-fly-6 {
-  0%   { opacity: 0; transform: translate(80px, 25px) rotate(200deg) scale(0.15); }
-  55%  { opacity: 0.9; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(130deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(80px, 25px) rotate(200deg) scale(0.15);
+  }
+  55% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(130deg) scale(1);
+  }
 }
 @keyframes debris-fly-7 {
-  0%   { opacity: 0; transform: translate(70px, 40px) rotate(-140deg) scale(0.2); }
-  60%  { opacity: 0.8; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(-80deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(70px, 40px) rotate(-140deg) scale(0.2);
+  }
+  60% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(-80deg) scale(1);
+  }
 }
 @keyframes debris-fly-8 {
-  0%   { opacity: 0; transform: translate(95px, 30px) rotate(90deg) scale(0.25); }
-  65%  { opacity: 0.9; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(45deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(95px, 30px) rotate(90deg) scale(0.25);
+  }
+  65% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(45deg) scale(1);
+  }
 }
 @keyframes debris-fly-9 {
-  0%   { opacity: 0; transform: translate(60px, 50px) rotate(-160deg) scale(0.15); }
-  50%  { opacity: 0.85; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(-110deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(60px, 50px) rotate(-160deg) scale(0.15);
+  }
+  50% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(-110deg) scale(1);
+  }
 }
 @keyframes debris-fly-10 {
-  0%   { opacity: 0; transform: translate(85px, 35px) rotate(110deg) scale(0.2); }
-  60%  { opacity: 0.9; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(70deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(85px, 35px) rotate(110deg) scale(0.2);
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(70deg) scale(1);
+  }
 }
 @keyframes debris-fly-11 {
-  0%   { opacity: 0; transform: translate(160px, 50px) rotate(-30deg) scale(0.2); }
-  55%  { opacity: 0.85; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(12deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(160px, 50px) rotate(-30deg) scale(0.2);
+  }
+  55% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(12deg) scale(1);
+  }
 }
 @keyframes debris-fly-12 {
-  0%   { opacity: 0; transform: translate(130px, 40px) rotate(70deg) scale(0.25); }
-  60%  { opacity: 0.9; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(-25deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(130px, 40px) rotate(70deg) scale(0.25);
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(-25deg) scale(1);
+  }
 }
 @keyframes debris-fly-13 {
-  0%   { opacity: 0; transform: translate(120px, 55px) rotate(-90deg) scale(0.3); }
-  65%  { opacity: 0.85; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(35deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(120px, 55px) rotate(-90deg) scale(0.3);
+  }
+  65% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(35deg) scale(1);
+  }
 }
 @keyframes debris-fly-14 {
-  0%   { opacity: 0; transform: translate(100px, 30px) rotate(150deg) scale(0.2); }
-  55%  { opacity: 0.9; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(-50deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(100px, 30px) rotate(150deg) scale(0.2);
+  }
+  55% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(-50deg) scale(1);
+  }
 }
 @keyframes debris-fly-15 {
-  0%   { opacity: 0; transform: translate(75px, 45px) rotate(-120deg) scale(0.15); }
-  60%  { opacity: 0.8; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(95deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(75px, 45px) rotate(-120deg) scale(0.15);
+  }
+  60% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(95deg) scale(1);
+  }
 }
 @keyframes debris-fly-16 {
-  0%   { opacity: 0; transform: translate(90px, 35px) rotate(60deg) scale(0.25); }
-  60%  { opacity: 0.9; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(-70deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(90px, 35px) rotate(60deg) scale(0.25);
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(-70deg) scale(1);
+  }
 }
 @keyframes debris-fly-17 {
-  0%   { opacity: 0; transform: translate(150px, 55px) rotate(-45deg) scale(0.2); }
-  55%  { opacity: 0.85; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(150deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(150px, 55px) rotate(-45deg) scale(0.2);
+  }
+  55% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(150deg) scale(1);
+  }
 }
 @keyframes debris-fly-18 {
-  0%   { opacity: 0; transform: translate(65px, 40px) rotate(130deg) scale(0.15); }
-  60%  { opacity: 0.9; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(-35deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(65px, 40px) rotate(130deg) scale(0.15);
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(-35deg) scale(1);
+  }
 }
 
 @keyframes debris-fly-19 {
-  0%   { opacity: 0; transform: translate(110px, 40px) rotate(-85deg) scale(0.2); }
-  60%  { opacity: 0.9; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(28deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(110px, 40px) rotate(-85deg) scale(0.2);
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(28deg) scale(1);
+  }
 }
 @keyframes debris-fly-20 {
-  0%   { opacity: 0; transform: translate(95px, 50px) rotate(140deg) scale(0.25); }
-  55%  { opacity: 0.85; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(-42deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(95px, 50px) rotate(140deg) scale(0.25);
+  }
+  55% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(-42deg) scale(1);
+  }
 }
 @keyframes debris-fly-21 {
-  0%   { opacity: 0; transform: translate(80px, 35px) rotate(-60deg) scale(0.2); }
-  60%  { opacity: 0.9; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(55deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(80px, 35px) rotate(-60deg) scale(0.2);
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(55deg) scale(1);
+  }
 }
 @keyframes debris-fly-22 {
-  0%   { opacity: 0; transform: translate(100px, 45px) rotate(100deg) scale(0.2); }
-  55%  { opacity: 0.85; }
-  100% { opacity: 1; transform: translate(0, 0) rotate(-18deg) scale(1); }
+  0% {
+    opacity: 0;
+    transform: translate(100px, 45px) rotate(100deg) scale(0.2);
+  }
+  55% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 1;
+    transform: translate(0, 0) rotate(-18deg) scale(1);
+  }
 }
 
 /* --- Star map responsive --- */
