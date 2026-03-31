@@ -25,9 +25,9 @@
 
     getStarCount() {
       const w = window.innerWidth;
-      if (w < 640) return 80;
-      if (w < 1024) return 140;
-      return 220;
+      if (w < 640) return 120;
+      if (w < 1024) return 220;
+      return 360;
     }
 
     resize() {

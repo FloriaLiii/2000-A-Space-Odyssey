@@ -23,7 +23,13 @@
       "Bash(fc-list)",
       "Bash(python scripts/office/unpack.py /Users/likangjue/Desktop/planet.pptx /tmp/planet-unpacked/)",
       "Bash(unzip -o /Users/likangjue/Desktop/planet.pptx -d /tmp/planet-unpacked/)",
-      "Bash(fc-list :lang=zh)"
+      "Bash(fc-list :lang=zh)",
+      "Bash(pip install:*)",
+      "Bash(cp /tmp/planet-unpacked/ppt/media/image1.png /Users/likangjue/project/resume/assets/planet-main.png)",
+      "Bash(cp /tmp/planet-unpacked/ppt/media/image7.png /Users/likangjue/project/resume/assets/planet-blue.png)",
+      "Bash(cp /tmp/planet-unpacked/ppt/media/image8.png /Users/likangjue/project/resume/assets/planet-purple-ring.png)",
+      "Bash(cp /tmp/planet-unpacked/ppt/media/image11.png /Users/likangjue/project/resume/assets/planet-gray-ring.png)",
+      "Bash(cp /tmp/planet-unpacked/ppt/media/image4.png /Users/likangjue/project/resume/assets/planet-red-texture.png)"
     ]
   }
 }

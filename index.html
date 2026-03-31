@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="css/style.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=ZCOOL+QingKe+HuangYou&family=Noto+Serif+SC:wght@400;700;900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=ZCOOL+QingKe+HuangYou&family=Noto+Serif+SC:wght@400;700;900&family=ZCOOL+KuaiLe&family=Noto+Sans+SC:wght@900&display=swap"
       rel="stylesheet"
     />
   </head>
@@ -23,28 +23,29 @@
         data-section="0"
         data-label="启程"
       ></a>
-      <a href="#about" class="nav-dot" data-section="1" data-label="关于我"></a>
+      <a href="#starmap" class="nav-dot" data-section="1" data-label="星图"></a>
+      <a href="#about" class="nav-dot" data-section="2" data-label="关于我"></a>
       <a
         href="#education"
         class="nav-dot"
-        data-section="2"
+        data-section="3"
         data-label="教育"
       ></a>
-      <a href="#skills" class="nav-dot" data-section="3" data-label="技能"></a>
+      <a href="#skills" class="nav-dot" data-section="4" data-label="技能"></a>
       <a
         href="#project1"
         class="nav-dot"
-        data-section="4"
+        data-section="5"
         data-label="项目一"
       ></a>
       <a
         href="#project2"
         class="nav-dot"
-        data-section="5"
+        data-section="6"
         data-label="项目二"
       ></a>
-      <a href="#awards" class="nav-dot" data-section="6" data-label="荣誉"></a>
-      <a href="#contact" class="nav-dot" data-section="7" data-label="联系"></a>
+      <a href="#awards" class="nav-dot" data-section="7" data-label="荣誉"></a>
+      <a href="#contact" class="nav-dot" data-section="8" data-label="联系"></a>
     </nav>
 
     <!-- 页面进度条 -->
@@ -126,7 +127,177 @@
       <div class="fly-tri fly-tri-2b"></div>
     </section>
 
-    <!-- ===== Section 1: About ===== -->
+    <!-- ===== Section 1: Star Map (星图导览) ===== -->
+    <section class="section section-starmap" id="starmap">
+      <div class="starmap-container">
+        <!-- SVG 连线（虚线轨道） -->
+        <svg
+          class="starmap-orbits"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+        >
+          <!-- 建立通讯 → 航行日志 -->
+          <path d="M14,58 Q18,50 22,42" class="orbit-line" />
+          <!-- 航行日志 → 已探索星球 -->
+          <path d="M28,38 Q32,46 38,50" class="orbit-line" />
+          <!-- 已探索星球 → 星图导览 -->
+          <path d="M49,52 Q54,48 58,44" class="orbit-line" />
+          <!-- 星图导览 → 燃料库 -->
+          <path d="M60,22 Q56,17 52,14" class="orbit-line" />
+          <!-- 星图导览 → 私人星图 -->
+          <path d="M78,48 Q82,60 85,68" class="orbit-line" />
+          <!-- 宇航员档案 → 私人星图 -->
+          <path d="M90,18 Q93,46 90,74" class="orbit-line" />
+        </svg>
+
+        <!-- 中心大星球：星图导览 -->
+        <div class="star-planet star-main anim-scale-in">
+          <img src="assets/planet-main.png" alt="星图导览" class="planet-img" />
+          <span class="planet-label label-main">星图导览</span>
+        </div>
+
+        <!-- 燃料库 → Skills -->
+        <a href="#skills" class="star-planet star-fuel anim-scale-in delay-1">
+          <div class="planet-glow glow-green"></div>
+          <img
+            src="assets/planet-green-texture.png"
+            alt="燃料库"
+            class="planet-img planet-circle"
+          />
+          <span class="planet-label label-top">燃料库</span>
+          <span class="planet-satellite">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              width="16"
+              height="16"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"
+              />
+            </svg>
+          </span>
+        </a>
+
+        <!-- 宇航员档案 → About -->
+        <a href="#about" class="star-planet star-profile anim-scale-in delay-2">
+          <div class="planet-glow glow-silver"></div>
+          <img
+            src="assets/planet-gray-ring.png"
+            alt="宇航员档案"
+            class="planet-img"
+          />
+          <span class="planet-label label-bottom">宇航员档案</span>
+          <span class="planet-satellite">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              width="16"
+              height="16"
+            >
+              <circle cx="12" cy="12" r="4" />
+              <path
+                d="M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"
+              />
+            </svg>
+          </span>
+        </a>
+
+        <!-- 航行日志 → Education -->
+        <a href="#education" class="star-planet star-log anim-scale-in delay-1">
+          <div class="planet-glow glow-red"></div>
+          <img
+            src="assets/planet-red-texture.png"
+            alt="航行日志"
+            class="planet-img planet-circle"
+          />
+          <span class="planet-label label-log">航行日志</span>
+        </a>
+
+        <!-- 已探索星球 → Projects -->
+        <a
+          href="#project1"
+          class="star-planet star-explore anim-scale-in delay-2"
+        >
+          <div class="planet-glow glow-blue"></div>
+          <img
+            src="assets/planet-blue.png"
+            alt="已探索星球"
+            class="planet-img"
+          />
+          <span class="planet-label label-bottom">已探索星球</span>
+        </a>
+
+        <!-- 建立通讯 → Contact -->
+        <a href="#contact" class="star-planet star-comm anim-scale-in delay-3">
+          <div class="planet-glow glow-orange"></div>
+          <img
+            src="assets/planet-orange-ring.png"
+            alt="建立通讯"
+            class="planet-img"
+          />
+          <span class="planet-label label-comm">建立通讯</span>
+        </a>
+
+        <!-- 私人星图 → Awards -->
+        <a
+          href="#awards"
+          class="star-planet star-personal anim-scale-in delay-3"
+        >
+          <div class="planet-glow glow-gold"></div>
+          <img
+            src="assets/planet-gold-texture.png"
+            alt="私人星图"
+            class="planet-img planet-circle"
+          />
+          <div class="planet-ring-wrap">
+            <div class="planet-orbit-ring"></div>
+          </div>
+          <span class="planet-label label-personal">私人星图</span>
+        </a>
+
+        <!-- 底部标语 -->
+        <p class="starmap-tagline anim-fade-up delay-3">
+          Do not go gentle into that good night
+        </p>
+      </div>
+
+      <!-- 底部三角形碎片装饰 -->
+      <div class="starmap-debris">
+        <!-- 左侧大三角 -->
+        <div class="debris-tri tri-1"></div>
+        <div class="debris-tri tri-2"></div>
+        <div class="debris-tri tri-3"></div>
+        <!-- 中间碎片（含中型三角） -->
+        <div class="debris-tri tri-4"></div>
+        <div class="debris-tri tri-5"></div>
+        <div class="debris-tri tri-19"></div>
+        <div class="debris-tri tri-6"></div>
+        <div class="debris-tri tri-7"></div>
+        <div class="debris-tri tri-20"></div>
+        <div class="debris-tri tri-8"></div>
+        <div class="debris-tri tri-9"></div>
+        <div class="debris-tri tri-21"></div>
+        <div class="debris-tri tri-10"></div>
+        <div class="debris-tri tri-22"></div>
+        <!-- 右侧大三角 -->
+        <div class="debris-tri tri-11"></div>
+        <div class="debris-tri tri-12"></div>
+        <div class="debris-tri tri-13"></div>
+        <div class="debris-tri tri-14"></div>
+        <div class="debris-tri tri-15"></div>
+        <div class="debris-tri tri-16"></div>
+        <div class="debris-tri tri-17"></div>
+        <div class="debris-tri tri-18"></div>
+      </div>
+    </section>
+
+    <!-- ===== Section 2: About ===== -->
     <section class="section section-about" id="about">
       <div class="section-inner">
         <div class="constellation-bg" id="constellationAbout"></div>
@@ -613,7 +784,7 @@
             </div>
           </div>
           <div class="contact-footer anim-fade-up delay-3">
-            <p>不要温和的走进那个良夜</p>
+            <p>在浩瀚无际的宇宙里，没有不可能的事</p>
           </div>
         </div>
       </div>

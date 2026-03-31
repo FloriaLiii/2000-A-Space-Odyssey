@@ -17,6 +17,15 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "HYLiLiangHei";
+  src:
+    local("汉仪力量黑简"), local("HYLiLiangHeiJ"), local("HY-LiLiangHei"),
+    local("HYLiLiangHeiJian");
+  font-weight: normal;
+  font-display: swap;
+}
+
 /* === Reset & Base === */
 *,
 *::before,
@@ -1762,4 +1771,857 @@ body {
 
 .section-landing::before {
   display: none;
+}
+
+/* ============================================
+   Star Map Section (星图导览)
+   ============================================ */
+.section-starmap {
+  background: radial-gradient(
+    ellipse at 0% 30%,
+    rgba(156, 80, 110, 0.25) 0%,
+    rgba(118, 70, 92, 0.12) 30%,
+    transparent 60%
+  );
+}
+
+.section-starmap::before {
+  display: none;
+}
+
+.starmap-container {
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  height: 80vh;
+  min-height: 600px;
+  margin: 0 auto;
+  padding: 0 60px;
+  z-index: 2;
+}
+
+/* --- SVG orbit lines --- */
+.starmap-orbits {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.orbit-line {
+  fill: none;
+  stroke: rgba(204, 164, 174, 0.5);
+  stroke-width: 0.4;
+  stroke-dasharray: 1.5 0.8;
+  stroke-linecap: round;
+  opacity: 0;
+  transition: opacity 1.5s ease 0.5s;
+}
+
+/* Orbit lines become visible when any sibling planet gets .visible */
+.starmap-container:has(.visible) .orbit-line {
+  opacity: 1;
+  animation: dash-flow 30s linear infinite;
+}
+
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -200;
+  }
+}
+
+/* --- Planet base --- */
+.star-planet {
+  position: absolute;
+  z-index: 3;
+  text-decoration: none;
+  color: var(--text);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+
+/* Dashed orbit circle around each planet */
+.star-planet::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 125%;
+  height: 125%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  /* Use SVG background for longer dash segments */
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  /* SVG circle with custom stroke-dasharray */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='49' fill='none' stroke='rgba(255,255,255,0.3)' stroke-width='1' stroke-dasharray='6 3.5'/%3E%3C/svg%3E");
+  background-size: 100% 100%;
+}
+
+.star-main::after {
+  width: 120%;
+  height: 120%;
+}
+
+a.star-planet:hover {
+  transform: scale(1.12);
+  z-index: 10;
+}
+
+a.star-planet:hover .planet-label {
+  opacity: 1;
+  color: var(--white);
+  text-shadow: 0 0 20px rgba(243, 112, 67, 0.6);
+}
+
+a.star-planet:hover .planet-glow {
+  opacity: 0.6;
+  transform: scale(1.3);
+}
+
+a.star-planet:hover .planet-img {
+  animation: planet-spin-cw 3s linear infinite;
+}
+
+a.star-planet:nth-child(even):hover .planet-img {
+  animation: planet-spin-ccw 3s linear infinite;
+}
+
+@keyframes planet-spin-cw {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes planet-spin-ccw {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.planet-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.5));
+  transition: transform 0.3s ease;
+}
+
+.planet-circle {
+  border-radius: 50%;
+  overflow: hidden;
+  aspect-ratio: 1;
+  object-fit: cover;
+}
+
+/* --- Planet glow --- */
+.planet-glow {
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  border-radius: 50%;
+  opacity: 0.25;
+  filter: blur(20px);
+  z-index: 0;
+  transition:
+    opacity 0.4s ease,
+    transform 0.4s ease;
+  pointer-events: none;
+}
+
+.glow-green {
+  background: radial-gradient(circle, #4ecdc4, transparent 70%);
+}
+.glow-silver {
+  background: radial-gradient(circle, #c0c0c0, transparent 70%);
+}
+.glow-red {
+  background: radial-gradient(circle, #e84e34, transparent 70%);
+}
+.glow-blue {
+  background: radial-gradient(circle, #4da6c9, transparent 70%);
+}
+.glow-orange {
+  background: radial-gradient(circle, #f37043, transparent 70%);
+}
+.glow-gold {
+  background: radial-gradient(circle, #fa9a1e, transparent 70%);
+}
+
+/* --- Planet labels --- */
+.planet-label {
+  font-family:
+    "HYLiLiangHei", "ZCOOL QingKe HuangYou", "PingFang SC", sans-serif;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  white-space: nowrap;
+  opacity: 0.85;
+  transition: all 0.3s ease;
+  letter-spacing: 0.05em;
+  position: absolute;
+  pointer-events: none;
+}
+
+.label-main {
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: var(--text);
+  text-shadow:
+    0 0 30px rgba(204, 164, 174, 0.5),
+    0 2px 10px rgba(0, 0, 0, 0.6);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+  z-index: 10;
+}
+
+.label-top {
+  font-size: 1.4rem;
+  bottom: -30px;
+  color: var(--accent-gold);
+}
+
+.label-right {
+  font-size: 1rem;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+}
+
+.label-left {
+  font-size: 1.1rem;
+  right: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent);
+}
+
+.label-bottom {
+  font-size: 1.2rem;
+  top: calc(100% + 8px);
+  color: var(--rose);
+}
+
+.label-log {
+  font-size: 1.1rem;
+  right: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--accent);
+}
+
+.label-comm {
+  font-size: 1rem;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--accent);
+}
+
+.label-personal {
+  font-size: 1rem;
+  top: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--accent-gold);
+}
+
+/* --- Planet satellite icon --- */
+.planet-satellite {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 28px;
+  height: 28px;
+  background: rgba(118, 70, 92, 0.6);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--rose);
+  border: 1px solid rgba(204, 164, 174, 0.3);
+  z-index: 5;
+}
+
+/* --- Planet orbit ring (for blue and orange planets) --- */
+.planet-ring-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 140%;
+  height: 40%;
+  transform: translate(-50%, -50%) rotateX(65deg) rotateZ(-15deg);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.ring-teal .planet-orbit-ring {
+  border-color: rgba(78, 205, 196, 0.5);
+}
+
+.planet-orbit-ring {
+  width: 100%;
+  height: 100%;
+  border: 1.5px solid rgba(204, 164, 174, 0.4);
+  border-radius: 50%;
+  animation: ring-spin 12s linear infinite;
+}
+
+@keyframes ring-spin {
+  from {
+    transform: rotateZ(0deg);
+  }
+  to {
+    transform: rotateZ(360deg);
+  }
+}
+
+/* --- Individual planet positions & sizes --- */
+
+/* 星图导览 - center-right, largest */
+.star-main {
+  width: 280px;
+  height: 280px;
+  top: 20%;
+  right: 18%;
+  cursor: default;
+}
+
+.star-main .planet-img {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+/* 燃料库 - top center-left */
+.star-fuel {
+  width: 130px;
+  height: 130px;
+  top: 3%;
+  left: 42%;
+}
+
+/* 宇航员档案 - top right */
+.star-profile {
+  width: 90px;
+  height: 90px;
+  top: 3%;
+  right: 6%;
+}
+
+/* 航行日志 - left-center */
+.star-log {
+  width: 90px;
+  height: 90px;
+  top: 30%;
+  left: 20%;
+}
+
+/* 已探索星球 - center */
+.star-explore {
+  width: 155px;
+  height: 155px;
+  top: 43%;
+  left: 36%;
+}
+
+/* 建立通讯 - bottom left */
+.star-comm {
+  width: 80px;
+  height: 80px;
+  top: 58%;
+  left: 8%;
+}
+
+/* 私人星图 - bottom right */
+.star-personal {
+  width: 85px;
+  height: 85px;
+  top: 72%;
+  right: 8%;
+}
+
+/* --- Floating animation --- */
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+/* --- Tagline --- */
+.starmap-tagline {
+  position: absolute;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Herculanum", "Noto Serif SC", serif;
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+  z-index: 3;
+}
+
+/* --- Bottom debris triangles --- */
+.starmap-debris {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 280px;
+  pointer-events: none;
+  z-index: 2;
+  overflow: visible;
+}
+
+.debris-tri {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.section-starmap:has(.visible) .debris-tri {
+  animation: debris-fly 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+/* ---- 左侧（最高，轨迹向上走） ---- */
+.tri-1 {
+  border-left: 50px solid transparent;
+  border-right: 50px solid transparent;
+  border-bottom: 80px solid #3a8bcd;
+  bottom: 80px; left: 2%;
+  animation-name: debris-fly-1 !important;
+  animation-delay: 1.3s !important;
+}
+.tri-2 {
+  border-left: 35px solid transparent;
+  border-right: 35px solid transparent;
+  border-bottom: 55px solid #4ecdc4;
+  bottom: 120px; left: 10%;
+  animation-name: debris-fly-2 !important;
+  animation-delay: 1.15s !important;
+}
+.tri-3 {
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  border-bottom: 30px solid #6d5a62;
+  bottom: 155px; left: 16%;
+  animation-name: debris-fly-3 !important;
+  animation-delay: 1.0s !important;
+}
+
+/* ---- 中偏左（轨迹渐低） ---- */
+.tri-4 {
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 14px solid #f37043;
+  bottom: 110px; left: 24%;
+  animation-name: debris-fly-4 !important;
+  animation-delay: 0.95s !important;
+}
+.tri-5 {
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 18px solid #4ecdc4;
+  bottom: 80px; left: 28%;
+  animation-name: debris-fly-5 !important;
+  animation-delay: 0.9s !important;
+}
+/* 中间中型灰紫三角 */
+.tri-19 {
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-bottom: 42px solid #7a6070;
+  bottom: 55px; left: 32%;
+  animation-name: debris-fly-19 !important;
+  animation-delay: 0.85s !important;
+}
+
+/* ---- 中间（较低，小碎片+中型点缀） ---- */
+.tri-6 {
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 12px solid #e84e34;
+  bottom: 70px; left: 37%;
+  animation-name: debris-fly-6 !important;
+  animation-delay: 0.82s !important;
+}
+.tri-7 {
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 10px solid #fa9a1e;
+  bottom: 35px; left: 41%;
+  animation-name: debris-fly-7 !important;
+  animation-delay: 0.78s !important;
+}
+/* 中间中型橙红三角 */
+.tri-20 {
+  border-left: 22px solid transparent;
+  border-right: 22px solid transparent;
+  border-bottom: 38px solid #e8654a;
+  bottom: 20px; left: 45%;
+  animation-name: debris-fly-20 !important;
+  animation-delay: 0.75s !important;
+}
+.tri-8 {
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-bottom: 14px solid #4ecdc4;
+  bottom: 50px; left: 49%;
+  animation-name: debris-fly-8 !important;
+  animation-delay: 0.7s !important;
+}
+.tri-9 {
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 9px solid #e84e34;
+  bottom: 15px; left: 53%;
+  animation-name: debris-fly-9 !important;
+  animation-delay: 0.68s !important;
+}
+/* 中偏右中型粉三角 */
+.tri-21 {
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 34px solid #cca4ae;
+  bottom: 40px; left: 57%;
+  animation-name: debris-fly-21 !important;
+  animation-delay: 0.65s !important;
+}
+.tri-10 {
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 11px solid #a89298;
+  bottom: 60px; left: 62%;
+  animation-name: debris-fly-10 !important;
+  animation-delay: 0.6s !important;
+}
+/* 中偏右中型蓝三角 */
+.tri-22 {
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  border-bottom: 30px solid #3a8bcd;
+  bottom: 10px; left: 66%;
+  animation-name: debris-fly-22 !important;
+  animation-delay: 0.55s !important;
+}
+
+/* ---- 右侧（最低，轨迹起点） ---- */
+.tri-11 {
+  border-left: 45px solid transparent;
+  border-right: 45px solid transparent;
+  border-bottom: 75px solid #c0c0c0;
+  bottom: -10px; right: 1%;
+  animation-name: debris-fly-11 !important;
+  animation-delay: 0.2s !important;
+}
+.tri-12 {
+  border-left: 38px solid transparent;
+  border-right: 38px solid transparent;
+  border-bottom: 65px solid #76465c;
+  bottom: 10px; right: 8%;
+  animation-name: debris-fly-12 !important;
+  animation-delay: 0.3s !important;
+}
+.tri-13 {
+  border-left: 28px solid transparent;
+  border-right: 28px solid transparent;
+  border-bottom: 45px solid #e84e34;
+  bottom: 35px; right: 14%;
+  animation-name: debris-fly-13 !important;
+  animation-delay: 0.4s !important;
+}
+.tri-14 {
+  border-left: 22px solid transparent;
+  border-right: 22px solid transparent;
+  border-bottom: 38px solid #cca4ae;
+  bottom: 0; right: 19%;
+  animation-name: debris-fly-14 !important;
+  animation-delay: 0.45s !important;
+}
+.tri-15 {
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 13px solid #f37043;
+  bottom: 55px; right: 22%;
+  animation-name: debris-fly-15 !important;
+  animation-delay: 0.5s !important;
+}
+.tri-16 {
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 18px solid #4ecdc4;
+  bottom: 20px; right: 26%;
+  animation-name: debris-fly-16 !important;
+  animation-delay: 0.52s !important;
+}
+.tri-17 {
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-bottom: 22px solid #6d5a62;
+  bottom: 45px; right: 5%;
+  animation-name: debris-fly-17 !important;
+  animation-delay: 0.35s !important;
+}
+.tri-18 {
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 10px solid #3a8bcd;
+  bottom: 65px; right: 11%;
+  animation-name: debris-fly-18 !important;
+  animation-delay: 0.48s !important;
+}
+
+/* 每个碎片独立的飞入动画 — 不同起点、不同终止角度 */
+@keyframes debris-fly-1 {
+  0%   { opacity: 0; transform: translate(180px, 60px) rotate(-50deg) scale(0.2); }
+  60%  { opacity: 0.85; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(-15deg) scale(1); }
+}
+@keyframes debris-fly-2 {
+  0%   { opacity: 0; transform: translate(140px, 30px) rotate(80deg) scale(0.25); }
+  60%  { opacity: 0.9; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(22deg) scale(1); }
+}
+@keyframes debris-fly-3 {
+  0%   { opacity: 0; transform: translate(100px, 50px) rotate(-100deg) scale(0.3); }
+  55%  { opacity: 0.8; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(-40deg) scale(1); }
+}
+@keyframes debris-fly-4 {
+  0%   { opacity: 0; transform: translate(90px, 35px) rotate(120deg) scale(0.2); }
+  65%  { opacity: 0.9; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(65deg) scale(1); }
+}
+@keyframes debris-fly-5 {
+  0%   { opacity: 0; transform: translate(110px, 45px) rotate(-70deg) scale(0.3); }
+  60%  { opacity: 0.85; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(-55deg) scale(1); }
+}
+@keyframes debris-fly-6 {
+  0%   { opacity: 0; transform: translate(80px, 25px) rotate(200deg) scale(0.15); }
+  55%  { opacity: 0.9; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(130deg) scale(1); }
+}
+@keyframes debris-fly-7 {
+  0%   { opacity: 0; transform: translate(70px, 40px) rotate(-140deg) scale(0.2); }
+  60%  { opacity: 0.8; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(-80deg) scale(1); }
+}
+@keyframes debris-fly-8 {
+  0%   { opacity: 0; transform: translate(95px, 30px) rotate(90deg) scale(0.25); }
+  65%  { opacity: 0.9; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(45deg) scale(1); }
+}
+@keyframes debris-fly-9 {
+  0%   { opacity: 0; transform: translate(60px, 50px) rotate(-160deg) scale(0.15); }
+  50%  { opacity: 0.85; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(-110deg) scale(1); }
+}
+@keyframes debris-fly-10 {
+  0%   { opacity: 0; transform: translate(85px, 35px) rotate(110deg) scale(0.2); }
+  60%  { opacity: 0.9; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(70deg) scale(1); }
+}
+@keyframes debris-fly-11 {
+  0%   { opacity: 0; transform: translate(160px, 50px) rotate(-30deg) scale(0.2); }
+  55%  { opacity: 0.85; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(12deg) scale(1); }
+}
+@keyframes debris-fly-12 {
+  0%   { opacity: 0; transform: translate(130px, 40px) rotate(70deg) scale(0.25); }
+  60%  { opacity: 0.9; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(-25deg) scale(1); }
+}
+@keyframes debris-fly-13 {
+  0%   { opacity: 0; transform: translate(120px, 55px) rotate(-90deg) scale(0.3); }
+  65%  { opacity: 0.85; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(35deg) scale(1); }
+}
+@keyframes debris-fly-14 {
+  0%   { opacity: 0; transform: translate(100px, 30px) rotate(150deg) scale(0.2); }
+  55%  { opacity: 0.9; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(-50deg) scale(1); }
+}
+@keyframes debris-fly-15 {
+  0%   { opacity: 0; transform: translate(75px, 45px) rotate(-120deg) scale(0.15); }
+  60%  { opacity: 0.8; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(95deg) scale(1); }
+}
+@keyframes debris-fly-16 {
+  0%   { opacity: 0; transform: translate(90px, 35px) rotate(60deg) scale(0.25); }
+  60%  { opacity: 0.9; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(-70deg) scale(1); }
+}
+@keyframes debris-fly-17 {
+  0%   { opacity: 0; transform: translate(150px, 55px) rotate(-45deg) scale(0.2); }
+  55%  { opacity: 0.85; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(150deg) scale(1); }
+}
+@keyframes debris-fly-18 {
+  0%   { opacity: 0; transform: translate(65px, 40px) rotate(130deg) scale(0.15); }
+  60%  { opacity: 0.9; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(-35deg) scale(1); }
+}
+
+@keyframes debris-fly-19 {
+  0%   { opacity: 0; transform: translate(110px, 40px) rotate(-85deg) scale(0.2); }
+  60%  { opacity: 0.9; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(28deg) scale(1); }
+}
+@keyframes debris-fly-20 {
+  0%   { opacity: 0; transform: translate(95px, 50px) rotate(140deg) scale(0.25); }
+  55%  { opacity: 0.85; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(-42deg) scale(1); }
+}
+@keyframes debris-fly-21 {
+  0%   { opacity: 0; transform: translate(80px, 35px) rotate(-60deg) scale(0.2); }
+  60%  { opacity: 0.9; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(55deg) scale(1); }
+}
+@keyframes debris-fly-22 {
+  0%   { opacity: 0; transform: translate(100px, 45px) rotate(100deg) scale(0.2); }
+  55%  { opacity: 0.85; }
+  100% { opacity: 1; transform: translate(0, 0) rotate(-18deg) scale(1); }
+}
+
+/* --- Star map responsive --- */
+@media (max-width: 1024px) {
+  .star-main {
+    width: 200px;
+    height: 200px;
+    top: 25%;
+    left: 50%;
+  }
+  .star-fuel {
+    width: 100px;
+    height: 100px;
+    top: 5%;
+    left: 40%;
+  }
+  .star-profile {
+    width: 80px;
+    height: 80px;
+    top: 8%;
+    right: 5%;
+  }
+  .star-log {
+    width: 70px;
+    height: 70px;
+    top: 30%;
+    left: 15%;
+  }
+  .star-explore {
+    width: 120px;
+    height: 120px;
+    top: 48%;
+    left: 30%;
+  }
+  .star-comm {
+    width: 65px;
+    height: 65px;
+    top: 58%;
+    left: 5%;
+  }
+  .star-personal {
+    width: 65px;
+    height: 65px;
+    top: 60%;
+    right: 5%;
+  }
+  .label-main {
+    font-size: 2rem;
+  }
+  .label-top {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .starmap-container {
+    height: 85vh;
+  }
+  .starmap-orbits {
+    display: none;
+  }
+  .star-main {
+    width: 150px;
+    height: 150px;
+    top: 20%;
+    left: 50%;
+  }
+  .star-fuel {
+    width: 80px;
+    height: 80px;
+    top: 2%;
+    left: 35%;
+  }
+  .star-profile {
+    width: 60px;
+    height: 60px;
+    top: 5%;
+    right: 8%;
+  }
+  .star-log {
+    width: 60px;
+    height: 60px;
+    top: 38%;
+    left: 8%;
+  }
+  .star-explore {
+    width: 100px;
+    height: 100px;
+    top: 48%;
+    left: 25%;
+  }
+  .star-comm {
+    width: 55px;
+    height: 55px;
+    top: 62%;
+    left: 5%;
+  }
+  .star-personal {
+    width: 55px;
+    height: 55px;
+    top: 65%;
+    right: 5%;
+  }
+  .label-main {
+    font-size: 1.4rem;
+  }
+  .label-top,
+  .label-bottom {
+    font-size: 0.9rem;
+  }
+  .label-left,
+  .label-right {
+    font-size: 0.8rem;
+  }
+  .planet-satellite {
+    display: none;
+  }
+  .starmap-tagline {
+    font-size: 0.8rem;
+    bottom: 5%;
+  }
 }
