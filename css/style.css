@@ -3524,8 +3524,8 @@ a.star-planet:nth-child(even):hover .planet-img {
 .section-hobbies {
   background: radial-gradient(
     ellipse at 20% 50%,
-    #2a1f3d 0%,
-    var(--bg-deep) 60%
+    rgba(42, 31, 61, 0.55) 0%,
+    rgba(26, 20, 36, 0.35) 100%
   );
 }
 
@@ -3564,7 +3564,7 @@ a.star-planet:nth-child(even):hover .planet-img {
   inset: 0;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 3;
   pointer-events: none;
   overflow: visible;
 }
@@ -3576,58 +3576,52 @@ a.star-planet:nth-child(even):hover .planet-img {
   stroke-width: 1.2;
 }
 
-/* 标题区 */
+/* 标题区（同航行日志布局） */
 .hobbies-header {
   position: absolute;
-  top: clamp(40px, 8vh, 80px);
-  right: clamp(60px, 10vw, 180px);
+  top: clamp(20px, 3vh, 50px);
+  right: clamp(20px, 3vw, 60px);
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 1.5vw, 20px);
   z-index: 5;
-  text-align: right;
 }
-.hobbies-title {
-  font-family: "HYLiLiangHei", "Noto Sans SC", sans-serif;
-  font-size: clamp(1.8rem, 3vw, 2.8rem);
-  color: var(--text);
-  letter-spacing: 0.15em;
-  margin-bottom: 0;
+.hobbies-header-planet {
+  position: relative;
+  width: clamp(90px, 10vw, 150px);
+  height: clamp(90px, 10vw, 150px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.hobbies-number {
-  font-family: "Orbitron", monospace;
-  font-size: clamp(3rem, 6vw, 5.5rem);
-  font-weight: 900;
-  color: rgba(255, 255, 255, 0.12);
-  line-height: 1;
-  display: block;
-  margin-top: -0.15em;
-}
-
-/* 几何线框球 */
-.hobbies-wireframe {
+.hobbies-header-planet .header-planet-img {
   position: absolute;
-  top: clamp(30px, 6vh, 70px);
-  right: clamp(30px, 4vw, 80px);
-  width: clamp(80px, 8vw, 120px);
-  height: clamp(80px, 8vw, 120px);
-  z-index: 4;
-  animation: spin-cw 30s linear infinite;
-}
-.wireframe-svg {
   width: 100%;
   height: 100%;
-  fill: none;
-  stroke: rgba(227, 100, 120, 0.5);
-  stroke-width: 0.6;
+  object-fit: contain;
 }
-.wireframe-dot {
-  fill: rgba(227, 100, 120, 0.8);
-  stroke: none;
+.hobbies-number {
+  position: relative;
+  font-family: "HYLiLiangHei", "HYChaoJiZhanJia", "Arial Black", sans-serif;
+  font-size: clamp(32px, 3.5vw, 50px);
+  font-weight: 900;
+  color: var(--white);
+  z-index: 1;
+  line-height: 1;
+  letter-spacing: 0.05em;
+}
+.hobbies-title {
+  font-family: "ZCOOL QingKe HuangYou", "Noto Serif SC", serif;
+  font-size: clamp(24px, 2.5vw, 36px);
+  color: var(--white);
+  letter-spacing: 0.15em;
 }
 
 /* 月亮 */
 .hobbies-moon {
   position: absolute;
   right: -20px;
-  top: 55%;
+  top: 50%;
   width: clamp(50px, 5vw, 80px);
   height: clamp(50px, 5vw, 80px);
   border-radius: 50%;
@@ -3641,6 +3635,8 @@ a.star-planet:nth-child(even):hover .planet-img {
     inset -8px -4px 12px rgba(0, 0, 0, 0.3),
     0 0 20px rgba(200, 190, 170, 0.15);
   z-index: 3;
+  filter: blur(3px);
+  opacity: 0.7;
 }
 
 /* 诗句 */
@@ -3710,7 +3706,6 @@ a.star-planet:nth-child(even):hover .planet-img {
   width: 65%;
   height: 65%;
   object-fit: contain;
-  border-radius: 50%;
   animation: spin-cw 20s linear infinite;
   transition: filter 0.4s ease;
 }
@@ -3730,17 +3725,6 @@ a.star-planet:nth-child(even):hover .planet-img {
     border-color 0.4s ease,
     box-shadow 0.4s ease;
 }
-.hobby-planet-ring {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 90%;
-  height: 28%;
-  border: 1.5px solid rgba(255, 255, 255, 0.4);
-  border-radius: 50%;
-  transform: translate(-50%, -50%) rotateX(70deg);
-  pointer-events: none;
-}
 
 /* 卡片 */
 .hobby-card {
@@ -3750,7 +3734,7 @@ a.star-planet:nth-child(even):hover .planet-img {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   padding: 10px;
-  margin-left: -8px;
+  margin-left: -18px;
   width: clamp(140px, 15vw, 200px);
   cursor: pointer;
   transition:
@@ -3760,6 +3744,30 @@ a.star-planet:nth-child(even):hover .planet-img {
 .hobby-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+/* 悬浮时显示「点击查看」提示 */
+.hobby-card::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  width: 28px;
+  height: 28px;
+  opacity: 0;
+  transition:
+    opacity 0.3s ease,
+    transform 0.3s ease;
+  pointer-events: none;
+  z-index: 2;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'/%3E%3Ccircle cx='12' cy='12' r='3'/%3E%3C/svg%3E")
+    no-repeat center/contain;
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.5));
+}
+.hobby-card:hover::after {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
 }
 .hobby-card-arrow {
   position: absolute;
@@ -3778,6 +3786,9 @@ a.star-planet:nth-child(even):hover .planet-img {
   object-fit: cover;
   border-radius: 4px;
   display: block;
+  filter: blur(6px);
+  clip-path: inset(0 round 4px);
+  transition: filter 0.4s ease;
 }
 .hobby-card-label {
   display: block;

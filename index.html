@@ -766,53 +766,13 @@
       <!-- 轨道弧线 — JS 动态绘制 SVG -->
       <svg class="hobbies-orbits-svg" id="hobbiesOrbits"></svg>
 
-      <!-- 右上角标题区 -->
+      <!-- 右上角标题区（同航行日志样式） -->
       <div class="hobbies-header anim-fade-up">
+        <div class="hobbies-header-planet">
+          <img src="assets/planet-title.png" alt="" class="header-planet-img" />
+          <span class="hobbies-number">06</span>
+        </div>
         <h2 class="hobbies-title">私人星图</h2>
-        <span class="hobbies-number">06</span>
-      </div>
-
-      <!-- 几何线框球装饰 -->
-      <div class="hobbies-wireframe anim-scale-in delay-2">
-        <svg viewBox="0 0 120 120" class="wireframe-svg">
-          <circle cx="60" cy="60" r="50" />
-          <ellipse cx="60" cy="60" rx="50" ry="20" />
-          <ellipse cx="60" cy="60" rx="20" ry="50" />
-          <ellipse
-            cx="60"
-            cy="60"
-            rx="50"
-            ry="35"
-            transform="rotate(30 60 60)"
-          />
-          <ellipse
-            cx="60"
-            cy="60"
-            rx="50"
-            ry="35"
-            transform="rotate(-30 60 60)"
-          />
-          <circle cx="18" cy="38" r="2.5" class="wireframe-dot" />
-          <circle cx="102" cy="38" r="2.5" class="wireframe-dot" />
-          <circle cx="60" cy="10" r="2.5" class="wireframe-dot" />
-          <circle cx="60" cy="110" r="2.5" class="wireframe-dot" />
-          <circle cx="30" cy="95" r="2.5" class="wireframe-dot" />
-          <circle cx="90" cy="95" r="2.5" class="wireframe-dot" />
-          <circle cx="18" cy="68" r="2.5" class="wireframe-dot" />
-          <circle cx="102" cy="68" r="2.5" class="wireframe-dot" />
-          <line x1="18" y1="38" x2="60" y2="10" />
-          <line x1="60" y1="10" x2="102" y2="38" />
-          <line x1="102" y1="38" x2="102" y2="68" />
-          <line x1="102" y1="68" x2="90" y2="95" />
-          <line x1="90" y1="95" x2="60" y2="110" />
-          <line x1="60" y1="110" x2="30" y2="95" />
-          <line x1="30" y1="95" x2="18" y2="68" />
-          <line x1="18" y1="68" x2="18" y2="38" />
-          <line x1="18" y1="38" x2="90" y2="95" />
-          <line x1="60" y1="10" x2="30" y2="95" />
-          <line x1="102" y1="38" x2="60" y2="110" />
-          <line x1="102" y1="68" x2="18" y2="68" />
-        </svg>
       </div>
 
       <!-- 右侧月亮装饰 -->
