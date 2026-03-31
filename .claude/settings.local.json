@@ -33,7 +33,18 @@
       "Bash(ls /Users/likangjue/Desktop/素材/星球小标题*)",
       "Bash(ls /Users/likangjue/Desktop/素材/*锐* /Users/likangjue/Desktop/素材/*Zhang* /Users/likangjue/Desktop/素材/*.ttf)",
       "Bash(xxd -l 16 /Users/likangjue/project/resume/assets/ZhangHaiShanRuiXie.ttf)",
-      "Bash(pip3 show:*)"
+      "Bash(pip3 show:*)",
+      "Bash(cp /Users/likangjue/Desktop/picture/摄影/* /Users/likangjue/project/resume/assets/hobbies/photography/)",
+      "Bash(cp /Users/likangjue/Desktop/picture/旅游/* /Users/likangjue/project/resume/assets/hobbies/travel/)",
+      "Bash(cp /Users/likangjue/Desktop/picture/运动/* /Users/likangjue/project/resume/assets/hobbies/sports/)",
+      "Bash(git remote:*)",
+      "Bash(git push:*)",
+      "Bash(ls /Users/likangjue/Desktop/picture/星球9*)",
+      "Bash(ls /Users/likangjue/Desktop/picture/*9*)",
+      "Bash(ls /Users/likangjue/Desktop/*星球9*)",
+      "Bash(find /Users/likangjue/Desktop -maxdepth 2 -name *9* -type f)",
+      "Read(//Users/likangjue/Library/Application Support/Claude/local-agent-mode-sessions/skills-plugin/8e71dae2-463a-425a-8ec6-493eb839c4c1/0a5e5a08-66b5-4a10-b19b-fd4f688d4b45/skills/pptx/**)",
+      "Bash(python scripts/office/soffice.py --headless --convert-to pdf /Users/likangjue/Desktop/planet.pptx)"
     ]
   }
 }

@@ -332,6 +332,202 @@
   }
 
   // ==========================================
+  // Hobby Gallery Modal (私人星图)
+  // ==========================================
+  class HobbyGallery {
+    constructor() {
+      this.modal = document.getElementById('hobbyModal');
+      if (!this.modal) return;
+
+      this.backdrop = this.modal.querySelector('.hobby-modal-backdrop');
+      this.titleEl = this.modal.querySelector('.hobby-modal-title');
+      this.imgEl = this.modal.querySelector('.hobby-modal-img');
+      this.dotsEl = this.modal.querySelector('.hobby-modal-dots');
+      this.counterEl = this.modal.querySelector('.hobby-modal-counter');
+      this.prevBtn = this.modal.querySelector('.arrow-prev');
+      this.nextBtn = this.modal.querySelector('.arrow-next');
+      this.closeBtn = this.modal.querySelector('.hobby-modal-close');
+
+      this.photos = {
+        photography: [
+          'assets/hobbies/photography/LKJ_0892.JPG',
+          'assets/hobbies/photography/LKJ_2636.JPG',
+          'assets/hobbies/photography/LKJ_3114.JPG',
+          'assets/hobbies/photography/2d4d749b56d05454abd10e13f1c354ce.jpg',
+          'assets/hobbies/photography/065e8de134bd71daad55a1bd0c56a859.jpg',
+          'assets/hobbies/photography/b81d0a3e9b3527d8a0f19eae49806e95.jpg',
+        ],
+        travel: [
+          'assets/hobbies/travel/LKJ_2371.JPG',
+          'assets/hobbies/travel/021ffb59a7ad9e8fc3784bd6a493772b.jpg',
+        ],
+        sports: [
+          'assets/hobbies/sports/7e3e798be9011d63065d6b7688510bcc.jpg',
+        ],
+      };
+
+      this.currentPhotos = [];
+      this.currentIndex = 0;
+
+      this.bindEvents();
+    }
+
+    bindEvents() {
+      // Open modal on planet or card click
+      document.querySelectorAll('.hobby-planet, .hobby-card').forEach((el) => {
+        el.addEventListener('click', () => {
+          const group = el.closest('.hobby-group');
+          const planet = group.querySelector('.hobby-planet');
+          const hobby = planet.dataset.hobby;
+          const title = planet.dataset.title;
+          this.open(hobby, title);
+        });
+      });
+
+      this.closeBtn.addEventListener('click', () => this.close());
+      this.backdrop.addEventListener('click', () => this.close());
+      this.prevBtn.addEventListener('click', () => this.prev());
+      this.nextBtn.addEventListener('click', () => this.next());
+
+      document.addEventListener('keydown', (e) => {
+        if (!this.modal.classList.contains('active')) return;
+        if (e.key === 'Escape') this.close();
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') this.prev();
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') this.next();
+      });
+    }
+
+    open(hobby, title) {
+      this.currentPhotos = this.photos[hobby] || [];
+      this.currentIndex = 0;
+      this.titleEl.textContent = title;
+      this.renderDots();
+      this.showPhoto(false);
+      this.modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    close() {
+      this.modal.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    prev() {
+      if (this.currentPhotos.length <= 1) return;
+      this.currentIndex = (this.currentIndex - 1 + this.currentPhotos.length) % this.currentPhotos.length;
+      this.showPhoto(true);
+    }
+
+    next() {
+      if (this.currentPhotos.length <= 1) return;
+      this.currentIndex = (this.currentIndex + 1) % this.currentPhotos.length;
+      this.showPhoto(true);
+    }
+
+    showPhoto(animate) {
+      const src = this.currentPhotos[this.currentIndex];
+      if (animate) {
+        this.imgEl.classList.add('fading');
+        setTimeout(() => {
+          this.imgEl.src = src;
+          this.imgEl.classList.remove('fading');
+        }, 200);
+      } else {
+        this.imgEl.src = src;
+      }
+      this.counterEl.textContent = `${this.currentIndex + 1} / ${this.currentPhotos.length}`;
+      this.updateDots();
+    }
+
+    renderDots() {
+      this.dotsEl.innerHTML = '';
+      this.currentPhotos.forEach((_, i) => {
+        const dot = document.createElement('span');
+        dot.className = 'hobby-modal-dot' + (i === 0 ? ' active' : '');
+        dot.addEventListener('click', () => {
+          this.currentIndex = i;
+          this.showPhoto(true);
+        });
+        this.dotsEl.appendChild(dot);
+      });
+    }
+
+    updateDots() {
+      this.dotsEl.querySelectorAll('.hobby-modal-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === this.currentIndex);
+      });
+    }
+  }
+
+  // ==========================================
+  // Hobby Orbits — 动态绘制轨道线穿过星球
+  // ==========================================
+  function drawHobbyOrbits() {
+    const svg = document.getElementById('hobbiesOrbits');
+    const section = document.getElementById('hobbies');
+    if (!svg || !section) return;
+
+    const w = section.offsetWidth;
+    const h = section.offsetHeight;
+
+    // 用 offsetLeft/offsetTop 获取相对于 section 的坐标（不受滚动影响）
+    function getCenterInSection(el) {
+      let x = el.offsetWidth / 2;
+      let y = el.offsetHeight / 2;
+      let node = el;
+      while (node && node !== section) {
+        x += node.offsetLeft;
+        y += node.offsetTop;
+        node = node.offsetParent;
+      }
+      return { x, y };
+    }
+
+    // 大星球中心
+    const bigPlanet = section.querySelector('.hobbies-big-planet');
+    const bp = getCenterInSection(bigPlanet);
+
+    // 获取每颗小星球中心坐标
+    const planets = {};
+    section.querySelectorAll('.hobby-planet').forEach(p => {
+      planets[p.dataset.hobby] = getCenterInSection(p);
+    });
+
+    const green = planets.photography;  // 上方
+    const red = planets.travel;         // 左下
+    const blue = planets.sports;        // 右下
+
+    // PPT 原版用大圆弧，圆心在左侧屏幕外
+    // 策略：固定圆心 x = 大星球视觉中心 x，由绿色和红色两点的垂直平分线求 cy
+    // 大星球 CSS: left=-38vw, width=clamp(500,60vw,900), top=50%, translateY(-50%)
+    // 视觉中心 x = offsetLeft + offsetWidth/2 (transform 不影响 offsetLeft)
+    const bpCx = bigPlanet.offsetLeft + bigPlanet.offsetWidth / 2;
+
+    // 垂直平分线经过 green 和 red 的中点，方向垂直于 green→red
+    // 参数化：给定 cx，求 cy 使圆同时经过 green 和 red
+    // cy = midY + (midX - cx) * dx / dy
+    const midX = (green.x + red.x) / 2;
+    const midY = (green.y + red.y) / 2;
+    const dx = red.x - green.x;
+    const dy = red.y - green.y;
+
+    const innerCx = bpCx;
+    const innerCy = midY + (midX - innerCx) * dx / dy;
+    const innerR = Math.sqrt((green.x - innerCx) * (green.x - innerCx) + (green.y - innerCy) * (green.y - innerCy));
+
+    // 外圆：经过蓝色星球，圆心 x 在内圆右边一点（仿 PPT 比例）
+    const outerCx = innerCx + w * 0.12;
+    const outerCy = innerCy;
+    const outerR = Math.sqrt((blue.x - outerCx) * (blue.x - outerCx) + (blue.y - outerCy) * (blue.y - outerCy));
+
+    svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+    svg.innerHTML = `
+      <circle cx="${innerCx}" cy="${innerCy}" r="${innerR}" />
+      <circle cx="${outerCx}" cy="${outerCy}" r="${outerR}" />
+    `;
+  }
+
+  // ==========================================
   // Initialize
   // ==========================================
   document.addEventListener('DOMContentLoaded', () => {
@@ -343,5 +539,21 @@
 
     // Scroll animations
     new ScrollAnimator();
+
+    // Hobby gallery modal
+    new HobbyGallery();
+
+    // Draw hobby orbits — wait for images to load, then redraw on scroll/resize
+    window.addEventListener('load', () => {
+      drawHobbyOrbits();
+      // Also redraw when section scrolls into view
+      const hobbiesSection = document.getElementById('hobbies');
+      if (hobbiesSection) {
+        new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting) drawHobbyOrbits();
+        }, { threshold: 0.1 }).observe(hobbiesSection);
+      }
+    });
+    window.addEventListener('resize', drawHobbyOrbits);
   });
 })();

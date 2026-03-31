@@ -3517,3 +3517,415 @@ a.star-planet:nth-child(even):hover .planet-img {
     bottom: 5%;
   }
 }
+
+/* ============================================
+   Section: 私人星图 / Hobbies
+   ============================================ */
+.section-hobbies {
+  background: radial-gradient(
+    ellipse at 20% 50%,
+    #2a1f3d 0%,
+    var(--bg-deep) 60%
+  );
+}
+
+/* 左侧半露大星球 */
+.hobbies-big-planet {
+  position: absolute;
+  left: -38vw;
+  top: 50%;
+  transform: translateY(-50%);
+  width: clamp(500px, 60vw, 900px);
+  height: clamp(500px, 60vw, 900px);
+  z-index: 2;
+  pointer-events: none;
+}
+.hobbies-big-planet-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: brightness(1.3) saturate(1.2);
+  animation: planet-breathe 15s ease-in-out infinite;
+}
+
+@keyframes planet-breathe {
+  0%,
+  100% {
+    transform: scale(1) translateX(0);
+  }
+  50% {
+    transform: scale(1.03) translateX(6px);
+  }
+}
+
+/* 轨道弧线 — JS 动态 SVG */
+.hobbies-orbits-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  overflow: visible;
+}
+.hobbies-orbits-svg ellipse,
+.hobbies-orbits-svg circle,
+.hobbies-orbits-svg path {
+  fill: none;
+  stroke: rgba(204, 164, 174, 0.18);
+  stroke-width: 1.2;
+}
+
+/* 标题区 */
+.hobbies-header {
+  position: absolute;
+  top: clamp(40px, 8vh, 80px);
+  right: clamp(60px, 10vw, 180px);
+  z-index: 5;
+  text-align: right;
+}
+.hobbies-title {
+  font-family: "HYLiLiangHei", "Noto Sans SC", sans-serif;
+  font-size: clamp(1.8rem, 3vw, 2.8rem);
+  color: var(--text);
+  letter-spacing: 0.15em;
+  margin-bottom: 0;
+}
+.hobbies-number {
+  font-family: "Orbitron", monospace;
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.12);
+  line-height: 1;
+  display: block;
+  margin-top: -0.15em;
+}
+
+/* 几何线框球 */
+.hobbies-wireframe {
+  position: absolute;
+  top: clamp(30px, 6vh, 70px);
+  right: clamp(30px, 4vw, 80px);
+  width: clamp(80px, 8vw, 120px);
+  height: clamp(80px, 8vw, 120px);
+  z-index: 4;
+  animation: spin-cw 30s linear infinite;
+}
+.wireframe-svg {
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: rgba(227, 100, 120, 0.5);
+  stroke-width: 0.6;
+}
+.wireframe-dot {
+  fill: rgba(227, 100, 120, 0.8);
+  stroke: none;
+}
+
+/* 月亮 */
+.hobbies-moon {
+  position: absolute;
+  right: -20px;
+  top: 55%;
+  width: clamp(50px, 5vw, 80px);
+  height: clamp(50px, 5vw, 80px);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 35%,
+    #e8e0d4,
+    #b0a898 50%,
+    #8a8278 100%
+  );
+  box-shadow:
+    inset -8px -4px 12px rgba(0, 0, 0, 0.3),
+    0 0 20px rgba(200, 190, 170, 0.15);
+  z-index: 3;
+}
+
+/* 诗句 */
+.hobbies-quote {
+  position: absolute;
+  top: 45%;
+  right: clamp(60px, 8vw, 160px);
+  z-index: 5;
+  font-family: "Orbitron", monospace;
+  font-size: clamp(0.55rem, 0.8vw, 0.78rem);
+  color: rgba(240, 230, 234, 0.45);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  line-height: 1.8;
+  text-align: center;
+}
+
+/* === 星球 + 卡片组 === */
+.hobby-group {
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow: visible;
+}
+
+/* 三组定位 */
+.hobby-photography {
+  top: 14%;
+  left: 24%;
+  flex-direction: row;
+}
+.hobby-travel {
+  bottom: 8%;
+  left: 18%;
+  flex-direction: row;
+}
+.hobby-sports {
+  bottom: 14%;
+  right: 8%;
+  flex-direction: row;
+}
+/* 蓝色星球稍大 */
+.hobby-sports .hobby-planet {
+  width: clamp(100px, 11vw, 160px);
+  height: clamp(100px, 11vw, 160px);
+}
+
+/* 星球 */
+.hobby-planet {
+  position: relative;
+  width: clamp(90px, 10vw, 150px);
+  height: clamp(90px, 10vw, 150px);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+  overflow: visible;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hobby-planet:hover {
+  transform: scale(1.15);
+}
+.hobby-planet-img {
+  width: 65%;
+  height: 65%;
+  object-fit: contain;
+  border-radius: 50%;
+  animation: spin-cw 20s linear infinite;
+  transition: filter 0.4s ease;
+}
+/* 悬浮星球或卡片时：加速自转 + 发光 */
+.hobby-planet:hover .hobby-planet-img,
+.hobby-group:hover .hobby-planet-img {
+  animation: spin-cw 3s linear infinite;
+  filter: brightness(1.3) drop-shadow(0 0 12px rgba(255, 255, 255, 0.5));
+}
+.hobby-planet:hover .hobby-planet-ring,
+.hobby-group:hover .hobby-planet-ring {
+  border-color: rgba(255, 255, 255, 0.7);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+}
+.hobby-planet-ring {
+  transition:
+    border-color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+.hobby-planet-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 90%;
+  height: 28%;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  transform: translate(-50%, -50%) rotateX(70deg);
+  pointer-events: none;
+}
+
+/* 卡片 */
+.hobby-card {
+  position: relative;
+  background: rgba(180, 175, 185, 0.25);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px;
+  margin-left: 15px;
+  width: clamp(140px, 15vw, 200px);
+  cursor: pointer;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+.hobby-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+.hobby-card-arrow {
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid rgba(180, 175, 185, 0.25);
+}
+.hobby-card-img {
+  width: 100%;
+  aspect-ratio: 4/3;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+}
+.hobby-card-label {
+  display: block;
+  margin-top: 8px;
+  font-family: "ZCOOL QingKe HuangYou", sans-serif;
+  font-size: clamp(0.8rem, 1.1vw, 1rem);
+  color: var(--rose);
+  letter-spacing: 0.1em;
+}
+
+/* ============================================
+   照片弹窗 Modal
+   ============================================ */
+.hobby-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
+}
+.hobby-modal.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+.hobby-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(10, 6, 18, 0.85);
+  backdrop-filter: blur(6px);
+}
+.hobby-modal-content {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+  width: 90vw;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transform: scale(0.9) translateY(20px);
+  transition: transform 0.35s ease;
+}
+.hobby-modal.active .hobby-modal-content {
+  transform: scale(1) translateY(0);
+}
+.hobby-modal-close {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  background: none;
+  border: none;
+  color: var(--text);
+  font-size: 2rem;
+  cursor: pointer;
+  line-height: 1;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  z-index: 2;
+}
+.hobby-modal-close:hover {
+  opacity: 1;
+}
+.hobby-modal-title {
+  font-family: "ZCOOL QingKe HuangYou", sans-serif;
+  font-size: 1.4rem;
+  color: var(--rose);
+  margin-bottom: 16px;
+  letter-spacing: 0.15em;
+}
+.hobby-modal-gallery {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+.hobby-modal-arrow {
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+.hobby-modal-arrow:hover {
+  background: rgba(255, 255, 255, 0.18);
+  transform: scale(1.1);
+}
+.hobby-modal-arrow svg {
+  width: 20px;
+  height: 20px;
+}
+.hobby-modal-img-wrap {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.3);
+}
+.hobby-modal-img {
+  max-width: 100%;
+  max-height: 65vh;
+  object-fit: contain;
+  border-radius: 8px;
+  transition: opacity 0.3s ease;
+}
+.hobby-modal-img.fading {
+  opacity: 0;
+}
+.hobby-modal-dots {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+  justify-content: center;
+}
+.hobby-modal-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+.hobby-modal-dot.active {
+  background: var(--rose);
+  transform: scale(1.3);
+}
+.hobby-modal-counter {
+  margin-top: 8px;
+  font-family: "Orbitron", monospace;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+}

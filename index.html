@@ -49,8 +49,14 @@
         data-section="6"
         data-label="项目二"
       ></a>
-      <a href="#awards" class="nav-dot" data-section="7" data-label="荣誉"></a>
-      <a href="#contact" class="nav-dot" data-section="8" data-label="联系"></a>
+      <a
+        href="#hobbies"
+        class="nav-dot"
+        data-section="7"
+        data-label="私人星图"
+      ></a>
+      <a href="#awards" class="nav-dot" data-section="8" data-label="荣誉"></a>
+      <a href="#contact" class="nav-dot" data-section="9" data-label="联系"></a>
     </nav>
 
     <!-- 页面进度条 -->
@@ -750,7 +756,166 @@
       </div>
     </section>
 
-    <!-- ===== Section 6: Awards ===== -->
+    <!-- ===== Section 6: Hobbies / 私人星图 ===== -->
+    <section class="section section-hobbies" id="hobbies">
+      <!-- 左侧半露大星球 -->
+      <div class="hobbies-big-planet">
+        <img src="assets/planet-9.png" alt="" class="hobbies-big-planet-img" />
+      </div>
+
+      <!-- 轨道弧线 — JS 动态绘制 SVG -->
+      <svg class="hobbies-orbits-svg" id="hobbiesOrbits"></svg>
+
+      <!-- 右上角标题区 -->
+      <div class="hobbies-header anim-fade-up">
+        <h2 class="hobbies-title">私人星图</h2>
+        <span class="hobbies-number">06</span>
+      </div>
+
+      <!-- 几何线框球装饰 -->
+      <div class="hobbies-wireframe anim-scale-in delay-2">
+        <svg viewBox="0 0 120 120" class="wireframe-svg">
+          <circle cx="60" cy="60" r="50" />
+          <ellipse cx="60" cy="60" rx="50" ry="20" />
+          <ellipse cx="60" cy="60" rx="20" ry="50" />
+          <ellipse
+            cx="60"
+            cy="60"
+            rx="50"
+            ry="35"
+            transform="rotate(30 60 60)"
+          />
+          <ellipse
+            cx="60"
+            cy="60"
+            rx="50"
+            ry="35"
+            transform="rotate(-30 60 60)"
+          />
+          <circle cx="18" cy="38" r="2.5" class="wireframe-dot" />
+          <circle cx="102" cy="38" r="2.5" class="wireframe-dot" />
+          <circle cx="60" cy="10" r="2.5" class="wireframe-dot" />
+          <circle cx="60" cy="110" r="2.5" class="wireframe-dot" />
+          <circle cx="30" cy="95" r="2.5" class="wireframe-dot" />
+          <circle cx="90" cy="95" r="2.5" class="wireframe-dot" />
+          <circle cx="18" cy="68" r="2.5" class="wireframe-dot" />
+          <circle cx="102" cy="68" r="2.5" class="wireframe-dot" />
+          <line x1="18" y1="38" x2="60" y2="10" />
+          <line x1="60" y1="10" x2="102" y2="38" />
+          <line x1="102" y1="38" x2="102" y2="68" />
+          <line x1="102" y1="68" x2="90" y2="95" />
+          <line x1="90" y1="95" x2="60" y2="110" />
+          <line x1="60" y1="110" x2="30" y2="95" />
+          <line x1="30" y1="95" x2="18" y2="68" />
+          <line x1="18" y1="68" x2="18" y2="38" />
+          <line x1="18" y1="38" x2="90" y2="95" />
+          <line x1="60" y1="10" x2="30" y2="95" />
+          <line x1="102" y1="38" x2="60" y2="110" />
+          <line x1="102" y1="68" x2="18" y2="68" />
+        </svg>
+      </div>
+
+      <!-- 右侧月亮装饰 -->
+      <div class="hobbies-moon"></div>
+
+      <!-- 诗句 -->
+      <p class="hobbies-quote anim-fade-up delay-1">
+        Do not go gentle into that good night,<br />
+        Old age should burn and rave at close of day;<br />
+        Rage, rage against the dying of the light.
+      </p>
+
+      <!-- 三颗星球 + 卡片 -->
+      <!-- 绿色星球 - 摄影 -->
+      <div class="hobby-group hobby-photography anim-scale-in delay-1">
+        <div class="hobby-planet" data-hobby="photography" data-title="摄影">
+          <img src="assets/planet-6.png" alt="摄影" class="hobby-planet-img" />
+        </div>
+        <div class="hobby-card">
+          <div class="hobby-card-arrow"></div>
+          <img
+            src="assets/hobbies/photography/LKJ_0892.JPG"
+            alt="摄影"
+            class="hobby-card-img"
+          />
+          <span class="hobby-card-label">摄影</span>
+        </div>
+      </div>
+
+      <!-- 红色星球 - 旅游 -->
+      <div class="hobby-group hobby-travel anim-scale-in delay-2">
+        <div class="hobby-planet" data-hobby="travel" data-title="旅游">
+          <img src="assets/planet-5.png" alt="旅游" class="hobby-planet-img" />
+        </div>
+        <div class="hobby-card">
+          <div class="hobby-card-arrow"></div>
+          <img
+            src="assets/hobbies/travel/LKJ_2371.JPG"
+            alt="旅游"
+            class="hobby-card-img"
+          />
+          <span class="hobby-card-label">旅游</span>
+        </div>
+      </div>
+
+      <!-- 蓝色星球 - 运动 -->
+      <div class="hobby-group hobby-sports anim-scale-in delay-3">
+        <div class="hobby-planet" data-hobby="sports" data-title="运动">
+          <img
+            src="assets/planet-blue.png"
+            alt="运动"
+            class="hobby-planet-img"
+          />
+        </div>
+        <div class="hobby-card">
+          <div class="hobby-card-arrow"></div>
+          <img
+            src="assets/hobbies/sports/7e3e798be9011d63065d6b7688510bcc.jpg"
+            alt="运动"
+            class="hobby-card-img"
+          />
+          <span class="hobby-card-label">运动</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 照片弹窗 Modal -->
+    <div class="hobby-modal" id="hobbyModal">
+      <div class="hobby-modal-backdrop"></div>
+      <div class="hobby-modal-content">
+        <button class="hobby-modal-close">&times;</button>
+        <h3 class="hobby-modal-title"></h3>
+        <div class="hobby-modal-gallery">
+          <button class="hobby-modal-arrow arrow-prev">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+          <div class="hobby-modal-img-wrap">
+            <img src="" alt="" class="hobby-modal-img" />
+          </div>
+          <button class="hobby-modal-arrow arrow-next">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <polyline points="9 6 15 12 9 18" />
+            </svg>
+          </button>
+        </div>
+        <div class="hobby-modal-dots"></div>
+        <p class="hobby-modal-counter"></p>
+      </div>
+    </div>
+
+    <!-- ===== Section 7: Awards ===== -->
     <section class="section section-awards" id="awards">
       <div class="section-inner">
         <h2 class="section-title anim-wipe-in">HONORS</h2>
@@ -881,6 +1046,6 @@
       </div>
     </section>
 
-    <script src="js/main.js?v=4"></script>
+    <script src="js/main.js?v=8"></script>
   </body>
 </html>
