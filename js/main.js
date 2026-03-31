@@ -550,5 +550,21 @@
       }
     });
     window.addEventListener('resize', drawHobbyOrbits);
+
+    // 鼠标尾焰轨迹
+    let lastTrailTime = 0;
+    document.addEventListener('mousemove', (e) => {
+      const now = Date.now();
+      if (now - lastTrailTime < 30) return; // 控制粒子密度
+      lastTrailTime = now;
+
+      const dot = document.createElement('div');
+      dot.className = 'cursor-trail';
+      dot.style.left = e.clientX + 'px';
+      dot.style.top = e.clientY + 'px';
+      document.body.appendChild(dot);
+
+      setTimeout(() => dot.remove(), 600);
+    });
   });
 })();
