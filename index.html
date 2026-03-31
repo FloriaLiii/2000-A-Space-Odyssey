@@ -21,15 +21,20 @@
         href="#landing"
         class="nav-dot active"
         data-section="0"
-        data-label="启程"
+        data-label="准备启程"
       ></a>
-      <a href="#starmap" class="nav-dot" data-section="1" data-label="星图"></a>
+      <a
+        href="#starmap"
+        class="nav-dot"
+        data-section="1"
+        data-label="星图导览"
+      ></a>
       <a href="#about" class="nav-dot" data-section="2" data-label="关于我"></a>
       <a
         href="#education"
         class="nav-dot"
         data-section="3"
-        data-label="教育"
+        data-label="航行日志"
       ></a>
       <a href="#skills" class="nav-dot" data-section="4" data-label="技能"></a>
       <a
@@ -343,38 +348,115 @@
       </div>
     </section>
 
-    <!-- ===== Section 2: Education ===== -->
-    <section class="section section-education" id="education">
-      <div class="section-inner">
-        <h2 class="section-title anim-wipe-in">EDUCATION</h2>
-        <p class="section-subtitle anim-fade-up delay-1">教育经历</p>
-        <div class="timeline">
-          <div class="timeline-line"></div>
-          <div class="timeline-item anim-fade-left delay-1">
-            <div class="timeline-dot">
-              <div class="timeline-dot-pulse"></div>
-            </div>
-            <div class="timeline-card">
-              <div class="timeline-date">2019.09 - 2023.06</div>
-              <h3 class="timeline-title">西南大学（211）</h3>
-              <p class="timeline-detail">计算机科学与技术 · 本科 · 重庆</p>
-              <p class="timeline-detail">GPA: 3.2</p>
-              <p class="timeline-detail course">
-                主修课程：计算机网络、数据结构、操作系统
-              </p>
-            </div>
+    <!-- ===== Section 2: 航行日志 (Travel Log) ===== -->
+    <section class="section section-voyage" id="education">
+      <div class="voyage-container">
+        <!-- 标题 -->
+        <div class="voyage-header">
+          <span class="voyage-num">04</span>
+          <h2 class="voyage-title">航行日志</h2>
+        </div>
+
+        <!-- 左侧半隐藏月球 -->
+        <div class="voyage-moon">
+          <img src="assets/planet-gray-ring.png" alt="" class="moon-img" />
+        </div>
+
+        <!-- SVG 飞行轨迹 -->
+        <svg
+          class="voyage-path-svg"
+          viewBox="0 0 180 100"
+          preserveAspectRatio="none"
+        >
+          <defs>
+            <mask id="trailMask">
+              <path
+                id="voyageTrailMask"
+                d="M 4,90 C 22,84 43,48 61,42
+                   C 76,37 86,55 101,58
+                   C 115,61 133,36 151,26
+                   C 158,22 164,19 170,15"
+                fill="none"
+                stroke="white"
+                stroke-width="6"
+              />
+            </mask>
+          </defs>
+          <path
+            id="voyageTrail"
+            class="voyage-trail"
+            d="M 4,90 C 22,84 43,48 61,42
+               C 76,37 86,55 101,58
+               C 115,61 133,36 151,26
+               C 158,22 164,19 170,15"
+            fill="none"
+            stroke="rgba(255,255,255,0.45)"
+            stroke-width="0.5"
+            stroke-dasharray="2 1.5"
+            mask="url(#trailMask)"
+          />
+        </svg>
+
+        <!-- 火箭 -->
+        <div class="voyage-rocket" id="voyageRocket">
+          <img src="assets/rocket.png" alt="rocket" class="rocket-img" />
+        </div>
+
+        <!-- 4个星球节点 -->
+        <div class="voyage-node node-1" data-trigger="0.15">
+          <div class="node-bubble">
+            <span class="bubble-date red">2000.11</span>
           </div>
-          <div class="timeline-item anim-fade-right delay-2">
-            <div class="timeline-dot">
-              <div class="timeline-dot-pulse"></div>
-            </div>
-            <div class="timeline-card">
-              <div class="timeline-date">2021.10</div>
-              <h3 class="timeline-title">ACM 实验室</h3>
-              <p class="timeline-detail">西南大学商贸学院 ACM 实验室</p>
-              <p class="timeline-detail">程序与算法设计大赛 · 第二名</p>
-            </div>
+          <div class="node-planet">
+            <img
+              src="assets/planet-orange-ring.png"
+              alt=""
+              class="planet-img"
+            />
           </div>
+          <div class="node-label">湖北 · 咸宁</div>
+        </div>
+
+        <div class="voyage-node node-2" data-trigger="0.35">
+          <div class="node-bubble">
+            <span class="bubble-date red">2012.09</span>
+          </div>
+          <div class="node-planet">
+            <img src="assets/planet-5.png" alt="" class="planet-img" />
+          </div>
+          <div class="node-label">盐田区外国语学校</div>
+        </div>
+
+        <div class="voyage-node node-3" data-trigger="0.55">
+          <div class="node-bubble">
+            <span class="bubble-date green">2015.09</span>
+          </div>
+          <div class="node-planet">
+            <img src="assets/planet-blue.png" alt="" class="planet-img" />
+          </div>
+          <div class="node-label">深圳实验学校高中部</div>
+        </div>
+
+        <div class="voyage-node node-4" data-trigger="0.78">
+          <div class="node-bubble">
+            <span class="bubble-date green">2019.9</span>
+          </div>
+          <div class="node-planet">
+            <img src="assets/planet-4.png" alt="" class="planet-img" />
+          </div>
+          <div class="node-label">西南大学</div>
+        </div>
+
+        <!-- 右下角装饰三角碎片 -->
+        <div class="voyage-debris">
+          <div class="v-debris v-d1"></div>
+          <div class="v-debris v-d2"></div>
+          <div class="v-debris v-d3"></div>
+          <div class="v-debris v-d4"></div>
+          <div class="v-debris v-d5"></div>
+          <div class="v-debris v-d6"></div>
+          <div class="v-debris v-d7"></div>
+          <div class="v-debris v-d8"></div>
         </div>
       </div>
     </section>

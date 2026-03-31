@@ -110,6 +110,83 @@
   }
 
   // ==========================================
+  // Voyage (航行日志) Rocket Animation
+  // ==========================================
+  class VoyageAnimator {
+    constructor(section) {
+      this.section = section;
+      this.trail = section.querySelector('#voyageTrail');
+      this.mask = section.querySelector('#voyageTrailMask');
+      this.rocket = section.querySelector('#voyageRocket');
+      this.nodes = section.querySelectorAll('.voyage-node');
+
+      if (!this.trail || !this.rocket || !this.mask) return;
+
+      // Use the mask path for drawing animation
+      this.pathLength = this.mask.getTotalLength();
+      this.mask.style.strokeDasharray = this.pathLength;
+      this.mask.style.strokeDashoffset = this.pathLength;
+
+      // Node trigger points (fraction of total path length)
+      this.triggers = [];
+      this.nodes.forEach((node) => {
+        this.triggers.push(parseFloat(node.getAttribute('data-trigger') || 0.5));
+      });
+      this.revealed = new Set();
+
+      this.startAnimation();
+    }
+
+    startAnimation() {
+      const duration = 4000; // 4 seconds total flight
+      const start = performance.now();
+      this.rocket.classList.add('flying');
+
+      const animate = (now) => {
+        const elapsed = now - start;
+        const rawProgress = Math.min(elapsed / duration, 1);
+        // Ease in-out
+        const progress = rawProgress < 0.5
+          ? 2 * rawProgress * rawProgress
+          : 1 - Math.pow(-2 * rawProgress + 2, 2) / 2;
+
+        // Draw trail behind rocket via mask
+        const drawLength = this.pathLength * progress;
+        this.mask.style.strokeDashoffset = this.pathLength - drawLength;
+
+        // Move rocket along path (fixed direction, no rotation)
+        const point = this.mask.getPointAtLength(drawLength);
+        const containerRect = this.section.querySelector('.voyage-container').getBoundingClientRect();
+
+        // SVG viewBox is 0-180 x 0-100 mapping to container
+        const rocketX = (point.x / 180) * containerRect.width;
+        const rocketY = (point.y / 100) * containerRect.height;
+
+        this.rocket.style.left = rocketX + 'px';
+        this.rocket.style.top = rocketY + 'px';
+
+        // Reveal planets when rocket passes their trigger point
+        this.triggers.forEach((trigger, i) => {
+          if (progress >= trigger && !this.revealed.has(i)) {
+            this.revealed.add(i);
+            this.nodes[i].classList.add('revealed');
+          }
+        });
+
+        if (rawProgress < 1) {
+          requestAnimationFrame(animate);
+        }
+        // Rocket stays visible at the end position (top-right)
+      };
+
+      // Small delay before launch
+      setTimeout(() => {
+        requestAnimationFrame(animate);
+      }, 300);
+    }
+  }
+
+  // ==========================================
   // Scroll-based Animations
   // ==========================================
   class ScrollAnimator {
@@ -163,6 +240,13 @@
                   this.animateNumber(stat);
                 });
                 if (stats.length) this.animated.add(entry.target.id);
+              }
+
+              // Trigger voyage animation
+              if (entry.target.classList.contains('section-voyage') && !this.animated.has('voyage')) {
+                this.animated.add('voyage');
+                entry.target.classList.add('in-view');
+                new VoyageAnimator(entry.target);
               }
             }
           });

@@ -809,135 +809,329 @@ body {
 }
 
 /* ============================================
-   SECTION 2: EDUCATION
+   SECTION 2: 航行日志 (VOYAGE LOG)
    ============================================ */
-.section-education {
+.section-voyage {
   background: linear-gradient(
-    180deg,
-    var(--bg-deep) 0%,
-    #221a2a 50%,
-    var(--bg-deep) 100%
+    160deg,
+    #1a1225 0%,
+    #2a1a30 30%,
+    #1e1528 60%,
+    #251a2e 100%
   );
+  overflow: hidden;
 }
 
-/* Timeline */
-.timeline {
+.voyage-container {
   position: relative;
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 20px 0;
+  width: 100%;
+  height: 100vh;
 }
 
-.timeline-line {
+/* 标题 */
+.voyage-header {
   position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background: linear-gradient(
-    180deg,
-    transparent,
-    var(--primary),
-    var(--accent),
-    var(--primary),
-    transparent
-  );
-  transform: translateX(-50%);
-}
-
-.timeline-item {
-  position: relative;
-  padding: 20px 0;
+  top: clamp(30px, 5vh, 60px);
+  left: clamp(30px, 4vw, 80px);
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  gap: 16px;
+  z-index: 5;
 }
 
-.timeline-item:nth-child(odd) {
-  justify-content: flex-start;
-  padding-right: calc(50% + 40px);
-  text-align: right;
+.voyage-num {
+  font-family: "Orbitron", monospace;
+  font-size: clamp(36px, 4vw, 56px);
+  font-weight: 900;
+  color: #e84e34;
+  text-shadow: 0 0 20px rgba(232, 78, 52, 0.4);
 }
 
-.timeline-item:nth-child(even) {
-  justify-content: flex-end;
-  padding-left: calc(50% + 40px);
+.voyage-title {
+  font-family: "ZCOOL QingKe HuangYou", "Noto Serif SC", serif;
+  font-size: clamp(24px, 2.5vw, 36px);
+  color: var(--white);
+  letter-spacing: 0.15em;
 }
 
-.timeline-dot {
+/* 左侧月球 */
+.voyage-moon {
   position: absolute;
-  left: 50%;
-  top: 30px;
-  width: 16px;
-  height: 16px;
-  background: var(--accent);
-  border-radius: 50%;
-  transform: translateX(-50%);
+  left: -60px;
+  top: 35%;
+  width: clamp(100px, 10vw, 160px);
+  opacity: 0.5;
+  z-index: 1;
+  filter: grayscale(0.8) brightness(0.6);
+}
+
+.voyage-moon .moon-img {
+  width: 100%;
+  height: auto;
+}
+
+/* SVG 飞行轨迹 */
+.voyage-path-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   z-index: 2;
-  box-shadow: 0 0 15px rgba(243, 112, 67, 0.4);
+  pointer-events: none;
 }
 
-.timeline-dot-pulse {
+.voyage-trail {
+  /* Dashed look preserved; drawing controlled by mask in JS */
+}
+
+/* 火箭 */
+.voyage-rocket {
   position: absolute;
-  top: -6px;
-  left: -6px;
-  right: -6px;
-  bottom: -6px;
-  border-radius: 50%;
-  border: 2px solid var(--accent);
-  animation: pulse-ring 2s ease-out infinite;
+  z-index: 10;
+  opacity: 0;
+  pointer-events: none;
+  filter: drop-shadow(0 0 8px rgba(255, 167, 38, 0.6));
 }
 
-@keyframes pulse-ring {
+.voyage-rocket.flying {
+  opacity: 1;
+}
+
+.rocket-img {
+  width: clamp(50px, 5vw, 80px);
+  height: auto;
+}
+
+/* 星球节点 - 通用 */
+.voyage-node {
+  position: absolute;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.6s cubic-bezier(0.34, 1.56, 0.64, 1),
+              transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.voyage-node.revealed {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 气泡标签 */
+.node-bubble {
+  position: relative;
+  background: #fff;
+  border-radius: 8px;
+  padding: 6px 14px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.node-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top: 8px solid #fff;
+}
+
+.bubble-date {
+  font-family: "Orbitron", monospace;
+  font-weight: 900;
+  font-size: clamp(14px, 1.4vw, 20px);
+  letter-spacing: 0.05em;
+}
+
+.bubble-date.red {
+  color: #e84e34;
+}
+
+.bubble-date.green {
+  color: #2ab573;
+}
+
+/* 星球图片 */
+.node-planet {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.node-planet .planet-img {
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* 轨道环 */
+.node-ring {
+  position: absolute;
+  width: 130%;
+  height: 30%;
+  border: 2px solid rgba(100, 240, 220, 0.6);
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotateX(70deg);
+  pointer-events: none;
+}
+
+/* 地名标签 */
+.node-label {
+  margin-top: 10px;
+  font-family: "ZCOOL QingKe HuangYou", sans-serif;
+  font-size: clamp(14px, 1.3vw, 20px);
+  color: #f37043;
+  text-align: center;
+  line-height: 1.4;
+  text-shadow: 0 0 10px rgba(243, 112, 67, 0.3);
+}
+
+/* 节点定位 & 大小 */
+.node-1 {
+  left: 8%;
+  bottom: 10%;
+}
+.node-1 .node-planet .planet-img {
+  width: clamp(50px, 5vw, 80px);
+  height: clamp(50px, 5vw, 80px);
+}
+
+.node-2 {
+  left: 30%;
+  bottom: 35%;
+}
+.node-2 .node-planet .planet-img {
+  width: clamp(60px, 6vw, 90px);
+  height: clamp(60px, 6vw, 90px);
+}
+
+.node-3 {
+  left: 54%;
+  bottom: 22%;
+}
+.node-3 .node-planet .planet-img {
+  width: clamp(70px, 7vw, 110px);
+  height: clamp(70px, 7vw, 110px);
+}
+
+.node-4 {
+  right: 10%;
+  bottom: 40%;
+}
+.node-4 .node-planet .planet-img {
+  width: clamp(100px, 10vw, 170px);
+  height: clamp(100px, 10vw, 170px);
+}
+
+/* 右下角装饰碎片 */
+.voyage-debris {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 280px;
+  height: 200px;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.v-debris {
+  position: absolute;
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.section-voyage.in-view .v-debris {
+  animation: v-debris-fly 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+.v-d1 {
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-bottom: 40px solid #3a2845;
+  right: 40px;
+  bottom: 60px;
+  animation-delay: 3.5s !important;
+}
+.v-d2 {
+  border-left: 18px solid transparent;
+  border-right: 18px solid transparent;
+  border-bottom: 30px solid #5a3e6a;
+  right: 80px;
+  bottom: 30px;
+  animation-delay: 3.6s !important;
+}
+.v-d3 {
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 20px solid #e8a0b0;
+  right: 120px;
+  bottom: 80px;
+  animation-delay: 3.7s !important;
+}
+.v-d4 {
+  border-left: 15px solid transparent;
+  border-right: 15px solid transparent;
+  border-bottom: 25px solid #4fc3f7;
+  right: 60px;
+  bottom: 120px;
+  animation-delay: 3.8s !important;
+}
+.v-d5 {
+  border-left: 10px solid transparent;
+  border-right: 10px solid transparent;
+  border-bottom: 16px solid #f37043;
+  right: 150px;
+  bottom: 50px;
+  animation-delay: 3.9s !important;
+}
+.v-d6 {
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 32px solid #7a5a8a;
+  right: 20px;
+  bottom: 10px;
+  animation-delay: 4.0s !important;
+}
+.v-d7 {
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+  border-bottom: 14px solid #4fc3f7;
+  right: 100px;
+  bottom: 140px;
+  animation-delay: 4.1s !important;
+}
+.v-d8 {
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-bottom: 22px solid #c0c0c0;
+  right: 10px;
+  bottom: 100px;
+  animation-delay: 4.2s !important;
+}
+
+@keyframes v-debris-fly {
   0% {
-    transform: scale(1);
-    opacity: 0.6;
+    opacity: 0;
+    transform: translate(80px, 80px) rotate(0deg) scale(0.3);
+  }
+  60% {
+    opacity: 0.9;
   }
   100% {
-    transform: scale(2);
-    opacity: 0;
+    opacity: 0.8;
+    transform: translate(0, 0) rotate(-15deg) scale(1);
   }
-}
-
-.timeline-card {
-  background: rgba(53, 39, 62, 0.6);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(118, 70, 92, 0.3);
-  border-radius: 12px;
-  padding: 24px 28px;
-  transition: all 0.4s;
-}
-
-.timeline-card:hover {
-  border-color: var(--accent);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(243, 112, 67, 0.15);
-}
-
-.timeline-date {
-  font-family: "Orbitron", monospace;
-  font-size: 13px;
-  color: var(--accent);
-  margin-bottom: 8px;
-  letter-spacing: 0.1em;
-}
-
-.timeline-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--white);
-  margin-bottom: 8px;
-}
-
-.timeline-detail {
-  font-size: 14px;
-  color: var(--text-muted);
-  line-height: 1.6;
-}
-
-.timeline-detail.course {
-  margin-top: 8px;
-  font-size: 13px;
-  color: var(--text-dim);
 }
 
 /* ============================================
