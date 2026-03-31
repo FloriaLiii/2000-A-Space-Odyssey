@@ -3671,12 +3671,12 @@ a.star-planet:nth-child(even):hover .planet-img {
 /* 三组定位 */
 .hobby-photography {
   top: 14%;
-  left: 24%;
+  left: 32%;
   flex-direction: row;
 }
 .hobby-travel {
   bottom: 8%;
-  left: 18%;
+  left: 26%;
   flex-direction: row;
 }
 .hobby-sports {
@@ -3750,7 +3750,7 @@ a.star-planet:nth-child(even):hover .planet-img {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   padding: 10px;
-  margin-left: 15px;
+  margin-left: -8px;
   width: clamp(140px, 15vw, 200px);
   cursor: pointer;
   transition:

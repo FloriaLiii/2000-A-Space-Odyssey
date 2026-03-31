@@ -467,30 +467,28 @@
     const section = document.getElementById('hobbies');
     if (!svg || !section) return;
 
-    const w = section.offsetWidth;
-    const h = section.offsetHeight;
+    const sectionRect = section.getBoundingClientRect();
+    const w = sectionRect.width;
+    const h = sectionRect.height;
 
-    // 用 offsetLeft/offsetTop 获取相对于 section 的坐标（不受滚动影响）
+    // 用 getBoundingClientRect 获取视觉位置（受 CSS transform 影响，精确对齐）
     function getCenterInSection(el) {
-      let x = el.offsetWidth / 2;
-      let y = el.offsetHeight / 2;
-      let node = el;
-      while (node && node !== section) {
-        x += node.offsetLeft;
-        y += node.offsetTop;
-        node = node.offsetParent;
-      }
-      return { x, y };
+      const rect = el.getBoundingClientRect();
+      return {
+        x: rect.left + rect.width / 2 - sectionRect.left,
+        y: rect.top + rect.height / 2 - sectionRect.top
+      };
     }
 
     // 大星球中心
     const bigPlanet = section.querySelector('.hobbies-big-planet');
     const bp = getCenterInSection(bigPlanet);
 
-    // 获取每颗小星球中心坐标
+    // 获取每颗小星球图片中心坐标（用 getBoundingClientRect 精确对齐视觉位置）
     const planets = {};
-    section.querySelectorAll('.hobby-planet').forEach(p => {
-      planets[p.dataset.hobby] = getCenterInSection(p);
+    section.querySelectorAll('.hobby-planet-img').forEach(img => {
+      const hobby = img.closest('.hobby-planet').dataset.hobby;
+      planets[hobby] = getCenterInSection(img);
     });
 
     const green = planets.photography;  // 上方
@@ -499,9 +497,7 @@
 
     // PPT 原版用大圆弧，圆心在左侧屏幕外
     // 策略：固定圆心 x = 大星球视觉中心 x，由绿色和红色两点的垂直平分线求 cy
-    // 大星球 CSS: left=-38vw, width=clamp(500,60vw,900), top=50%, translateY(-50%)
-    // 视觉中心 x = offsetLeft + offsetWidth/2 (transform 不影响 offsetLeft)
-    const bpCx = bigPlanet.offsetLeft + bigPlanet.offsetWidth / 2;
+    const bpCx = bp.x;
 
     // 垂直平分线经过 green 和 red 的中点，方向垂直于 green→red
     // 参数化：给定 cx，求 cy 使圆同时经过 green 和 red
@@ -511,7 +507,7 @@
     const dx = red.x - green.x;
     const dy = red.y - green.y;
 
-    const innerCx = bpCx;
+    const innerCx = bpCx + w * 0.1;
     const innerCy = midY + (midX - innerCx) * dx / dy;
     const innerR = Math.sqrt((green.x - innerCx) * (green.x - innerCx) + (green.y - innerCy) * (green.y - innerCy));
 
@@ -543,14 +539,24 @@
     // Hobby gallery modal
     new HobbyGallery();
 
-    // Draw hobby orbits — wait for images to load, then redraw on scroll/resize
+    // Draw hobby orbits — 等入场动画完成后再绘制，避免跳动
     window.addEventListener('load', () => {
-      drawHobbyOrbits();
-      // Also redraw when section scrolls into view
       const hobbiesSection = document.getElementById('hobbies');
-      if (hobbiesSection) {
+      const orbitsSvg = document.getElementById('hobbiesOrbits');
+      if (hobbiesSection && orbitsSvg) {
+        // 初始隐藏，避免动画期间闪跳
+        orbitsSvg.style.opacity = '0';
+        orbitsSvg.style.transition = 'opacity 0.5s ease';
+        let drawn = false;
         new IntersectionObserver((entries) => {
-          if (entries[0].isIntersecting) drawHobbyOrbits();
+          if (entries[0].isIntersecting) {
+            // 等 anim-scale-in transition (0.8s) 完成后再绘制
+            setTimeout(() => {
+              drawHobbyOrbits();
+              orbitsSvg.style.opacity = '1';
+              drawn = true;
+            }, 900);
+          }
         }, { threshold: 0.1 }).observe(hobbiesSection);
       }
     });
