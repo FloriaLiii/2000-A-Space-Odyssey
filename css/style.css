@@ -3609,6 +3609,7 @@ a.star-planet:nth-child(even):hover .planet-img {
   z-index: 1;
   line-height: 1;
   letter-spacing: 0.05em;
+  margin-top: 10px;
 }
 .hobbies-title {
   font-family: "ZCOOL QingKe HuangYou", "Noto Serif SC", serif;

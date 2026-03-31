@@ -348,26 +348,15 @@
       this.nextBtn = this.modal.querySelector('.arrow-next');
       this.closeBtn = this.modal.querySelector('.hobby-modal-close');
 
-      this.photos = {
-        photography: [
-          'assets/hobbies/photography/LKJ_0892.JPG',
-          'assets/hobbies/photography/LKJ_2636.JPG',
-          'assets/hobbies/photography/LKJ_3114.JPG',
-          'assets/hobbies/photography/2d4d749b56d05454abd10e13f1c354ce.jpg',
-          'assets/hobbies/photography/065e8de134bd71daad55a1bd0c56a859.jpg',
-          'assets/hobbies/photography/b81d0a3e9b3527d8a0f19eae49806e95.jpg',
-        ],
-        travel: [
-          'assets/hobbies/travel/LKJ_2371.JPG',
-          'assets/hobbies/travel/021ffb59a7ad9e8fc3784bd6a493772b.jpg',
-        ],
-        sports: [
-          'assets/hobbies/sports/7e3e798be9011d63065d6b7688510bcc.jpg',
-        ],
-      };
-
+      this.photos = {};
       this.currentPhotos = [];
       this.currentIndex = 0;
+
+      // 从 photos.json 动态加载照片列表
+      fetch('assets/hobbies/photos.json')
+        .then(r => r.json())
+        .then(data => { this.photos = data; })
+        .catch(() => { console.warn('photos.json 未找到，请运行 bash generate-photos.sh'); });
 
       this.bindEvents();
     }
