@@ -17,6 +17,319 @@
 
     <!-- 导航指示器 -->
     <nav class="side-nav" id="sideNav">
+      <!-- 小宇航员指示器 - 漂浮姿态 -->
+      <div class="nav-astronaut" id="navAstronaut">
+        <svg viewBox="0 0 180 190" xmlns="http://www.w3.org/2000/svg">
+          <!-- 微微侧身，腰略冲前 -->
+          <g transform="rotate(18, 90, 90)">
+            <!-- === 双腿并拢向下，膝盖弯曲小腿翘后 === -->
+            <!-- 左大腿（短） -->
+            <path
+              d="M70 104 Q64 114 58 124"
+              fill="none"
+              stroke="white"
+              stroke-width="11"
+              stroke-linecap="round"
+            />
+            <!-- 左膝橙色 -->
+            <circle cx="58" cy="123" r="4.5" fill="#f0873a" />
+            <!-- 左小腿（长，向后上翘） -->
+            <path
+              d="M58 124 Q48 136 44 126 Q42 118 50 112"
+              fill="none"
+              stroke="white"
+              stroke-width="9"
+              stroke-linecap="round"
+            />
+            <!-- 左靴 -->
+            <ellipse
+              cx="50"
+              cy="110"
+              rx="7"
+              ry="5"
+              fill="#d0d0d5"
+              stroke="#b0b0b5"
+              stroke-width="1.2"
+              transform="rotate(30 50 110)"
+            />
+
+            <!-- 右大腿（短） -->
+            <path
+              d="M84 104 Q78 114 72 122"
+              fill="none"
+              stroke="white"
+              stroke-width="11"
+              stroke-linecap="round"
+            />
+            <!-- 右膝橙色 -->
+            <circle cx="72" cy="121" r="4.5" fill="#f0873a" />
+            <!-- 右小腿（长，向后上翘） -->
+            <path
+              d="M72 122 Q62 134 58 124 Q56 116 64 110"
+              fill="none"
+              stroke="white"
+              stroke-width="9"
+              stroke-linecap="round"
+            />
+            <!-- 右靴 -->
+            <ellipse
+              cx="64"
+              cy="108"
+              rx="7"
+              ry="5"
+              fill="#d0d0d5"
+              stroke="#b0b0b5"
+              stroke-width="1.2"
+              transform="rotate(30 64 108)"
+            />
+
+            <!-- === 背包 === -->
+            <rect
+              x="56"
+              y="54"
+              width="16"
+              height="26"
+              rx="6"
+              fill="#d0d0d5"
+              stroke="#a0a0a5"
+              stroke-width="1.5"
+            />
+            <rect
+              x="60"
+              y="59"
+              width="5"
+              height="5"
+              rx="1.5"
+              fill="#5bb8c4"
+              opacity="0.8"
+            />
+            <rect
+              x="60"
+              y="67"
+              width="5"
+              height="5"
+              rx="1.5"
+              fill="#5bb8c4"
+              opacity="0.8"
+            />
+
+            <!-- === 身体（微微侧身，椭圆稍偏） === -->
+            <ellipse
+              cx="80"
+              cy="76"
+              rx="24"
+              ry="30"
+              fill="white"
+              stroke="#d0d0d5"
+              stroke-width="2"
+            />
+
+            <!-- === 腰带 === -->
+            <path
+              d="M58 92 Q80 99 102 92"
+              fill="none"
+              stroke="#5bb8c4"
+              stroke-width="7"
+              stroke-linecap="round"
+            />
+            <!-- 腰带扣 -->
+            <rect
+              x="74"
+              y="90"
+              width="12"
+              height="8"
+              rx="2.5"
+              fill="#3a9da8"
+              stroke="#2e8a94"
+              stroke-width="1"
+            />
+            <rect x="77" y="92" width="6" height="4" rx="1.2" fill="#5bb8c4" />
+
+            <!-- === 左臂（肘部微弯向下） === -->
+            <path
+              d="M58 66 Q38 72 24 64"
+              fill="none"
+              stroke="white"
+              stroke-width="11"
+              stroke-linecap="round"
+            />
+            <!-- 左肘橙色 -->
+            <circle cx="40" cy="70" r="4.5" fill="#f0873a" />
+            <!-- 左手掌 -->
+            <circle
+              cx="22"
+              cy="62"
+              r="7"
+              fill="white"
+              stroke="#d0d0d5"
+              stroke-width="1.5"
+            />
+            <!-- 手指 -->
+            <line
+              x1="16"
+              y1="58"
+              x2="12"
+              y2="54"
+              stroke="white"
+              stroke-width="2.8"
+              stroke-linecap="round"
+            />
+            <line
+              x1="18"
+              y1="56"
+              x2="15"
+              y2="50"
+              stroke="white"
+              stroke-width="2.8"
+              stroke-linecap="round"
+            />
+            <line
+              x1="22"
+              y1="55"
+              x2="22"
+              y2="49"
+              stroke="white"
+              stroke-width="2.8"
+              stroke-linecap="round"
+            />
+            <line
+              x1="26"
+              y1="56"
+              x2="28"
+              y2="51"
+              stroke="white"
+              stroke-width="2.8"
+              stroke-linecap="round"
+            />
+            <line
+              x1="28"
+              y1="60"
+              x2="33"
+              y2="57"
+              stroke="white"
+              stroke-width="2.8"
+              stroke-linecap="round"
+            />
+
+            <!-- === 右臂（肘部微弯向下） === -->
+            <path
+              d="M104 66 Q126 72 140 64"
+              fill="none"
+              stroke="white"
+              stroke-width="11"
+              stroke-linecap="round"
+            />
+            <!-- 右肘橙色 -->
+            <circle cx="124" cy="70" r="4.5" fill="#f0873a" />
+            <!-- 右手掌 -->
+            <circle
+              cx="142"
+              cy="62"
+              r="7"
+              fill="white"
+              stroke="#d0d0d5"
+              stroke-width="1.5"
+            />
+            <!-- 手指 -->
+            <line
+              x1="147"
+              y1="57"
+              x2="152"
+              y2="54"
+              stroke="white"
+              stroke-width="2.8"
+              stroke-linecap="round"
+            />
+            <line
+              x1="148"
+              y1="60"
+              x2="154"
+              y2="58"
+              stroke="white"
+              stroke-width="2.8"
+              stroke-linecap="round"
+            />
+            <line
+              x1="149"
+              y1="64"
+              x2="155"
+              y2="64"
+              stroke="white"
+              stroke-width="2.8"
+              stroke-linecap="round"
+            />
+            <line
+              x1="148"
+              y1="67"
+              x2="153"
+              y2="70"
+              stroke="white"
+              stroke-width="2.8"
+              stroke-linecap="round"
+            />
+
+            <!-- === 头盔（朝内侧微旋转） === -->
+            <g transform="rotate(-15, 80, 40)">
+              <circle
+                cx="80"
+                cy="40"
+                r="28"
+                fill="white"
+                stroke="#d0d0d5"
+                stroke-width="2.5"
+              />
+              <!-- 头盔橙色顶部弧线 -->
+              <path
+                d="M54 28 A28 28 0 0 1 106 28"
+                fill="none"
+                stroke="#f0873a"
+                stroke-width="4"
+                stroke-linecap="round"
+              />
+              <!-- 头盔侧面橙色耳罩 -->
+              <ellipse
+                cx="53"
+                cy="42"
+                rx="6"
+                ry="9"
+                fill="#f0873a"
+                opacity="0.9"
+              />
+              <ellipse
+                cx="107"
+                cy="42"
+                rx="6"
+                ry="9"
+                fill="#f0873a"
+                opacity="0.9"
+              />
+
+              <!-- === 面罩 === -->
+              <ellipse cx="80" cy="44" rx="19" ry="18" fill="#3d2050" />
+              <!-- 面罩反光 -->
+              <ellipse
+                cx="73"
+                cy="37"
+                rx="5"
+                ry="8"
+                fill="rgba(255,255,255,0.1)"
+                transform="rotate(-12 73 37)"
+              />
+              <!-- 感叹号 -->
+              <line
+                x1="80"
+                y1="35"
+                x2="80"
+                y2="47"
+                stroke="rgba(255,255,255,0.4)"
+                stroke-width="3.5"
+                stroke-linecap="round"
+              />
+              <circle cx="80" cy="52" r="2" fill="rgba(255,255,255,0.4)" />
+            </g>
+          </g>
+        </svg>
+      </div>
       <a
         href="#landing"
         class="nav-dot active"

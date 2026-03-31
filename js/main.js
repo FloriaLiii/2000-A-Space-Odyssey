@@ -316,6 +316,21 @@
       this.navDots.forEach((dot, i) => {
         dot.classList.toggle('active', i === currentIndex);
       });
+
+      // 更新小宇航员位置
+      this.updateAstronautPosition(currentIndex);
+    }
+
+    updateAstronautPosition(activeIndex) {
+      const astronaut = document.getElementById('navAstronaut');
+      const activeDot = this.navDots[activeIndex];
+      if (!astronaut || !activeDot) return;
+
+      const nav = document.getElementById('sideNav');
+      const navRect = nav.getBoundingClientRect();
+      const dotRect = activeDot.getBoundingClientRect();
+      const offsetTop = dotRect.top - navRect.top + dotRect.height / 2 - 23;
+      astronaut.style.top = offsetTop + 'px';
     }
 
     setupNavigation() {
