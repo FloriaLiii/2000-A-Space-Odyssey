@@ -1924,112 +1924,264 @@ body {
 }
 
 /* ============================================
-   SECTION 7: CONTACT
+   SECTION 7: CONTACT — 星球主题（PPT素材）
    ============================================ */
 .section-contact {
-  background: radial-gradient(
-    ellipse at 50% 80%,
-    #35273e 0%,
-    #2e2232 40%,
-    #1a1225 100%
-  );
+  background:
+    radial-gradient(ellipse at 25% 50%, rgba(120, 50, 80, 0.2) 0%, transparent 50%),
+    linear-gradient(to right, #5a2848 0%, #4a2450 20%, #3e2050 40%, #352050 55%, #2c1a42 70%, #241538 85%, #1c1030 100%);
+  position: relative;
+  overflow: hidden;
 }
 
-.contact-content {
-  text-align: center;
-  max-width: 800px;
-  margin: 0 auto;
+/* 星空粒子 canvas */
+.contact-stars {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 
-.contact-title {
-  font-family: "ZCOOL QingKe HuangYou", "Noto Serif SC", sans-serif;
-  font-size: clamp(32px, 5vw, 48px);
-  font-weight: 900;
-  color: var(--white);
-  margin-bottom: 12px;
-  letter-spacing: 0.15em;
+/* 场景容器 — 按PPT slide 5 布局 */
+.ct-scene {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
 
-.contact-subtitle {
-  font-family: "Noto Serif SC", serif;
-  font-size: 16px;
-  color: var(--text-muted);
-  letter-spacing: 0.3em;
-  margin-bottom: 50px;
+/* 主星球：居中, ~28%宽 (PPT: center-x 50%, center-y 37%) */
+.ct-planet-main {
+  position: absolute;
+  width: clamp(200px, 28vw, 340px);
+  height: auto;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -72%);
+  filter: drop-shadow(0 0 50px rgba(80, 200, 160, 0.25));
+  animation: ctPlanetFloat 8s ease-in-out infinite;
+  z-index: 2;
+}
+@keyframes ctPlanetFloat {
+  0%, 100% { transform: translate(-50%, -68%) translateY(0); }
+  50% { transform: translate(-50%, -68%) translateY(-10px); }
 }
 
-.contact-links {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  margin-bottom: 50px;
+/* 小星球通用 */
+.ct-planet-sm {
+  position: absolute;
+  border-radius: 50%;
+  overflow: hidden;
+  z-index: 3;
+}
+.ct-planet-sm img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.contact-item {
+/* 星球环 */
+.ct-ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 170%;
+  height: 35%;
+  transform: translate(-50%, -40%) rotateX(75deg);
+  border: 1.5px solid rgba(255,255,255,0.35);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* 红色小星球 (PPT: 左上，靠近主星球) */
+.ct-planet-red {
+  width: clamp(35px, 4.5vw, 55px);
+  height: clamp(35px, 4.5vw, 55px);
+  top: 22%;
+  left: 32%;
+  filter: drop-shadow(0 0 10px rgba(224, 80, 80, 0.4));
+  animation: ctPlanetSmall 7s ease-in-out 1s infinite;
+}
+
+/* 橙色小星球（带环，PPT: 左下） */
+.ct-planet-orange {
+  width: clamp(28px, 3.2vw, 42px);
+  height: clamp(28px, 3.2vw, 42px);
+  top: 40%;
+  left: 24%;
+  filter: drop-shadow(0 0 8px rgba(240, 130, 48, 0.4));
+  animation: ctPlanetSmall 9s ease-in-out 2s infinite;
+}
+.ct-planet-orange .ct-ring {
+  border-color: rgba(100, 220, 220, 0.5);
+}
+
+/* 蓝色小星球（带环，PPT: 右中） */
+.ct-planet-blue {
+  width: clamp(38px, 4.5vw, 60px);
+  height: clamp(38px, 4.5vw, 60px);
+  top: 38%;
+  right: 26%;
+  filter: drop-shadow(0 0 12px rgba(77, 216, 180, 0.4));
+  animation: ctPlanetSmall 8s ease-in-out 0.5s infinite;
+}
+.ct-planet-blue .ct-ring {
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+/* 暗紫星球（PPT: 右上） */
+.ct-planet-dark {
+  position: absolute;
+  width: clamp(50px, 6vw, 80px);
+  height: auto;
+  top: 15%;
+  right: 22%;
+  filter: drop-shadow(0 0 8px rgba(90, 56, 120, 0.5));
+  animation: ctPlanetSmall 10s ease-in-out 3s infinite;
+  z-index: 3;
+}
+
+@keyframes ctPlanetSmall {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* 三角形碎片（PPT位置） */
+.ct-tri {
+  position: absolute;
+  pointer-events: none;
+  z-index: 4;
+}
+/* 入场前隐藏 */
+.anim-tri {
+  opacity: 0;
+}
+/* 每个三角从不同方向的屏幕外飞入，各有独立的 keyframes */
+.section-contact.in-view .ct-tri-1  { animation: ctFlyIn1  1.0s cubic-bezier(0.22, 0.61, 0.36, 1) 0.2s  forwards, ctTriFloat 9s  ease-in-out 1.4s infinite; }
+.section-contact.in-view .ct-tri-2  { animation: ctFlyIn2  1.1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.35s forwards, ctTriFloat 10s ease-in-out 1.6s infinite; }
+.section-contact.in-view .ct-tri-3  { animation: ctFlyIn3  0.9s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s forwards, ctTriFloat 8s  ease-in-out 1.2s infinite; }
+.section-contact.in-view .ct-tri-4  { animation: ctFlyIn4  1.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.4s  forwards, ctTriFloat 11s ease-in-out 1.8s infinite; }
+.section-contact.in-view .ct-tri-5  { animation: ctFlyIn5  1.0s cubic-bezier(0.22, 0.61, 0.36, 1) 0.5s  forwards, ctTriFloat 9s  ease-in-out 1.7s infinite; }
+.section-contact.in-view .ct-tri-6  { animation: ctFlyIn6  0.85s cubic-bezier(0.22, 0.61, 0.36, 1) 0.1s  forwards, ctTriFloat 10s ease-in-out 1.1s infinite; }
+.section-contact.in-view .ct-tri-7  { animation: ctFlyIn7  1.1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s  forwards, ctTriFloat 8s  ease-in-out 1.5s infinite; }
+.section-contact.in-view .ct-tri-8  { animation: ctFlyIn8  0.95s cubic-bezier(0.22, 0.61, 0.36, 1) 0.55s forwards, ctTriFloat 11s ease-in-out 1.6s infinite; }
+.section-contact.in-view .ct-tri-9  { animation: ctFlyIn9  1.05s cubic-bezier(0.22, 0.61, 0.36, 1) 0.25s forwards, ctTriFloat 9s  ease-in-out 1.4s infinite; }
+.section-contact.in-view .ct-tri-10 { animation: ctFlyIn10 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) 0.45s forwards, ctTriFloat 10s ease-in-out 1.5s infinite; }
+.section-contact.in-view .ct-tri-11 { animation: ctFlyIn11 1.15s cubic-bezier(0.22, 0.61, 0.36, 1) 0.6s  forwards, ctTriFloat 8s  ease-in-out 1.9s infinite; }
+.section-contact.in-view .ct-tri-12 { animation: ctFlyIn12 1.0s cubic-bezier(0.22, 0.61, 0.36, 1) 0.35s forwards, ctTriFloat 9s  ease-in-out 1.5s infinite; }
+.section-contact.in-view .ct-tri-big1 { animation: ctFlyInBig1 1.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.5s forwards, ctTriFloat 10s ease-in-out 1.8s infinite; }
+.section-contact.in-view .ct-tri-big2 { animation: ctFlyInBig2 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.65s forwards, ctTriFloat 9s  ease-in-out 2.0s infinite; }
+
+/* 从屏幕外各方向飞入的路径动画 */
+/* 左侧三角 — 从左外飞入 */
+@keyframes ctFlyIn1  { 0% { opacity: 0; transform: translate(-120vw, -30vh) rotate(0deg); }     100% { opacity: 1; transform: translate(0, 0) rotate(180deg); } }
+@keyframes ctFlyIn3  { 0% { opacity: 0; transform: translate(-100vw, -50vh) rotate(-30deg); }    100% { opacity: 1; transform: translate(0, 0) rotate(210deg); } }
+@keyframes ctFlyIn6  { 0% { opacity: 0; transform: translate(-110vw, 0) rotate(20deg); }         100% { opacity: 1; transform: translate(0, 0) rotate(130deg); } }
+@keyframes ctFlyIn7  { 0% { opacity: 0; transform: translate(-90vw, 40vh) rotate(-50deg); }      100% { opacity: 1; transform: translate(0, 0) rotate(240deg); } }
+@keyframes ctFlyIn9  { 0% { opacity: 0; transform: translate(-100vw, 30vh) rotate(10deg); }      100% { opacity: 1; transform: translate(0, 0) rotate(195deg); } }
+/* 右侧三角 — 从右外飞入 */
+@keyframes ctFlyIn4  { 0% { opacity: 0; transform: translate(120vw, 30vh) rotate(0deg); }        100% { opacity: 1; transform: translate(0, 0) rotate(-40deg); } }
+@keyframes ctFlyIn5  { 0% { opacity: 0; transform: translate(100vw, 20vh) rotate(40deg); }       100% { opacity: 1; transform: translate(0, 0) rotate(-15deg); } }
+@keyframes ctFlyIn10 { 0% { opacity: 0; transform: translate(110vw, -40vh) rotate(-20deg); }     100% { opacity: 1; transform: translate(0, 0) rotate(-100deg); } }
+@keyframes ctFlyIn12 { 0% { opacity: 0; transform: translate(90vw, 30vh) rotate(50deg); }        100% { opacity: 1; transform: translate(0, 0) rotate(-30deg); } }
+/* 上方三角 — 从上外飞入 */
+@keyframes ctFlyIn2  { 0% { opacity: 0; transform: translate(20vw, -120vh) rotate(-40deg); }     100% { opacity: 1; transform: translate(0, 0) rotate(155deg); } }
+@keyframes ctFlyIn8  { 0% { opacity: 0; transform: translate(-10vw, -100vh) rotate(30deg); }     100% { opacity: 1; transform: translate(0, 0) rotate(-60deg); } }
+/* 下方三角 — 从下外飞入 */
+@keyframes ctFlyIn11 { 0% { opacity: 0; transform: translate(-15vw, 120vh) rotate(40deg); }      100% { opacity: 1; transform: translate(0, 0) rotate(160deg); } }
+/* 大三角 — 从右下飞入，终态指向左下 */
+@keyframes ctFlyInBig1 { 0% { opacity: 0; transform: translate(80vw, 80vh) rotate(0deg); }       100% { opacity: 1; transform: translate(0, 0) rotate(150deg); } }
+@keyframes ctFlyInBig2 { 0% { opacity: 0; transform: translate(90vw, 60vh) rotate(-20deg); }     100% { opacity: 1; transform: translate(0, 0) rotate(135deg); } }
+
+/* 持续浮动 — 用独立 translate 属性，不覆盖 fly-in 的 transform 旋转 */
+@keyframes ctTriFloat {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -6px; }
+}
+
+/* 各三角位置、大小 — 散乱分布 */
+.ct-tri-1  { width: 16px; top: 42%; left: 37%; }
+.ct-tri-2  { width: 20px; top: 48%; left: 44%; }
+.ct-tri-3  { width: 12px; top: 28%; left: 30%; }
+.ct-tri-4  { width: 18px; bottom: 18%; right: 15%; }
+.ct-tri-5  { width: 22px; bottom: 22%; right: 22%; }
+.ct-tri-6  { width: 10px; top: 18%; left: 12%; }
+.ct-tri-7  { width: 14px; top: 60%; left: 8%; }
+.ct-tri-8  { width: 9px;  top: 15%; right: 25%; }
+.ct-tri-9  { width: 16px; bottom: 35%; left: 18%; }
+.ct-tri-10 { width: 11px; top: 22%; right: 10%; }
+.ct-tri-11 { width: 8px;  bottom: 12%; left: 42%; }
+.ct-tri-12 { width: 13px; bottom: 28%; right: 8%; }
+/* 大三角 — 按钮下方醒目箭头（PPT: 指向左下，重叠） */
+.ct-tri-big1 { width: 58px; bottom: 13%; left: 50%; transform: rotate(150deg); z-index: 6; }
+.ct-tri-big2 { width: 44px; bottom: 11%; left: 52%; transform: rotate(135deg); z-index: 6; }
+
+/* === THANKS 卡片 → 通讯面板按钮 === */
+/* PPT: 居中, center-y 69%, 宽53% */
+.ct-card-wrap {
+  position: absolute;
+  left: 50%;
+  top: 58%;
+  transform: translateX(-50%);
+  width: clamp(320px, 50%, 660px);
+  z-index: 5;
+}
+.ct-card {
+  border-radius: 22px;
+  overflow: hidden;
+  background: #201228;
+  box-shadow: 0 16px 60px rgba(0, 0, 0, 0.55);
+  cursor: pointer;
+}
+.ct-card-bg {
+  display: none;
+}
+.ct-card-btn {
+  position: relative;
+  z-index: 1;
   display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 20px 24px;
-  border-radius: 14px;
-  background: rgba(53, 39, 62, 0.4);
-  border: 1px solid rgba(118, 70, 92, 0.2);
-  text-decoration: none;
-  color: inherit;
-  transition: all 0.4s;
-}
-
-.contact-item:hover {
-  border-color: var(--accent);
-  background: rgba(53, 39, 62, 0.6);
-  transform: translateY(-4px);
-  box-shadow: 0 8px 30px rgba(243, 112, 67, 0.1);
-}
-
-.contact-icon-wrap {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
-  background: linear-gradient(
-    135deg,
-    rgba(243, 112, 67, 0.15),
-    rgba(250, 154, 30, 0.1)
-  );
-  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-shrink: 0;
+  gap: 8px;
+  width: 100%;
+  padding: 42px 40px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.4s;
 }
-
-.contact-icon-wrap svg {
-  width: 20px;
-  height: 20px;
-  color: var(--accent);
+.ct-card-btn:hover {
+  background: rgba(243, 112, 67, 0.08);
 }
-
-.contact-label {
+.ct-card-label {
+  font-family: "ZCOOL QingKe HuangYou", sans-serif;
+  font-size: clamp(26px, 4vw, 42px);
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  color: transparent;
+  background: url('../assets/contact/texture-thanks.png') center / cover;
+  -webkit-background-clip: text;
+  background-clip: text;
+  filter: brightness(1.2) saturate(1.1);
+  text-shadow: none;
+}
+.ct-card-sub {
   font-family: "Orbitron", sans-serif;
-  font-size: 11px;
-  color: var(--text-dim);
-  display: block;
-  letter-spacing: 0.1em;
+  font-size: 10px;
+  color: rgba(200, 180, 220, 0.5);
+  letter-spacing: 0.35em;
   text-transform: uppercase;
 }
 
-.contact-value {
-  font-size: 14px;
-  color: var(--text);
-  display: block;
-}
-
-.contact-footer {
-  padding-top: 30px;
-  border-top: 1px solid rgba(118, 70, 92, 0.2);
-}
-
-.contact-footer p {
-  font-size: 14px;
-  color: var(--primary-light);
-  letter-spacing: 0.3em;
+/* 响应式 */
+@media (max-width: 768px) {
+  .ct-card-wrap { width: 85%; }
+  .ct-card-btn { padding: 30px 24px; }
+  .ct-planet-red { left: 10%; }
+  .ct-planet-orange { left: 5%; }
+  .ct-planet-blue { right: 8%; }
+  .ct-planet-dark { right: 8%; }
 }
 
 /* ============================================

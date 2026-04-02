@@ -47,7 +47,12 @@
       "Bash(python scripts/office/soffice.py --headless --convert-to pdf /Users/likangjue/Desktop/planet.pptx)",
       "Bash(chmod +x /Users/likangjue/project/resume/generate-photos.sh)",
       "Bash(./generate-photos.sh)",
-      "Bash(bash generate-photos.sh)"
+      "Bash(bash generate-photos.sh)",
+      "Bash(ls -la /Users/likangjue/project/resume/images/contact/slide5_*)",
+      "Bash(grep -r planet- /Users/likangjue/project/resume/*.html /Users/likangjue/project/resume/css/*.css)",
+      "Bash(grep -r \"bg-space\\\\|texture-\\\\|planet-\" /Users/likangjue/project/resume/*.html /Users/likangjue/project/resume/css/*.css)",
+      "Bash(find /Users/likangjue/project/resume/images -type f -exec ls -lh {})",
+      "Bash(find /Users/likangjue/project/resume/assets -type f -exec ls -lh {})"
     ]
   }
 }

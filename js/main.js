@@ -11,9 +11,10 @@
   // Static white dots that twinkle — appear & disappear
   // ==========================================
   class ParticleSystem {
-    constructor(canvas) {
+    constructor(canvas, { container } = {}) {
       this.canvas = canvas;
       this.ctx = canvas.getContext('2d');
+      this.container = container || null;
       this.stars = [];
       this.starCount = this.getStarCount();
 
@@ -24,15 +25,20 @@
     }
 
     getStarCount() {
-      const w = window.innerWidth;
+      const w = this.container ? this.container.offsetWidth : window.innerWidth;
       if (w < 640) return 120;
       if (w < 1024) return 220;
       return 360;
     }
 
     resize() {
-      this.canvas.width = window.innerWidth;
-      this.canvas.height = window.innerHeight;
+      if (this.container) {
+        this.canvas.width = this.container.offsetWidth;
+        this.canvas.height = this.container.offsetHeight;
+      } else {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      }
     }
 
     init() {
@@ -247,6 +253,12 @@
                 this.animated.add('voyage');
                 entry.target.classList.add('in-view');
                 new VoyageAnimator(entry.target);
+              }
+
+              // Trigger contact triangles entrance
+              if (entry.target.classList.contains('section-contact') && !this.animated.has('contact')) {
+                this.animated.add('contact');
+                entry.target.classList.add('in-view');
               }
             }
           });
@@ -531,10 +543,16 @@
   // Initialize
   // ==========================================
   document.addEventListener('DOMContentLoaded', () => {
-    // Particle system
+    // Particle system — hero
     const canvas = document.getElementById('particles-canvas');
     if (canvas) {
       new ParticleSystem(canvas);
+    }
+
+    // Particle system — contact section
+    const contactCanvas = document.getElementById('contact-stars-canvas');
+    if (contactCanvas) {
+      new ParticleSystem(contactCanvas, { container: contactCanvas.parentElement });
     }
 
     // Scroll animations
