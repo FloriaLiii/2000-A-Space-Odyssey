@@ -2170,40 +2170,57 @@ body {
   display: flex;
   flex-direction: column;
   pointer-events: auto;
-  border-radius: 3px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  background: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
   overflow: hidden;
+  min-width: 52px;
 }
 
 .gis-sdk-row {
   display: flex;
 }
 
-.gis-sdk-btn {
-  padding: 5px 12px;
-  background: #fff;
-  border: none;
-  border-right: 1px solid #e0e0e0;
-  color: #333;
-  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
-  font-size: 0.72rem;
-  cursor: pointer;
-  transition: background 0.15s ease;
-  white-space: nowrap;
-  line-height: 1.4;
-  text-align: center;
+.gis-sdk-row.gis-sdk-actions {
+  flex-direction: column;
+  border-top: 1px solid #e0e0e0;
 }
 
-.gis-sdk-row:first-child {
-  border-bottom: 1px solid #e0e0e0;
+.gis-sdk-row:not(.gis-sdk-actions) .gis-sdk-btn {
+  border-bottom: none;
+  border-right: 1px solid #f0f0f0;
 }
 
-.gis-sdk-btn:last-child {
+.gis-sdk-row:not(.gis-sdk-actions) .gis-sdk-btn:last-child {
   border-right: none;
 }
 
+.gis-sdk-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 7px 14px;
+  background: #fff;
+  border: none;
+  border-bottom: 1px solid #f0f0f0;
+  color: #555;
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: 0.7rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+  line-height: 1;
+  text-align: center;
+}
+
+.gis-sdk-btn:last-child {
+  border-bottom: none;
+}
+
 .gis-sdk-btn:hover {
-  background: #f0f0f0;
+  background: #f5f5f5;
+  color: #333;
 }
 
 .gis-sdk-btn.active {
@@ -2217,6 +2234,7 @@ body {
 
 .gis-sdk-confirm:hover {
   background: #e8f5e9;
+  color: #1b5e20;
 }
 
 .gis-perf-item {

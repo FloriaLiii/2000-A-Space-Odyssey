@@ -6,7 +6,10 @@
     <title>黎康珏的探索之旅</title>
     <link rel="stylesheet" href="css/style.css" />
     <!-- Leaflet (轻量地图渲染) -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
@@ -378,7 +381,12 @@
         data-label="私人星图"
       ></a>
       <a href="#awards" class="nav-dot" data-section="9" data-label="荣誉"></a>
-      <a href="#contact" class="nav-dot" data-section="10" data-label="联系"></a>
+      <a
+        href="#contact"
+        class="nav-dot"
+        data-section="10"
+        data-label="联系"
+      ></a>
     </nav>
 
     <!-- 页面进度条 -->
@@ -1082,7 +1090,9 @@
     <section class="section section-project section-gis" id="project3">
       <div class="section-inner">
         <h2 class="section-title anim-wipe-in">PROJECT 03</h2>
-        <p class="section-subtitle anim-fade-up delay-1">派工智慧地图（从 0 到 1 建设与迁移）</p>
+        <p class="section-subtitle anim-fade-up delay-1">
+          派工智慧地图（从 0 到 1 建设与迁移）
+        </p>
         <div class="gis-dashboard">
           <!-- 左侧：交互式地图模拟器 -->
           <div class="gis-map-panel anim-scale-in delay-1">
@@ -1091,18 +1101,37 @@
                 <span class="mockup-dot"></span>
                 <span class="mockup-dot"></span>
                 <span class="mockup-dot"></span>
-                <span class="gis-map-title">PAMap — 智慧地图引擎</span>
+                <span class="gis-map-title">派工智慧地图</span>
               </div>
               <div class="gis-map-viewport" id="gisMapViewport">
                 <!-- 高德地图容器 -->
                 <div class="gis-amap-container" id="gisAmapContainer"></div>
                 <!-- 覆盖层：区域多边形 (CSS overlay, 用于无 Key 回退) -->
-                <svg class="gis-regions gis-overlay" id="gisRegions" viewBox="0 0 400 320">
-                  <polygon class="gis-region r1" points="80,60 160,40 200,100 140,140 60,120" />
-                  <polygon class="gis-region r2" points="200,100 280,70 320,140 260,180 200,160" />
-                  <polygon class="gis-region r3" points="60,160 140,140 180,220 120,260 40,240" />
-                  <polygon class="gis-region r4" points="180,180 260,160 300,240 240,280 160,260" />
-                  <polygon class="gis-region r5" points="300,100 360,80 380,160 340,200 280,180" />
+                <svg
+                  class="gis-regions gis-overlay"
+                  id="gisRegions"
+                  viewBox="0 0 400 320"
+                >
+                  <polygon
+                    class="gis-region r1"
+                    points="80,60 160,40 200,100 140,140 60,120"
+                  />
+                  <polygon
+                    class="gis-region r2"
+                    points="200,100 280,70 320,140 260,180 200,160"
+                  />
+                  <polygon
+                    class="gis-region r3"
+                    points="60,160 140,140 180,220 120,260 40,240"
+                  />
+                  <polygon
+                    class="gis-region r4"
+                    points="180,180 260,160 300,240 240,280 160,260"
+                  />
+                  <polygon
+                    class="gis-region r5"
+                    points="300,100 360,80 380,160 340,200 280,180"
+                  />
                 </svg>
                 <!-- 覆盖层：数据点 -->
                 <div class="gis-markers gis-overlay" id="gisMarkers"></div>
@@ -1137,49 +1166,89 @@
             <div class="gis-missions">
               <button class="gis-mission-btn active" data-phase="migrate">
                 <span class="gis-mission-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
-                    <path d="M13 5H1v14h12M17 9l4 3-4 3M7 12h14"/>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    width="20"
+                    height="20"
+                  >
+                    <path d="M13 5H1v14h12M17 9l4 3-4 3M7 12h14" />
                   </svg>
                 </span>
                 <span class="gis-mission-info">
                   <strong>业务逻辑重构与迁移</strong>
-                  <small>1 个月内对标第三方平台核心功能，完成派工区划管理、海量业务点位标注及空间数据分析</small>
+                  <small
+                    >1
+                    个月内对标第三方平台核心功能，完成派工区划管理、海量业务点位标注及空间数据分析</small
+                  >
                 </span>
                 <span class="gis-mission-arrow">→</span>
               </button>
               <button class="gis-mission-btn" data-phase="sdk">
                 <span class="gis-mission-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
-                    <polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    width="20"
+                    height="20"
+                  >
+                    <polyline points="16 18 22 12 16 6" />
+                    <polyline points="8 6 2 12 8 18" />
                   </svg>
                 </span>
                 <span class="gis-mission-info">
                   <strong>技术债治理与 SDK 攻坚</strong>
-                  <small>零文档、紧周期下独立完成 PAMap SDK 摸索与业务功能落地，填补 GIS 开发空白</small>
+                  <small
+                    >零文档、紧周期下独立完成 PAMap SDK 摸索与业务功能落地，填补
+                    GIS 开发空白</small
+                  >
                 </span>
                 <span class="gis-mission-arrow">→</span>
               </button>
               <button class="gis-mission-btn" data-phase="perf">
                 <span class="gis-mission-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
-                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    width="20"
+                    height="20"
+                  >
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
                   </svg>
                 </span>
                 <span class="gis-mission-info">
                   <strong>万级数据渲染性能优化</strong>
-                  <small>DOM Marker → 瓦片图层渲染，支持渲染 5w+ 点无卡顿</small>
+                  <small
+                    >DOM Marker → 瓦片图层渲染，支持渲染 5w+ 点无卡顿</small
+                  >
                 </span>
                 <span class="gis-mission-arrow">→</span>
               </button>
               <button class="gis-mission-btn" data-phase="fusion">
                 <span class="gis-mission-icon">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
-                    <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    width="20"
+                    height="20"
+                  >
+                    <rect x="2" y="3" width="20" height="14" rx="2" />
+                    <path d="M8 21h8M12 17v4" />
                   </svg>
                 </span>
                 <span class="gis-mission-info">
                   <strong>跨平台底图融合方案</strong>
-                  <small>多图层叠加零成本解决底图数据过时问题，兼顾交付效率与可用性</small>
+                  <small
+                    >多图层叠加零成本解决底图数据过时问题，兼顾交付效率与可用性</small
+                  >
                 </span>
                 <span class="gis-mission-arrow">→</span>
               </button>

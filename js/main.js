@@ -790,6 +790,11 @@
         perfMarkers.textContent = '0';
         perfTiles.textContent = '0';
         perfFps.textContent = '60';
+        // 清理 migrate 绘制交互
+        if (map && map._migrateCleanup) {
+          map._migrateCleanup();
+          map._migrateCleanup = null;
+        }
         // 清理 SDK 裁切交互
         if (map && map._sdkCleanup) {
           map._sdkCleanup();
@@ -798,6 +803,7 @@
         // 重置地图视角 + 恢复可见性
         if (mapReady && map) {
           mapContainer.classList.add('map-ready');
+          map.dragging.enable();
           map.setView(SZ_CENTER, 11, { animate: true });
         }
       }
@@ -808,17 +814,148 @@
         if (phase === 'migrate') {
           if (mapReady) {
             REGION_PATHS.forEach(function (path, i) {
-              addPolygon(path, 200 + i * 350, { dashArray: '8 4', opacity: 0.8 });
+              addPolygon(path, 200 + i * 350, { opacity: 0.8 });
             });
             MARKER_POINTS.forEach(function (pt, i) {
               addTypedMarker([pt[0], pt[1]], 1200 + i * 80, pt[2]);
             });
-            animTimeout.push(setTimeout(function () {
-              perfOverlay.classList.add('active');
-              perfMarkers.textContent = String(MARKER_POINTS.length);
-              perfTiles.textContent = '5 区';
-              perfFps.textContent = '60';
-            }, 2500));
+
+            // 绘制多边形工具栏
+            var mToolbar = document.createElement('div');
+            mToolbar.className = 'gis-sdk-toolbar';
+            mToolbar.innerHTML =
+              '<div class="gis-sdk-row">' +
+                '<button class="gis-sdk-btn" data-tool="draw">&#9998; 绘制</button>' +
+              '</div>' +
+              '<div class="gis-sdk-row gis-sdk-actions" style="display:none">' +
+                '<button class="gis-sdk-btn gis-sdk-confirm" data-tool="confirm">&#10003; 确认</button>' +
+                '<button class="gis-sdk-btn" data-tool="cancel">&#10005; 取消</button>' +
+              '</div>';
+            viewport.appendChild(mToolbar);
+            var mActionsRow = mToolbar.querySelector('.gis-sdk-actions');
+
+            var drawMode = false;
+            var drawPoints = [];
+            var drawMarkers = [];
+            var drawPolyline = null;
+            var drawPolygonLayer = null;
+            var mHint = document.createElement('div');
+            mHint.className = 'gis-split-hint gis-overlay';
+            mHint.textContent = '选择工具开始操作';
+            viewport.appendChild(mHint);
+
+            function drawPreview() {
+              if (drawPolyline) { overlayGroup.removeLayer(drawPolyline); drawPolyline = null; }
+              if (drawPolygonLayer) { overlayGroup.removeLayer(drawPolygonLayer); drawPolygonLayer = null; }
+              if (drawPoints.length >= 2) {
+                var pts = drawPoints.slice();
+                if (drawPoints.length >= 3) {
+                  // 显示闭合多边形预览
+                  drawPolygonLayer = L.polygon(pts, {
+                    color: '#f37979', weight: 2.5,
+                    fillColor: '#f37979', fillOpacity: 0.15,
+                    dashArray: '6 4', interactive: false
+                  });
+                  overlayGroup.addLayer(drawPolygonLayer);
+                } else {
+                  drawPolyline = L.polyline(pts, {
+                    color: '#f37979', weight: 2, dashArray: '6 4', interactive: false
+                  });
+                  overlayGroup.addLayer(drawPolyline);
+                }
+              }
+            }
+
+            function clearDraw() {
+              drawPoints = [];
+              drawMarkers.forEach(function (m) { overlayGroup.removeLayer(m); });
+              drawMarkers = [];
+              if (drawPolyline) { overlayGroup.removeLayer(drawPolyline); drawPolyline = null; }
+              if (drawPolygonLayer) { overlayGroup.removeLayer(drawPolygonLayer); drawPolygonLayer = null; }
+            }
+
+            function exitDrawMode() {
+              drawMode = false;
+              map.off('click', onDrawClick);
+              mActionsRow.style.display = 'none';
+              mToolbar.querySelector('[data-tool="draw"]').classList.remove('active');
+            }
+
+            function onDrawClick(e) {
+              if (!drawMode) return;
+              var latlng = [e.latlng.lat, e.latlng.lng];
+              drawPoints.push(latlng);
+              var dot = L.circleMarker(latlng, {
+                radius: 4, color: '#f37979', fillColor: '#fff',
+                fillOpacity: 1, weight: 2, interactive: false
+              });
+              overlayGroup.addLayer(dot);
+              drawMarkers.push(dot);
+              drawPreview();
+              if (drawPoints.length >= 3) {
+                mHint.textContent = '继续添加顶点，或点击确认完成';
+              } else {
+                mHint.textContent = '已添加 ' + drawPoints.length + ' 点，至少需要 3 点';
+              }
+            }
+
+            mToolbar.addEventListener('click', function (ev) {
+              var btn = ev.target.closest('.gis-sdk-btn');
+              if (!btn) return;
+              var tool = btn.dataset.tool;
+
+              if (tool === 'draw') {
+                if (drawMode) {
+                  clearDraw();
+                  exitDrawMode();
+                  mHint.textContent = '选择工具开始操作';
+                } else {
+                  drawMode = true;
+                  map.dragging.disable();
+                  mToolbar.querySelectorAll('.gis-sdk-btn').forEach(function (b) { b.classList.remove('active'); });
+                  btn.classList.add('active');
+                  mActionsRow.style.display = '';
+                  mHint.textContent = '点击地图添加多边形顶点';
+                  map.on('click', onDrawClick);
+                }
+              } else if (tool === 'confirm') {
+                if (drawPoints.length >= 3) {
+                  // 确认：绘制正式多边形
+                  if (drawPolyline) { overlayGroup.removeLayer(drawPolyline); drawPolyline = null; }
+                  if (drawPolygonLayer) { overlayGroup.removeLayer(drawPolygonLayer); drawPolygonLayer = null; }
+                  drawMarkers.forEach(function (m) { overlayGroup.removeLayer(m); });
+                  drawMarkers = [];
+                  var finalPoly = L.polygon(drawPoints, {
+                    color: '#f37979', weight: 2.5,
+                    fillColor: '#f37979', fillOpacity: 0.15,
+                    interactive: false
+                  });
+                  overlayGroup.addLayer(finalPoly);
+                  drawPoints = [];
+                  exitDrawMode();
+                  map.dragging.enable();
+                  mHint.textContent = '绘制完成';
+                } else {
+                  mHint.textContent = '至少需要 3 个顶点';
+                }
+              } else if (tool === 'cancel') {
+                clearDraw();
+                exitDrawMode();
+                map.dragging.enable();
+                mHint.textContent = '已取消';
+              }
+            });
+
+            // 存储清理函数
+            map._migrateCleanup = function () {
+              clearDraw();
+              map.off('click', onDrawClick);
+              map.dragging.enable();
+              var h = viewport.querySelector('.gis-split-hint');
+              if (h) h.remove();
+              var tb = viewport.querySelector('.gis-sdk-toolbar');
+              if (tb) tb.remove();
+            };
           } else {
             // 回退动画
             animTimeout.push(setTimeout(function () {
@@ -856,7 +993,6 @@
           // 区域裁切交互演示：用户画线拆分多边形
           if (mapReady) {
             map.setView([22.56, 114.04], 12, { animate: true });
-            map.dragging.disable();
 
             // 初始多边形
             var initVerts = [
@@ -965,6 +1101,7 @@
             function exitSplitMode() {
               splitMode = false;
               cutStart = null;
+              map.dragging.enable();
               map.off('mousemove');
               if (previewLine) { overlayGroup.removeLayer(previewLine); previewLine = null; }
               // 移除起点标记
@@ -1111,6 +1248,7 @@
                   hint.textContent = '选择工具开始操作';
                 } else {
                   splitMode = true;
+                  map.dragging.disable();
                   toolbar.querySelectorAll('.gis-sdk-btn').forEach(function (b) { b.classList.remove('active'); });
                   btn.classList.add('active');
                   actionsRow.style.display = '';
