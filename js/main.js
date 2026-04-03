@@ -255,6 +255,16 @@
                 new VoyageAnimator(entry.target);
               }
 
+              // Trigger GIS map resize when section becomes visible
+              if (entry.target.classList.contains('section-gis')) {
+                var mapEl = document.getElementById('gisAmapContainer');
+                if (mapEl && mapEl._leafletMap) {
+                  setTimeout(function() {
+                    mapEl._leafletMap.invalidateSize();
+                  }, 300);
+                }
+              }
+
               // Trigger contact triangles entrance
               if (entry.target.classList.contains('section-contact') && !this.animated.has('contact')) {
                 this.animated.add('contact');
@@ -693,6 +703,7 @@
           map.whenReady(function () {
             mapReady = true;
             mapContainer.classList.add('map-ready');
+            mapContainer._leafletMap = map;
             // 真实地图就绪，隐藏 SVG 回退
             regionsEl.style.display = 'none';
           });

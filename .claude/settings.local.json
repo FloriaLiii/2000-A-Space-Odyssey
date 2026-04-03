@@ -52,7 +52,9 @@
       "Bash(grep -r planet- /Users/likangjue/project/resume/*.html /Users/likangjue/project/resume/css/*.css)",
       "Bash(grep -r \"bg-space\\\\|texture-\\\\|planet-\" /Users/likangjue/project/resume/*.html /Users/likangjue/project/resume/css/*.css)",
       "Bash(find /Users/likangjue/project/resume/images -type f -exec ls -lh {})",
-      "Bash(find /Users/likangjue/project/resume/assets -type f -exec ls -lh {})"
+      "Bash(find /Users/likangjue/project/resume/assets -type f -exec ls -lh {})",
+      "Read(//private/tmp/planet_unpacked/ppt/slides/_rels/**)",
+      "Bash(grep -l \"hobbies\\\\|photography\\\\|sports\" /Users/likangjue/project/resume/css/*.css)"
     ]
   }
 }

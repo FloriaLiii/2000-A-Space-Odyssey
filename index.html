@@ -1088,71 +1088,98 @@
 
     <!-- ===== Section 6: Project 3 — 派工智慧地图 ===== -->
     <section class="section section-project section-gis" id="project3">
+      <img class="gis-planet-top" src="assets/planet-main.png" alt="" />
+      <img class="gis-planet-bottom" src="assets/planet-9.png" alt="" />
+      <div class="gis-header anim-fade-up">
+        <div class="voyage-header-planet">
+          <img src="assets/planet-title.png" alt="" class="header-planet-img" />
+          <span class="voyage-num">03</span>
+        </div>
+        <div class="gis-header-text">
+          <h2 class="gis-header-title">已探索星球</h2>
+          <p class="gis-header-sub">派工智慧地图</p>
+        </div>
+      </div>
       <div class="section-inner">
-        <h2 class="section-title anim-wipe-in">PROJECT 03</h2>
-        <p class="section-subtitle anim-fade-up delay-1">
-          派工智慧地图（从 0 到 1 建设与迁移）
-        </p>
         <div class="gis-dashboard">
           <!-- 左侧：交互式地图模拟器 -->
           <div class="gis-map-panel anim-scale-in delay-1">
-            <div class="gis-map-frame">
-              <div class="gis-map-topbar">
-                <span class="mockup-dot"></span>
-                <span class="mockup-dot"></span>
-                <span class="mockup-dot"></span>
-                <span class="gis-map-title">派工智慧地图</span>
-              </div>
-              <div class="gis-map-viewport" id="gisMapViewport">
-                <!-- 高德地图容器 -->
-                <div class="gis-amap-container" id="gisAmapContainer"></div>
-                <!-- 覆盖层：区域多边形 (CSS overlay, 用于无 Key 回退) -->
-                <svg
-                  class="gis-regions gis-overlay"
-                  id="gisRegions"
-                  viewBox="0 0 400 320"
-                >
-                  <polygon
-                    class="gis-region r1"
-                    points="80,60 160,40 200,100 140,140 60,120"
-                  />
-                  <polygon
-                    class="gis-region r2"
-                    points="200,100 280,70 320,140 260,180 200,160"
-                  />
-                  <polygon
-                    class="gis-region r3"
-                    points="60,160 140,140 180,220 120,260 40,240"
-                  />
-                  <polygon
-                    class="gis-region r4"
-                    points="180,180 260,160 300,240 240,280 160,260"
-                  />
-                  <polygon
-                    class="gis-region r5"
-                    points="300,100 360,80 380,160 340,200 280,180"
-                  />
-                </svg>
-                <!-- 覆盖层：数据点 -->
-                <div class="gis-markers gis-overlay" id="gisMarkers"></div>
-                <!-- 覆盖层：性能指标 -->
-                <div class="gis-perf-overlay gis-overlay" id="gisPerfOverlay">
-                  <div class="gis-perf-item">
-                    <span class="gis-perf-label">Markers</span>
-                    <span class="gis-perf-value" id="gisPerfMarkers">0</span>
+            <div class="gis-laptop-wrapper">
+              <!-- 电脑外框 -->
+              <img
+                class="gis-laptop-frame"
+                src="assets/computer-frame.png"
+                alt=""
+              />
+              <!-- 屏幕内容区域 -->
+              <div class="gis-laptop-screen">
+                <div class="gis-map-frame">
+                  <div class="gis-map-topbar">
+                    <span class="mockup-dot"></span>
+                    <span class="mockup-dot"></span>
+                    <span class="mockup-dot"></span>
+                    <span class="gis-map-title">派工智慧地图</span>
                   </div>
-                  <div class="gis-perf-item">
-                    <span class="gis-perf-label">FPS</span>
-                    <span class="gis-perf-value" id="gisPerfFps">60</span>
-                  </div>
-                  <div class="gis-perf-item">
-                    <span class="gis-perf-label">Tiles</span>
-                    <span class="gis-perf-value" id="gisPerfTiles">0</span>
+                  <div class="gis-map-viewport" id="gisMapViewport">
+                    <!-- 高德地图容器 -->
+                    <div class="gis-amap-container" id="gisAmapContainer"></div>
+                    <!-- 覆盖层：区域多边形 (CSS overlay, 用于无 Key 回退) -->
+                    <svg
+                      class="gis-regions gis-overlay"
+                      id="gisRegions"
+                      viewBox="0 0 400 320"
+                    >
+                      <polygon
+                        class="gis-region r1"
+                        points="80,60 160,40 200,100 140,140 60,120"
+                      />
+                      <polygon
+                        class="gis-region r2"
+                        points="200,100 280,70 320,140 260,180 200,160"
+                      />
+                      <polygon
+                        class="gis-region r3"
+                        points="60,160 140,140 180,220 120,260 40,240"
+                      />
+                      <polygon
+                        class="gis-region r4"
+                        points="180,180 260,160 300,240 240,280 160,260"
+                      />
+                      <polygon
+                        class="gis-region r5"
+                        points="300,100 360,80 380,160 340,200 280,180"
+                      />
+                    </svg>
+                    <!-- 覆盖层：数据点 -->
+                    <div class="gis-markers gis-overlay" id="gisMarkers"></div>
+                    <!-- 覆盖层：性能指标 -->
+                    <div
+                      class="gis-perf-overlay gis-overlay"
+                      id="gisPerfOverlay"
+                    >
+                      <div class="gis-perf-item">
+                        <span class="gis-perf-label">Markers</span>
+                        <span class="gis-perf-value" id="gisPerfMarkers"
+                          >0</span
+                        >
+                      </div>
+                      <div class="gis-perf-item">
+                        <span class="gis-perf-label">FPS</span>
+                        <span class="gis-perf-value" id="gisPerfFps">60</span>
+                      </div>
+                      <div class="gis-perf-item">
+                        <span class="gis-perf-label">Tiles</span>
+                        <span class="gis-perf-value" id="gisPerfTiles">0</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
+              <!-- /.gis-laptop-screen -->
             </div>
+            <!-- /.gis-laptop-wrapper -->
           </div>
+          <!-- /.gis-map-panel -->
 
           <!-- 右侧：任务阶段切换面板 -->
           <div class="gis-mission-panel anim-fade-up delay-2">
