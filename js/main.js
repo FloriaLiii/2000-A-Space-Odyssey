@@ -584,6 +584,713 @@
     });
     window.addEventListener('resize', drawHobbyOrbits);
 
+    // ==========================================
+    // GIS Mission Control Dashboard
+    // Leaflet + 高德免费瓦片 (无需 Key)
+    // ==========================================
+    (function initGisDashboard() {
+      var viewport = document.getElementById('gisMapViewport');
+      if (!viewport) return;
+
+      var mapContainer = document.getElementById('gisAmapContainer');
+      var regionsEl = document.getElementById('gisRegions');
+      var markersEl = document.getElementById('gisMarkers');
+      var perfOverlay = document.getElementById('gisPerfOverlay');
+      var perfMarkers = document.getElementById('gisPerfMarkers');
+      var perfFps = document.getElementById('gisPerfFps');
+      var perfTiles = document.getElementById('gisPerfTiles');
+      var missionBtns = document.querySelectorAll('.gis-mission-btn');
+      var svgRegions = regionsEl.querySelectorAll('.gis-region');
+
+      // Leaflet 地图实例
+      var map = null;
+      var mapReady = false;
+      var overlayGroup = null; // 用于清理覆盖物
+
+      // 高德免费瓦片地址 (style=7 标准路网)
+      var TILE_URL = 'https://wprd0{s}.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=7';
+      // 高德卫星瓦片 (style=6)
+      var SAT_URL = 'https://wprd0{s}.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang=zh_cn&size=1&scl=1&style=6';
+
+      // 深圳中心 (Leaflet 用 [lat, lng])
+      var SZ_CENTER = [22.55, 114.06];
+
+      // 派工区划多边形坐标 (Leaflet: [lat, lng])
+      var REGION_PATHS = [
+        [[22.55, 113.92], [22.58, 113.95], [22.57, 113.99], [22.53, 113.98], [22.52, 113.94]],
+        [[22.56, 114.02], [22.59, 114.06], [22.57, 114.10], [22.53, 114.08], [22.53, 114.03]],
+        [[22.56, 114.10], [22.58, 114.14], [22.55, 114.17], [22.52, 114.15], [22.53, 114.11]],
+        [[22.58, 113.86], [22.62, 113.90], [22.60, 113.94], [22.56, 113.93], [22.55, 113.88]],
+        [[22.62, 114.00], [22.65, 114.05], [22.63, 114.09], [22.59, 114.07], [22.60, 114.02]]
+      ];
+
+      // 业务标记点坐标 [lat, lng, type]
+      // type: survey=查勘, car=车定损, person=人定损, property=物定损
+      var MARKER_TYPES = ['survey', 'car', 'person', 'property'];
+      var MARKER_POINTS = [
+        [22.555, 113.93, 'survey'],   [22.565, 113.96, 'car'],      [22.545, 113.95, 'person'],
+        [22.57, 114.04, 'property'],  [22.555, 114.07, 'survey'],   [22.545, 114.06, 'car'],
+        [22.565, 114.12, 'person'],   [22.555, 114.14, 'property'], [22.535, 114.13, 'survey'],
+        [22.59, 113.88, 'car'],       [22.595, 113.91, 'person'],   [22.575, 113.90, 'property'],
+        [22.635, 114.03, 'survey'],   [22.625, 114.06, 'car'],      [22.615, 114.05, 'person']
+      ];
+
+      // 图层堆叠（fusion 阶段）
+      var layerStack = document.createElement('div');
+      layerStack.className = 'gis-layer-stack gis-overlay';
+      layerStack.innerHTML =
+        '<div class="gis-layer l-base">四维地图</div>' +
+        '<div class="gis-layer l-road">高德瓦片地图</div>' +
+        '<div class="gis-layer l-data">业务数据层</div>';
+      viewport.appendChild(layerStack);
+
+      // 回退用瓦片网格
+      var tilesEl = null;
+      var tiles = [];
+
+      function createFallbackTiles() {
+        tilesEl = document.createElement('div');
+        tilesEl.className = 'gis-tiles-fallback';
+        for (var i = 0; i < 48; i++) {
+          var tile = document.createElement('div');
+          tile.className = 'gis-tile';
+          tilesEl.appendChild(tile);
+        }
+        viewport.insertBefore(tilesEl, viewport.firstChild);
+        tiles = tilesEl.querySelectorAll('.gis-tile');
+      }
+
+      // ---- 初始化 Leaflet 地图 ----
+      function initMap() {
+        if (typeof L === 'undefined') {
+          console.warn('[GIS] Leaflet 未加载，使用回退模式');
+          createFallbackTiles();
+          return;
+        }
+
+        try {
+          map = L.map(mapContainer, {
+            center: SZ_CENTER,
+            zoom: 11,
+            zoomControl: false,
+            attributionControl: false,
+            dragging: true,
+            scrollWheelZoom: true,
+            doubleClickZoom: true,
+            touchZoom: true,
+            boxZoom: false,
+            keyboard: false
+          });
+
+          L.tileLayer(TILE_URL, {
+            subdomains: '1234',
+            maxZoom: 18,
+            detectRetina: true
+          }).addTo(map);
+
+          overlayGroup = L.layerGroup().addTo(map);
+
+          map.whenReady(function () {
+            mapReady = true;
+            mapContainer.classList.add('map-ready');
+            // 真实地图就绪，隐藏 SVG 回退
+            regionsEl.style.display = 'none';
+          });
+
+          // 超时回退
+          setTimeout(function () {
+            if (!mapReady) {
+              console.warn('[GIS] 地图加载超时，使用回退模式');
+              map.remove();
+              map = null;
+              createFallbackTiles();
+              regionsEl.style.display = '';
+            }
+          }, 5000);
+
+        } catch (e) {
+          console.warn('[GIS] 地图初始化失败:', e.message);
+          createFallbackTiles();
+        }
+      }
+
+      initMap();
+
+      // ---- 地图覆盖物操作 ----
+      function clearMapOverlays() {
+        if (overlayGroup) overlayGroup.clearLayers();
+        // 移除临时图层（卫星/路网）
+        if (map && map._extraLayers) {
+          map._extraLayers.forEach(function (l) { map.removeLayer(l); });
+          map._extraLayers = [];
+        }
+      }
+
+      function addPolygon(path, delay, opts) {
+        if (!mapReady) return;
+        var defaults = {
+          color: '#f37979',
+          weight: 2,
+          opacity: 0.7,
+          fillColor: '#f37979',
+          fillOpacity: 0.12,
+          dashArray: null
+        };
+        var o = Object.assign({}, defaults, opts);
+        animTimeout.push(setTimeout(function () {
+          var poly = L.polygon(path, {
+            color: o.color,
+            weight: o.weight,
+            opacity: o.opacity,
+            fillColor: o.fillColor,
+            fillOpacity: o.fillOpacity,
+            dashArray: o.dashArray
+          });
+          overlayGroup.addLayer(poly);
+        }, delay));
+      }
+
+      // Leaflet 图标颜色映射
+      var LF_MARKER_CLASSES = {
+        survey: 'gis-lf-marker gis-lf-survey',
+        car: 'gis-lf-marker gis-lf-car',
+        person: 'gis-lf-marker gis-lf-person',
+        property: 'gis-lf-marker gis-lf-property'
+      };
+
+      function addTypedMarker(latlng, delay, type) {
+        if (!mapReady) return;
+        var markerType = type || MARKER_TYPES[Math.floor(Math.random() * 4)];
+        animTimeout.push(setTimeout(function () {
+          var icon = L.divIcon({
+            className: LF_MARKER_CLASSES[markerType],
+            iconSize: [10, 10],
+            iconAnchor: [5, 5]
+          });
+          var marker = L.marker(latlng, { icon: icon, interactive: false });
+          overlayGroup.addLayer(marker);
+        }, delay));
+      }
+
+      // ---- 动画控制 ----
+      var currentPhase = 'migrate';
+      var animTimeout = [];
+
+      function clearAnimations() {
+        animTimeout.forEach(function (t) { clearTimeout(t); });
+        animTimeout = [];
+        clearMapOverlays();
+        // CSS 回退
+        if (tiles.length) tiles.forEach(function (t) { t.classList.remove('loaded', 'highlight'); });
+        svgRegions.forEach(function (r) { r.classList.remove('drawn', 'filled'); });
+        markersEl.innerHTML = '';
+        if (tilesEl) tilesEl.classList.remove('active');
+        perfOverlay.classList.remove('active');
+        layerStack.classList.remove('active');
+        perfMarkers.textContent = '0';
+        perfTiles.textContent = '0';
+        perfFps.textContent = '60';
+        // 清理 SDK 裁切交互
+        if (map && map._sdkCleanup) {
+          map._sdkCleanup();
+          map._sdkCleanup = null;
+        }
+        // 重置地图视角 + 恢复可见性
+        if (mapReady && map) {
+          mapContainer.classList.add('map-ready');
+          map.setView(SZ_CENTER, 11, { animate: true });
+        }
+      }
+
+      function runPhase(phase) {
+        clearAnimations();
+
+        if (phase === 'migrate') {
+          if (mapReady) {
+            REGION_PATHS.forEach(function (path, i) {
+              addPolygon(path, 200 + i * 350, { dashArray: '8 4', opacity: 0.8 });
+            });
+            MARKER_POINTS.forEach(function (pt, i) {
+              addTypedMarker([pt[0], pt[1]], 1200 + i * 80, pt[2]);
+            });
+            animTimeout.push(setTimeout(function () {
+              perfOverlay.classList.add('active');
+              perfMarkers.textContent = String(MARKER_POINTS.length);
+              perfTiles.textContent = '5 区';
+              perfFps.textContent = '60';
+            }, 2500));
+          } else {
+            // 回退动画
+            animTimeout.push(setTimeout(function () {
+              if (tilesEl) tilesEl.classList.add('active');
+              tiles.forEach(function (t, i) {
+                animTimeout.push(setTimeout(function () { t.classList.add('loaded'); }, i * 30));
+              });
+            }, 100));
+            animTimeout.push(setTimeout(function () {
+              svgRegions.forEach(function (r) { r.classList.add('drawn'); });
+            }, 600));
+            animTimeout.push(setTimeout(function () {
+              svgRegions.forEach(function (r) { r.classList.add('filled'); });
+            }, 1800));
+            animTimeout.push(setTimeout(function () {
+              var pts = [
+                [120,80],[150,110],[100,100],[240,100],[260,130],[280,110],
+                [100,200],[130,220],[150,190],[220,200],[250,230],[200,240],
+                [320,140],[340,160],[310,170]
+              ];
+              pts.forEach(function (p, i) {
+                animTimeout.push(setTimeout(function () {
+                  var m = document.createElement('div');
+                  m.className = 'gis-marker m-' + MARKER_TYPES[i % 4];
+                  m.style.left = (p[0] / 400 * 100) + '%';
+                  m.style.top = (p[1] / 320 * 100) + '%';
+                  markersEl.appendChild(m);
+                  requestAnimationFrame(function () { m.classList.add('visible'); });
+                }, i * 80));
+              });
+            }, 1200));
+          }
+
+        } else if (phase === 'sdk') {
+          // 区域裁切交互演示：用户画线拆分多边形
+          if (mapReady) {
+            map.setView([22.56, 114.04], 12, { animate: true });
+            map.dragging.disable();
+
+            // 初始多边形
+            var initVerts = [
+              [22.585, 113.97], [22.59, 114.04], [22.575, 114.10],
+              [22.545, 114.11], [22.53, 114.05], [22.54, 113.98]
+            ];
+            var splitPolygons = [initVerts]; // 当前所有多边形顶点集合
+            var polyLayers = [];
+            var splitColors = ['#f37979', '#2196f3', '#4caf50', '#ff9800', '#9c27b0', '#00bcd4'];
+            var splitCount = 0;
+
+            var mergeMode = false;
+            var mergeSelected = []; // 选中的多边形索引
+
+            function drawAllPolygons(interactiveMode) {
+              polyLayers.forEach(function (l) { overlayGroup.removeLayer(l); });
+              polyLayers = [];
+              splitPolygons.forEach(function (verts, i) {
+                var isSelected = mergeSelected.indexOf(i) !== -1;
+                var poly = L.polygon(verts, {
+                  color: isSelected ? '#fff' : splitColors[i % splitColors.length],
+                  weight: isSelected ? 3.5 : 2.5,
+                  fillColor: splitColors[i % splitColors.length],
+                  fillOpacity: isSelected ? 0.4 : 0.15,
+                  interactive: !!interactiveMode
+                });
+                if (interactiveMode) {
+                  (function (idx) {
+                    poly.on('click', function () {
+                      if (!mergeMode) return;
+                      var pos = mergeSelected.indexOf(idx);
+                      if (pos === -1) {
+                        mergeSelected.push(idx);
+                      } else {
+                        mergeSelected.splice(pos, 1);
+                      }
+                      drawAllPolygons(true);
+                      hint.textContent = '已选 ' + mergeSelected.length + ' 区，点击确认合并';
+                    });
+                  })(i);
+                }
+                overlayGroup.addLayer(poly);
+                polyLayers.push(poly);
+              });
+            }
+
+            drawAllPolygons();
+
+            // 提示文字
+            var hint = document.createElement('div');
+            hint.className = 'gis-split-hint gis-overlay';
+            hint.textContent = '选择工具开始操作';
+            viewport.appendChild(hint);
+
+            // 裁切交互状态
+            var cutStart = null;
+            var cutLine = null;
+            var previewLine = null;
+            var splitMode = false;
+            var pendingSplit = null; // 待确认的拆分结果
+
+            // 线段相交检测
+            function segIntersect(a1, a2, b1, b2) {
+              var d1x = a2[1] - a1[1], d1y = a2[0] - a1[0];
+              var d2x = b2[1] - b1[1], d2y = b2[0] - b1[0];
+              var cross = d1x * d2y - d1y * d2x;
+              if (Math.abs(cross) < 1e-12) return null;
+              var t = ((b1[1] - a1[1]) * d2y - (b1[0] - a1[0]) * d2x) / cross;
+              var u = ((b1[1] - a1[1]) * d1y - (b1[0] - a1[0]) * d1x) / cross;
+              if (t > 0.001 && t < 0.999 && u > 0.001 && u < 0.999) {
+                return [a1[0] + t * d1y, a1[1] + t * d1x];
+              }
+              return null;
+            }
+
+            // 拆分一个多边形
+            function splitOnePolygon(verts, p1, p2) {
+              var inters = [];
+              for (var i = 0; i < verts.length; i++) {
+                var j = (i + 1) % verts.length;
+                var pt = segIntersect(verts[i], verts[j], p1, p2);
+                if (pt) inters.push({ pt: pt, edge: i });
+              }
+              if (inters.length < 2) return null;
+              // 取前两个交点
+              var i1 = inters[0], i2 = inters[1];
+              var poly1 = [i1.pt];
+              for (var k = i1.edge + 1; k <= i2.edge; k++) poly1.push(verts[k]);
+              poly1.push(i2.pt);
+              var poly2 = [i2.pt];
+              for (var k = i2.edge + 1; k < verts.length; k++) poly2.push(verts[k]);
+              for (var k = 0; k <= i1.edge; k++) poly2.push(verts[k]);
+              poly2.push(i1.pt);
+              return [poly1, poly2];
+            }
+
+            // 延长线段使其足以穿过多边形
+            function extendLine(a, b, factor) {
+              var dx = b[0] - a[0], dy = b[1] - a[1];
+              return [
+                [a[0] - dx * factor, a[1] - dy * factor],
+                [b[0] + dx * factor, b[1] + dy * factor]
+              ];
+            }
+
+            function exitSplitMode() {
+              splitMode = false;
+              cutStart = null;
+              map.off('mousemove');
+              if (previewLine) { overlayGroup.removeLayer(previewLine); previewLine = null; }
+              // 移除起点标记
+              overlayGroup.eachLayer(function (l) {
+                if (l instanceof L.CircleMarker && l.options.fillColor === '#fff') overlayGroup.removeLayer(l);
+              });
+              var tb = viewport.querySelector('.gis-sdk-toolbar');
+              if (tb) {
+                tb.querySelectorAll('.gis-sdk-btn').forEach(function (b) { b.classList.remove('active'); });
+              }
+            }
+
+            function onMapClick(e) {
+              if (!splitMode) return;
+              var latlng = [e.latlng.lat, e.latlng.lng];
+
+              if (!cutStart) {
+                // 第一次点击：起点
+                cutStart = latlng;
+                var startDot = L.circleMarker(latlng, {
+                  radius: 5, color: '#fff', fillColor: '#fff',
+                  fillOpacity: 1, weight: 2, interactive: false
+                });
+                overlayGroup.addLayer(startDot);
+                hint.textContent = '点击第二个点完成裁切';
+
+                // 鼠标移动预览线
+                map.on('mousemove', function onMove(ev) {
+                  if (previewLine) overlayGroup.removeLayer(previewLine);
+                  previewLine = L.polyline(
+                    [cutStart, [ev.latlng.lat, ev.latlng.lng]],
+                    { color: '#fff', weight: 1.5, dashArray: '6 4', interactive: false }
+                  );
+                  overlayGroup.addLayer(previewLine);
+                });
+              } else {
+                // 第二次点击：裁切
+                map.off('mousemove');
+                if (previewLine) { overlayGroup.removeLayer(previewLine); previewLine = null; }
+
+                var ext = extendLine(cutStart, latlng, 2);
+                // 画裁切线
+                cutLine = L.polyline([cutStart, latlng], {
+                  color: '#fff', weight: 2, interactive: false
+                });
+                overlayGroup.addLayer(cutLine);
+
+                // 尝试裁切每一个多边形
+                var newPolygons = [];
+                var didSplit = false;
+                splitPolygons.forEach(function (verts) {
+                  var result = splitOnePolygon(verts, ext[0], ext[1]);
+                  if (result && result[0].length >= 3 && result[1].length >= 3) {
+                    newPolygons.push(result[0]);
+                    newPolygons.push(result[1]);
+                    didSplit = true;
+                  } else {
+                    newPolygons.push(verts);
+                  }
+                });
+
+                if (didSplit) {
+                  // 预览拆分结果，等待确认
+                  pendingSplit = { oldPolygons: splitPolygons.slice(), newPolygons: newPolygons };
+                  splitPolygons = newPolygons;
+                  setTimeout(function () {
+                    if (cutLine) { overlayGroup.removeLayer(cutLine); cutLine = null; }
+                    drawAllPolygons(false);
+                    actionsRow.style.display = '';
+                    hint.textContent = '预览拆分结果，点击确认或取消';
+                  }, 300);
+                  // 暂停点击监听
+                  splitMode = false;
+                } else {
+                  setTimeout(function () {
+                    if (cutLine) { overlayGroup.removeLayer(cutLine); cutLine = null; }
+                  }, 500);
+                  hint.textContent = '未穿过区域，请重试';
+                  cutStart = null;
+                }
+              }
+            }
+
+            // 工具栏按钮
+            var toolbar = document.createElement('div');
+            toolbar.className = 'gis-sdk-toolbar';
+            toolbar.innerHTML =
+              '<div class="gis-sdk-row">' +
+                '<button class="gis-sdk-btn" data-tool="split">&#9986; 拆分</button>' +
+                '<button class="gis-sdk-btn" data-tool="merge">&#8644; 合并</button>' +
+              '</div>' +
+              '<div class="gis-sdk-row gis-sdk-actions" style="display:none">' +
+                '<button class="gis-sdk-btn gis-sdk-confirm" data-tool="confirm">&#10003; 确认</button>' +
+                '<button class="gis-sdk-btn" data-tool="cancel">&#10005; 取消</button>' +
+              '</div>';
+            viewport.appendChild(toolbar);
+            var actionsRow = toolbar.querySelector('.gis-sdk-actions');
+            var confirmBtn = toolbar.querySelector('[data-tool="confirm"]');
+            var cancelBtn = toolbar.querySelector('[data-tool="cancel"]');
+
+            var history = []; // 保存拆分历史用于合并
+
+            function mergeSelectedPolygons() {
+              if (mergeSelected.length < 2) {
+                hint.textContent = '请至少选择两个区域';
+                return;
+              }
+              history.push(splitPolygons.slice());
+              // 合并选中的多边形顶点（凸包近似：按顺序拼接）
+              var mergedVerts = [];
+              mergeSelected.sort(function (a, b) { return a - b; });
+              mergeSelected.forEach(function (idx) {
+                mergedVerts = mergedVerts.concat(splitPolygons[idx]);
+              });
+              // 移除已合并的，添加合并后的
+              var newPolygons = [];
+              splitPolygons.forEach(function (verts, i) {
+                if (mergeSelected.indexOf(i) === -1) newPolygons.push(verts);
+              });
+              newPolygons.push(mergedVerts);
+              splitPolygons = newPolygons;
+              mergeSelected = [];
+              exitMergeMode();
+              drawAllPolygons(false);
+              hint.textContent = '已合并，当前 ' + splitPolygons.length + ' 区';
+            }
+
+            function exitMergeMode() {
+              mergeMode = false;
+              mergeSelected = [];
+              actionsRow.style.display = 'none';
+              toolbar.querySelector('[data-tool="merge"]').classList.remove('active');
+            }
+
+            toolbar.addEventListener('click', function (ev) {
+              var btn = ev.target.closest('.gis-sdk-btn');
+              if (!btn) return;
+              var tool = btn.dataset.tool;
+
+              if (tool === 'split') {
+                if (splitMode) {
+                  // 已在拆分模式，点击退出
+                  exitSplitMode();
+                  hint.textContent = '选择工具开始操作';
+                } else {
+                  splitMode = true;
+                  toolbar.querySelectorAll('.gis-sdk-btn').forEach(function (b) { b.classList.remove('active'); });
+                  btn.classList.add('active');
+                  actionsRow.style.display = '';
+                  hint.textContent = '点击地图两点绘制裁切线';
+                }
+              } else if (tool === 'merge') {
+                exitSplitMode();
+                if (splitPolygons.length < 2) {
+                  hint.textContent = '只有一个区域，无需合并';
+                  return;
+                }
+                if (mergeMode) {
+                  exitMergeMode();
+                  drawAllPolygons(false);
+                  hint.textContent = '选择工具开始操作';
+                } else {
+                  mergeMode = true;
+                  toolbar.querySelectorAll('.gis-sdk-btn').forEach(function (b) { b.classList.remove('active'); });
+                  btn.classList.add('active');
+                  actionsRow.style.display = '';
+                  drawAllPolygons(true);
+                  hint.textContent = '点击选择要合并的区域';
+                }
+              } else if (tool === 'confirm') {
+                if (pendingSplit) {
+                  // 确认拆分
+                  history.push(pendingSplit.oldPolygons);
+                  splitCount++;
+                  pendingSplit = null;
+                  actionsRow.style.display = 'none';
+                  exitSplitMode();
+                  drawAllPolygons(false);
+                  hint.textContent = '已拆分为 ' + splitPolygons.length + ' 区';
+                } else if (mergeMode) {
+                  mergeSelectedPolygons();
+                }
+              } else if (tool === 'cancel') {
+                if (pendingSplit) {
+                  splitPolygons = pendingSplit.oldPolygons;
+                  pendingSplit = null;
+                  drawAllPolygons(false);
+                }
+                actionsRow.style.display = 'none';
+                exitSplitMode();
+                if (mergeMode) {
+                  exitMergeMode();
+                  drawAllPolygons(false);
+                }
+                hint.textContent = '已取消';
+              }
+            });
+
+            map.on('click', onMapClick);
+            // 存储清理函数
+            map._sdkCleanup = function () {
+              map.off('click', onMapClick);
+              map.off('mousemove');
+              map.dragging.enable();
+              mergeMode = false;
+              mergeSelected = [];
+              var h = viewport.querySelector('.gis-split-hint');
+              if (h) h.remove();
+              var tb = viewport.querySelector('.gis-sdk-toolbar');
+              if (tb) tb.remove();
+            };
+
+          } else {
+            // 回退模式：静态展示
+            if (tilesEl) tilesEl.classList.add('active');
+            tiles.forEach(function (t, i) {
+              animTimeout.push(setTimeout(function () { t.classList.add('loaded'); }, i * 25));
+            });
+            animTimeout.push(setTimeout(function () {
+              svgRegions.forEach(function (r) { r.classList.add('drawn'); r.classList.add('filled'); });
+            }, 500));
+            animTimeout.push(setTimeout(function () {
+              perfOverlay.classList.add('active');
+              perfFps.textContent = '60';
+              perfMarkers.textContent = '裁切';
+              perfTiles.textContent = '演示';
+            }, 800));
+          }
+
+        } else if (phase === 'perf') {
+          perfOverlay.classList.add('active');
+
+          if (mapReady) {
+            var count = 0;
+            var total = 80;
+            for (var i = 0; i < total; i++) {
+              (function (idx) {
+                animTimeout.push(setTimeout(function () {
+                  var lat = 22.48 + Math.random() * 0.2;
+                  var lng = 113.85 + Math.random() * 0.35;
+                  var rtype = MARKER_TYPES[idx % 4];
+                  var icon = L.divIcon({
+                    className: LF_MARKER_CLASSES[rtype],
+                    iconSize: [10, 10],
+                    iconAnchor: [5, 5]
+                  });
+                  var marker = L.marker([lat, lng], { icon: icon, interactive: false });
+                  overlayGroup.addLayer(marker);
+                  count++;
+                  perfMarkers.textContent = String(count * 650);
+                  perfFps.textContent = '60';
+                  perfTiles.textContent = String(count);
+                }, idx * 30));
+              })(i);
+            }
+          } else {
+            if (tilesEl) tilesEl.classList.add('active');
+            tiles.forEach(function (t, i) {
+              animTimeout.push(setTimeout(function () {
+                t.classList.add('loaded', 'highlight');
+                perfTiles.textContent = String(i + 1);
+              }, i * 15));
+            });
+            var cnt = 0;
+            for (var j = 0; j < 60; j++) {
+              (function (idx) {
+                animTimeout.push(setTimeout(function () {
+                  var m = document.createElement('div');
+                  var rt = MARKER_TYPES[idx % 4];
+                  m.className = 'gis-marker pulse m-' + rt;
+                  m.style.left = (10 + Math.random() * 80) + '%';
+                  m.style.top = (5 + Math.random() * 85) + '%';
+                  markersEl.appendChild(m);
+                  requestAnimationFrame(function () { m.classList.add('visible'); });
+                  cnt++;
+                  perfMarkers.textContent = String(cnt * 850);
+                  perfFps.textContent = '60';
+                }, idx * 40));
+              })(j);
+            }
+          }
+
+        } else if (phase === 'fusion') {
+          // 融合方案：隐藏地图，用纯色背景 + 3D 图层堆叠展示
+          if (mapReady) {
+            mapContainer.classList.remove('map-ready');
+          }
+          // 3D 图层堆叠效果
+          animTimeout.push(setTimeout(function () {
+            layerStack.classList.add('active');
+          }, 300));
+          animTimeout.push(setTimeout(function () {
+            perfOverlay.classList.add('active');
+            perfTiles.textContent = '3层';
+            perfMarkers.textContent = '融合';
+            perfFps.textContent = '60';
+          }, 800));
+        }
+      }
+
+      // 按钮点击
+      missionBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          missionBtns.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          var phase = btn.dataset.phase;
+          if (phase !== currentPhase) {
+            currentPhase = phase;
+            runPhase(phase);
+          }
+        });
+      });
+
+      // 滚动进入视图时自动触发
+      var gisSection = document.getElementById('project3');
+      if (gisSection) {
+        var triggered = false;
+        new IntersectionObserver(function (entries) {
+          if (entries[0].isIntersecting && !triggered) {
+            triggered = true;
+            setTimeout(function () { runPhase('migrate'); }, 600);
+          }
+        }, { threshold: 0.3 }).observe(gisSection);
+      }
+    })();
+
     // 鼠标尾焰轨迹
     let lastTrailTime = 0;
     document.addEventListener('mousemove', (e) => {

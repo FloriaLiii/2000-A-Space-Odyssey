@@ -1833,7 +1833,623 @@ body {
 }
 
 /* ============================================
-   SECTION 6: AWARDS
+   SECTION 6: PROJECT 3 — 派工智慧地图
+   Interactive GIS Mission Control Dashboard
+   ============================================ */
+.section-gis {
+  background: linear-gradient(
+    180deg,
+    var(--bg-deep) 0%,
+    #1a2030 40%,
+    #1e2638 60%,
+    var(--bg-deep) 100%
+  );
+}
+
+.gis-dashboard {
+  display: flex;
+  align-items: stretch;
+  gap: 40px;
+}
+
+/* ---- Map Panel (Left) ---- */
+.gis-map-panel {
+  flex-shrink: 0;
+  width: 440px;
+}
+
+.gis-map-frame {
+  border-radius: 16px;
+  border: 2px solid rgba(118, 70, 92, 0.25);
+  overflow: hidden;
+  background: #0d1117;
+  box-shadow:
+    20px 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 50px rgba(56, 140, 220, 0.06);
+  transition: box-shadow 0.6s;
+}
+
+.gis-map-frame:hover {
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 0 80px rgba(56, 140, 220, 0.12);
+}
+
+.gis-map-topbar {
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(53, 39, 62, 0.5);
+}
+
+.gis-map-title {
+  margin-left: 8px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.gis-map-viewport {
+  position: relative;
+  width: 100%;
+  height: 340px;
+  overflow: hidden;
+  background: #0a0f18;
+}
+
+/* Leaflet 地图容器 */
+.gis-amap-container {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.gis-amap-container.map-ready {
+  opacity: 1;
+}
+
+/* 原始高德底图风格 — 与项目实际风格一致 */
+
+/* 隐藏 Leaflet 默认控件 */
+.gis-amap-container .leaflet-control-container {
+  display: none;
+}
+
+/* 所有覆盖层浮于地图之上，但不拦截鼠标事件 */
+.gis-overlay {
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* 回退用瓦片网格（无 AMap Key 时使用） */
+.gis-tiles-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: 1px;
+  opacity: 0;
+  transition: opacity 0.8s;
+}
+
+.gis-tiles-fallback.active {
+  opacity: 1;
+}
+
+.gis-tile {
+  background: rgba(56, 140, 220, 0.04);
+  border: 1px solid rgba(56, 140, 220, 0.08);
+  opacity: 0;
+  transform: scale(0.85);
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.gis-tile.loaded {
+  opacity: 1;
+  transform: scale(1);
+  background: rgba(56, 140, 220, 0.06);
+}
+
+.gis-tile.highlight {
+  background: rgba(56, 140, 220, 0.15);
+  border-color: rgba(56, 140, 220, 0.25);
+}
+
+/* Region polygons */
+.gis-regions {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.gis-region {
+  fill: rgba(243, 121, 121, 0.08);
+  stroke: rgba(243, 121, 121, 0.3);
+  stroke-width: 1.5;
+  stroke-dasharray: 300;
+  stroke-dashoffset: 300;
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.gis-region.drawn {
+  stroke-dashoffset: 0;
+  opacity: 1;
+}
+
+.gis-region.filled {
+  fill: rgba(243, 121, 121, 0.15);
+}
+
+.gis-region.r1.drawn { transition-delay: 0s; }
+.gis-region.r2.drawn { transition-delay: 0.15s; }
+.gis-region.r3.drawn { transition-delay: 0.3s; }
+.gis-region.r4.drawn { transition-delay: 0.45s; }
+.gis-region.r5.drawn { transition-delay: 0.6s; }
+
+/* Data markers */
+.gis-markers {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.gis-marker {
+  position: absolute;
+  opacity: 0;
+  transform: scale(0);
+  transition: all 0.3s;
+}
+
+.gis-marker.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* 查勘 — 蓝色圆形 */
+.gis-marker.m-survey {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #2196f3;
+  box-shadow: 0 0 6px rgba(33, 150, 243, 0.6);
+}
+
+/* 车定损 — 红色方形 */
+.gis-marker.m-car {
+  width: 7px;
+  height: 7px;
+  border-radius: 1px;
+  background: #e53935;
+  box-shadow: 0 0 6px rgba(229, 57, 53, 0.6);
+}
+
+/* 人定损 — 橙色三角 */
+.gis-marker.m-person {
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 9px solid #ff9800;
+  background: transparent;
+  filter: drop-shadow(0 0 4px rgba(255, 152, 0, 0.6));
+}
+
+/* 物定损 — 绿色五边形/房形 */
+.gis-marker.m-property {
+  width: 8px;
+  height: 6px;
+  background: #4caf50;
+  border-radius: 1px;
+  position: absolute;
+  box-shadow: 0 0 6px rgba(76, 175, 80, 0.6);
+}
+
+.gis-marker.m-property::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid #4caf50;
+}
+
+.gis-marker.pulse {
+  animation: marker-pulse 2s ease-in-out infinite;
+}
+
+@keyframes marker-pulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.5); }
+}
+
+/* Leaflet 自定义图标 */
+.leaflet-marker-icon.gis-lf-marker {
+  border: none;
+  background: transparent;
+}
+
+.gis-lf-survey {
+  width: 10px !important;
+  height: 10px !important;
+  border-radius: 50% !important;
+  background: #2196f3 !important;
+  box-shadow: 0 0 6px rgba(33, 150, 243, 0.6);
+}
+
+.gis-lf-car {
+  width: 9px !important;
+  height: 9px !important;
+  border-radius: 1px !important;
+  background: #e53935 !important;
+  box-shadow: 0 0 6px rgba(229, 57, 53, 0.6);
+}
+
+.gis-lf-person {
+  width: 0 !important;
+  height: 0 !important;
+  border-left: 6px solid transparent !important;
+  border-right: 6px solid transparent !important;
+  border-bottom: 10px solid #ff9800 !important;
+  background: transparent !important;
+  filter: drop-shadow(0 0 4px rgba(255, 152, 0, 0.6));
+}
+
+.gis-lf-property {
+  width: 10px !important;
+  height: 7px !important;
+  background: #4caf50 !important;
+  border-radius: 1px !important;
+  box-shadow: 0 0 6px rgba(76, 175, 80, 0.6);
+  position: relative;
+}
+
+.gis-lf-property::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 0;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 5px solid #4caf50;
+}
+
+/* Performance overlay */
+.gis-perf-overlay {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+
+.gis-perf-overlay.active {
+  opacity: 1;
+}
+
+.gis-split-hint {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  pointer-events: none;
+  padding: 6px 16px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(243, 121, 121, 0.4);
+  border-radius: 4px;
+  color: #f0e6ea;
+  font-family: 'Courier New', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+
+.gis-sdk-toolbar {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+  border-radius: 3px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.gis-sdk-row {
+  display: flex;
+}
+
+.gis-sdk-btn {
+  padding: 5px 12px;
+  background: #fff;
+  border: none;
+  border-right: 1px solid #e0e0e0;
+  color: #333;
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: background 0.15s ease;
+  white-space: nowrap;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.gis-sdk-row:first-child {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.gis-sdk-btn:last-child {
+  border-right: none;
+}
+
+.gis-sdk-btn:hover {
+  background: #f0f0f0;
+}
+
+.gis-sdk-btn.active {
+  background: #e8f4fd;
+  color: #1a73e8;
+}
+
+.gis-sdk-confirm {
+  color: #2e7d32;
+}
+
+.gis-sdk-confirm:hover {
+  background: #e8f5e9;
+}
+
+.gis-perf-item {
+  display: flex;
+  gap: 8px;
+  padding: 3px 8px;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+  border: 1px solid rgba(56, 140, 220, 0.2);
+}
+
+.gis-perf-label {
+  color: var(--text-dim);
+}
+
+.gis-perf-value {
+  color: #4cdf50;
+  font-weight: 700;
+}
+
+/* Fusion layers overlay */
+.gis-layer-stack {
+  position: absolute;
+  inset: 0;
+  perspective: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+
+.gis-layer-stack.active {
+  opacity: 1;
+}
+
+.gis-layer {
+  position: absolute;
+  width: 70%;
+  height: 60%;
+  border-radius: 8px;
+  border: 1px solid;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 10px;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  backface-visibility: hidden;
+}
+
+.gis-layer.l-base {
+  background: rgba(30, 60, 100, 0.3);
+  border-color: rgba(56, 140, 220, 0.3);
+  color: rgba(56, 140, 220, 0.7);
+  transform: translateZ(0px) translateY(20px);
+}
+
+.gis-layer.l-road {
+  background: rgba(100, 60, 30, 0.25);
+  border-color: rgba(243, 112, 67, 0.3);
+  color: rgba(243, 112, 67, 0.7);
+  transform: translateZ(0px) translateY(10px);
+}
+
+.gis-layer.l-data {
+  background: rgba(50, 100, 50, 0.25);
+  border-color: rgba(76, 175, 80, 0.3);
+  color: rgba(76, 175, 80, 0.7);
+  transform: translateZ(0px) translateY(0px);
+}
+
+.gis-layer-stack.active .l-base {
+  transform: translateZ(-60px) translateY(30px) rotateX(15deg);
+}
+.gis-layer-stack.active .l-road {
+  transform: translateZ(0px) translateY(0px) rotateX(15deg);
+}
+.gis-layer-stack.active .l-data {
+  transform: translateZ(60px) translateY(-30px) rotateX(15deg);
+}
+
+/* ---- Mission Panel (Right) ---- */
+.gis-mission-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.gis-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.gis-missions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gis-mission-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: rgba(53, 39, 62, 0.2);
+  border: 1px solid rgba(118, 70, 92, 0.15);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  text-align: left;
+  font-family: inherit;
+  position: relative;
+  overflow: hidden;
+}
+
+.gis-mission-btn::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  transform: scaleY(0);
+  transition: transform 0.3s;
+}
+
+.gis-mission-btn:hover {
+  background: rgba(53, 39, 62, 0.4);
+  border-color: rgba(243, 112, 67, 0.2);
+  transform: translateX(4px);
+}
+
+.gis-mission-btn.active {
+  background: rgba(53, 39, 62, 0.5);
+  border-color: rgba(243, 112, 67, 0.35);
+  box-shadow: 0 0 30px rgba(243, 112, 67, 0.06);
+}
+
+.gis-mission-btn.active::before {
+  transform: scaleY(1);
+}
+
+.gis-mission-icon {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: rgba(243, 112, 67, 0.1);
+  color: var(--accent);
+  transition: all 0.3s;
+}
+
+.gis-mission-btn.active .gis-mission-icon {
+  background: rgba(243, 112, 67, 0.2);
+  box-shadow: 0 0 12px rgba(243, 112, 67, 0.15);
+}
+
+.gis-mission-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.gis-mission-info strong {
+  font-size: 14px;
+  color: var(--white);
+  font-weight: 600;
+}
+
+.gis-mission-info small {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.gis-mission-arrow {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 18px;
+  color: rgba(243, 112, 67, 0.2);
+  transition: all 0.3s;
+  flex-shrink: 0;
+}
+
+.gis-mission-btn.active .gis-mission-arrow {
+  color: var(--accent);
+  transform: translateX(3px);
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 1024px) {
+  .gis-dashboard {
+    flex-direction: column;
+    align-items: center;
+  }
+  .gis-map-panel {
+    width: 100%;
+    max-width: 480px;
+  }
+}
+
+@media (max-width: 640px) {
+  .gis-map-viewport {
+    height: 240px;
+  }
+  .gis-mission-btn {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+  .gis-mission-icon {
+    width: 28px;
+    height: 28px;
+  }
+  .gis-mission-info strong {
+    font-size: 13px;
+  }
+  .gis-mission-info small {
+    font-size: 11px;
+  }
+}
+
+/* ============================================
+   SECTION 7: AWARDS
    ============================================ */
 .section-awards {
   background: linear-gradient(
