@@ -3253,7 +3253,7 @@ body {
   }
   100% {
     opacity: 1;
-    transform: translate(0, 0) rotate(-100deg);
+    transform: translate(0, 0) rotate(-70deg);
   }
 }
 
@@ -3333,17 +3333,17 @@ body {
 /* 大三角 — 按钮下方醒目箭头（PPT: 指向左下，重叠） */
 .ct-tri-big1 {
   width: 112px;
-  bottom: 16%;
-  left: 52%;
+  bottom: 12%;
+  left: 56%;
   transform: rotate(150deg);
   z-index: 6;
 }
 .ct-tri-big2 {
-  width: 80px;
-  bottom: 18%;
-  left: 54%;
-  transform: rotate(135deg);
-  z-index: 6;
+  width: 70px;
+  bottom: 15%;
+  left: 59%;
+  transform: rotate(145deg);
+  z-index: 8;
 }
 
 /* === THANKS 卡片 → 通讯面板按钮 === */
@@ -3385,7 +3385,7 @@ body {
   background: rgba(243, 112, 67, 0.08);
 }
 .ct-card-label {
-  font-family: "ZCOOL QingKe HuangYou", sans-serif;
+  font-family: "Noto Serif SC", "Songti SC", serif;
   font-size: clamp(26px, 4vw, 42px);
   font-weight: 700;
   letter-spacing: 0.3em;
@@ -3396,12 +3396,24 @@ body {
   filter: brightness(1.2) saturate(1.1);
   text-shadow: none;
 }
+.ct-card-label-img {
+  display: block;
+  width: clamp(120px, 30vw, 300px);
+  height: auto;
+  margin: 0 auto;
+}
 .ct-card-sub {
-  font-family: "Orbitron", sans-serif;
-  font-size: 10px;
-  color: rgba(200, 180, 220, 0.5);
-  letter-spacing: 0.35em;
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Oriya MN", "Orbitron", "Impact", sans-serif;
+  font-size: 16px;
+  color: #fff;
+  letter-spacing: 0.08em;
+  font-weight: 900;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 /* 响应式 */
