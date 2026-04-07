@@ -8,9 +8,9 @@ let commActiveNoise = new Set();
 let commTypeTimer = null;
 
 function openCommPanel() {
-  const modal = document.getElementById('commModal');
-  modal.classList.add('open');
-  document.body.style.overflow = 'hidden';
+  const modal = document.getElementById("commModal");
+  modal.classList.add("open");
+  document.body.style.overflow = "hidden";
   // 初始化雪花 canvas
   initCommNoise();
   // 启动打字机
@@ -20,44 +20,50 @@ function openCommPanel() {
 }
 
 function closeCommPanel() {
-  const modal = document.getElementById('commModal');
-  modal.classList.remove('open');
-  document.body.style.overflow = '';
+  const modal = document.getElementById("commModal");
+  modal.classList.remove("open");
+  document.body.style.overflow = "";
   // 停止打字机
   clearTimeout(commTypeTimer);
   // 重置所有屏幕到关机状态
-  document.querySelectorAll('.comm-monitor:not(.comm-monitor-main)').forEach(m => {
-    m.classList.remove('comm-on', 'comm-turning-on');
-    m.classList.add('comm-off');
-  });
+  document
+    .querySelectorAll(".comm-monitor:not(.comm-monitor-main)")
+    .forEach((m) => {
+      m.classList.remove("comm-on", "comm-turning-on");
+      m.classList.add("comm-off");
+    });
 }
 
 // 点击遮罩关闭
-document.getElementById('commModal').addEventListener('click', function(e) {
+document.getElementById("commModal").addEventListener("click", function (e) {
   if (e.target === this) closeCommPanel();
 });
 
 // ESC 关闭
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeCommPanel();
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape") closeCommPanel();
 });
 
 // === 雪花系统 ===
 function initCommNoise() {
-  document.querySelectorAll('.comm-noise').forEach(el => {
+  document.querySelectorAll(".comm-noise").forEach((el) => {
     if (el._canvas) return; // 已初始化
-    const c = document.createElement('canvas');
-    c.width = 200; c.height = 140;
-    c.style.imageRendering = 'pixelated';
+    const c = document.createElement("canvas");
+    c.width = 200;
+    c.height = 140;
+    c.style.imageRendering = "pixelated";
     el.appendChild(c);
-    el._ctx = c.getContext('2d');
+    el._ctx = c.getContext("2d");
     el._canvas = c;
   });
 
   // 默认小屏关机显示雪花
-  document.querySelectorAll('.comm-monitor.comm-off').forEach(m => {
-    const noise = m.querySelector('.comm-noise');
-    if (noise) { noise.style.opacity = '.7'; commActiveNoise.add(noise); }
+  document.querySelectorAll(".comm-monitor.comm-off").forEach((m) => {
+    const noise = m.querySelector(".comm-noise");
+    if (noise) {
+      noise.style.opacity = ".7";
+      commActiveNoise.add(noise);
+    }
   });
 
   // 启动雪花渲染
@@ -68,8 +74,9 @@ function initCommNoise() {
     function loop(now) {
       if (now - lastTime >= interval) {
         lastTime = now;
-        commActiveNoise.forEach(el => {
-          if (el._ctx) drawCommStatic(el._ctx, el._canvas.width, el._canvas.height);
+        commActiveNoise.forEach((el) => {
+          if (el._ctx)
+            drawCommStatic(el._ctx, el._canvas.width, el._canvas.height);
         });
       }
       commNoiseLoop = requestAnimationFrame(loop);
@@ -87,26 +94,28 @@ function drawCommStatic(ctx, w, h) {
     if (r < 0.42) v = 0;
     else if (r < 0.82) v = 255;
     else v = 80 + Math.random() * 100;
-    d[i] = d[i+1] = d[i+2] = v;
-    d[i+3] = 255;
+    d[i] = d[i + 1] = d[i + 2] = v;
+    d[i + 3] = 255;
   }
   ctx.putImageData(img, 0, 0);
 }
 
 // === 打字机 ===
 const commLines = [
-  '通讯系统已就绪——',
-  '选择你的频道...',
-  'SIGNAL: ████████░░ 82%',
-  'ALL CHANNELS OPERATIONAL',
-  '等待信号接入...'
+  "这不是普通的雪花点",
+  "这是宇宙诞生时的余辉",
+  "SIGNAL: ████████░░ 82%",
+  "ALL CHANNELS OPERATIONAL",
+  "等待信号接入...",
 ];
-let commLi = 0, commCi = 0;
+let commLi = 0,
+  commCi = 0;
 
 function startCommTypewriter() {
-  const el = document.getElementById('commMainText');
+  const el = document.getElementById("commMainText");
   if (!el) return;
-  commLi = 0; commCi = 0;
+  commLi = 0;
+  commCi = 0;
   function tick() {
     if (commCi <= commLines[commLi].length) {
       el.textContent = commLines[commLi].substring(0, commCi);
@@ -116,7 +125,7 @@ function startCommTypewriter() {
       commTypeTimer = setTimeout(() => {
         commCi = 0;
         commLi = (commLi + 1) % commLines.length;
-        el.textContent = '';
+        el.textContent = "";
         commTypeTimer = setTimeout(tick, 250);
       }, 2200);
     }
@@ -126,78 +135,93 @@ function startCommTypewriter() {
 
 // === 屏幕开关 ===
 function commToggle(el) {
-  if (el.classList.contains('comm-monitor-main')) return;
+  if (el.classList.contains("comm-monitor-main")) return;
 
   // 音效
   try {
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const o = ctx.createOscillator(), g = ctx.createGain();
-    o.connect(g); g.connect(ctx.destination);
-    o.type = 'square';
-    const isOn = el.classList.contains('comm-on');
+    const o = ctx.createOscillator(),
+      g = ctx.createGain();
+    o.connect(g);
+    g.connect(ctx.destination);
+    o.type = "square";
+    const isOn = el.classList.contains("comm-on");
     o.frequency.value = isOn ? 100 : 520;
     g.gain.value = 0.035;
     g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
-    o.start(ctx.currentTime); o.stop(ctx.currentTime + 0.1);
-  } catch(e) {}
+    o.start(ctx.currentTime);
+    o.stop(ctx.currentTime + 0.1);
+  } catch (e) {}
 
-  const noise = el.querySelector('.comm-noise');
+  const noise = el.querySelector(".comm-noise");
 
-  if (el.classList.contains('comm-on')) {
+  if (el.classList.contains("comm-on")) {
     // 关机
-    el.classList.remove('comm-on', 'comm-turning-on');
-    el.classList.add('comm-off');
-    if (noise) { noise.style.opacity = '.7'; commActiveNoise.add(noise); }
+    el.classList.remove("comm-on", "comm-turning-on");
+    el.classList.add("comm-off");
+    if (noise) {
+      noise.style.opacity = ".7";
+      commActiveNoise.add(noise);
+    }
   } else {
     // 开机
-    el.classList.remove('comm-off');
-    el.classList.add('comm-on', 'comm-turning-on');
-    if (noise) { noise.style.opacity = '.8'; commActiveNoise.add(noise); }
+    el.classList.remove("comm-off");
+    el.classList.add("comm-on", "comm-turning-on");
+    if (noise) {
+      noise.style.opacity = ".8";
+      commActiveNoise.add(noise);
+    }
     setTimeout(() => {
-      el.classList.remove('comm-turning-on');
-      if (noise) { noise.style.opacity = '0'; commActiveNoise.delete(noise); }
+      el.classList.remove("comm-turning-on");
+      if (noise) {
+        noise.style.opacity = "0";
+        commActiveNoise.delete(noise);
+      }
     }, 500);
 
     // 自动复制 + 主屏提示
     const copyText = el.dataset.copy;
     if (copyText) {
-      navigator.clipboard.writeText(copyText).then(() => {
-        showCommCopyMsg('✓ COPIED: ' + copyText);
-      }).catch(() => {
-        showCommCopyMsg('✓ ' + copyText);
-      });
+      navigator.clipboard
+        .writeText(copyText)
+        .then(() => {
+          showCommCopyMsg("✓ COPIED: " + copyText);
+        })
+        .catch(() => {
+          showCommCopyMsg("✓ " + copyText);
+        });
     }
   }
 }
 
 // === 主屏复制提示 ===
 function showCommCopyMsg(text) {
-  const msgEl = document.getElementById('commCopyMsg');
-  const promptEl = document.querySelector('.comm-main-prompt');
-  const hintEl = document.querySelector('.comm-main-hint');
+  const msgEl = document.getElementById("commCopyMsg");
+  const promptEl = document.querySelector(".comm-main-prompt");
+  const hintEl = document.querySelector(".comm-main-hint");
   if (!msgEl) return;
 
-  if (promptEl) promptEl.classList.add('comm-hide');
-  if (hintEl) hintEl.classList.add('comm-hide');
+  if (promptEl) promptEl.classList.add("comm-hide");
+  if (hintEl) hintEl.classList.add("comm-hide");
 
-  msgEl.classList.remove('comm-show');
+  msgEl.classList.remove("comm-show");
   msgEl.textContent = text;
   void msgEl.offsetWidth;
-  msgEl.classList.add('comm-show');
+  msgEl.classList.add("comm-show");
 
   setTimeout(() => {
-    msgEl.classList.remove('comm-show');
-    if (promptEl) promptEl.classList.remove('comm-hide');
-    if (hintEl) hintEl.classList.remove('comm-hide');
+    msgEl.classList.remove("comm-show");
+    if (promptEl) promptEl.classList.remove("comm-hide");
+    if (hintEl) hintEl.classList.remove("comm-hide");
   }, 2600);
 }
 
 // === 随机干扰 ===
 function commGlitchMonitor(mon) {
-  if (!mon.classList.contains('comm-on')) return;
-  const noise = mon.querySelector('.comm-noise');
-  const tear = mon.querySelector('.comm-tear');
-  const effects = ['comm-glitch', 'comm-flicker', 'comm-jitter'];
+  if (!mon.classList.contains("comm-on")) return;
+  const noise = mon.querySelector(".comm-noise");
+  const tear = mon.querySelector(".comm-tear");
+  const effects = ["comm-glitch", "comm-flicker", "comm-jitter"];
   const fx = effects[Math.floor(Math.random() * effects.length)];
 
   if (noise) {
@@ -205,8 +229,8 @@ function commGlitchMonitor(mon) {
     commActiveNoise.add(noise);
   }
   if (tear && Math.random() > 0.3) {
-    tear.style.top = (Math.random() * 80 + 10) + '%';
-    tear.style.opacity = '1';
+    tear.style.top = Math.random() * 80 + 10 + "%";
+    tear.style.opacity = "1";
   }
   mon.classList.add(fx);
 
@@ -216,39 +240,54 @@ function commGlitchMonitor(mon) {
     const buf = 4096;
     const wn = ctx.createScriptProcessor(buf, 1, 1);
     const g = ctx.createGain();
-    wn.onaudioprocess = e => {
+    wn.onaudioprocess = (e) => {
       const out = e.outputBuffer.getChannelData(0);
       for (let i = 0; i < buf; i++) out[i] = (Math.random() * 2 - 1) * 0.015;
     };
-    wn.connect(g); g.connect(ctx.destination);
+    wn.connect(g);
+    g.connect(ctx.destination);
     g.gain.value = 0.06;
     g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
-    setTimeout(() => { wn.disconnect(); g.disconnect(); }, 200);
-  } catch(e) {}
+    setTimeout(() => {
+      wn.disconnect();
+      g.disconnect();
+    }, 200);
+  } catch (e) {}
 
-  setTimeout(() => {
-    mon.classList.remove(fx);
-    if (noise) { noise.style.opacity = '0'; commActiveNoise.delete(noise); }
-    if (tear) tear.style.opacity = '0';
-  }, 100 + Math.random() * 150);
+  setTimeout(
+    () => {
+      mon.classList.remove(fx);
+      if (noise) {
+        noise.style.opacity = "0";
+        commActiveNoise.delete(noise);
+      }
+      if (tear) tear.style.opacity = "0";
+    },
+    100 + Math.random() * 150,
+  );
 }
 
 let commGlitchTimer = null;
 function scheduleCommGlitch() {
   clearTimeout(commGlitchTimer);
-  commGlitchTimer = setTimeout(() => {
-    const modal = document.getElementById('commModal');
-    if (!modal.classList.contains('open')) return;
+  commGlitchTimer = setTimeout(
+    () => {
+      const modal = document.getElementById("commModal");
+      if (!modal.classList.contains("open")) return;
 
-    const small = [...document.querySelectorAll('.comm-monitor:not(.comm-monitor-main)')];
-    const onOnes = small.filter(m => m.classList.contains('comm-on'));
-    if (onOnes.length > 0) {
-      const t = onOnes[Math.floor(Math.random() * onOnes.length)];
-      commGlitchMonitor(t);
-      if (Math.random() < 0.3) {
-        setTimeout(() => commGlitchMonitor(t), 120 + Math.random() * 80);
+      const small = [
+        ...document.querySelectorAll(".comm-monitor:not(.comm-monitor-main)"),
+      ];
+      const onOnes = small.filter((m) => m.classList.contains("comm-on"));
+      if (onOnes.length > 0) {
+        const t = onOnes[Math.floor(Math.random() * onOnes.length)];
+        commGlitchMonitor(t);
+        if (Math.random() < 0.3) {
+          setTimeout(() => commGlitchMonitor(t), 120 + Math.random() * 80);
+        }
       }
-    }
-    scheduleCommGlitch();
-  }, 1500 + Math.random() * 3500);
+      scheduleCommGlitch();
+    },
+    1500 + Math.random() * 3500,
+  );
 }

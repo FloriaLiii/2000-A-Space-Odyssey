@@ -2937,7 +2937,7 @@ body {
   }
   100% {
     opacity: 1;
-    transform: translate(0, 0) rotate(240deg);
+    transform: translate(0, 0) rotate(140deg);
   }
 }
 @keyframes ctFlyIn9 {
@@ -3037,11 +3037,11 @@ body {
 @keyframes ctFlyInBig2 {
   0% {
     opacity: 0;
-    transform: translate(90vw, 60vh) rotate(-20deg);
+    transform: translate(90vw, 60vh) rotate(-70deg);
   }
   100% {
     opacity: 1;
-    transform: translate(0, 0) rotate(135deg);
+    transform: translate(0, 0) rotate(-100deg);
   }
 }
 
@@ -3058,42 +3058,43 @@ body {
 
 /* 各三角位置、大小 — 散乱分布 */
 .ct-tri-1 {
-  width: 16px;
+  width: 40px;
   top: 42%;
   left: 37%;
 }
 .ct-tri-2 {
-  width: 20px;
+  width: 30px;
   top: 48%;
   left: 44%;
 }
 .ct-tri-3 {
-  width: 12px;
+  width: 42px;
   top: 28%;
   left: 30%;
 }
 .ct-tri-4 {
-  width: 18px;
+  width: 48px;
   bottom: 18%;
   right: 15%;
 }
 .ct-tri-5 {
-  width: 22px;
+  width: 38px;
   bottom: 22%;
   right: 22%;
 }
 .ct-tri-6 {
-  width: 10px;
+  width: 60px;
   top: 18%;
   left: 12%;
 }
 .ct-tri-7 {
-  width: 14px;
+  width: 50px;
   top: 60%;
-  left: 8%;
+  left: 32%;
+  z-index: 10;
 }
 .ct-tri-8 {
-  width: 9px;
+  width: 26px;
   top: 15%;
   right: 25%;
 }
@@ -3103,32 +3104,32 @@ body {
   left: 18%;
 }
 .ct-tri-10 {
-  width: 11px;
+  width: 31px;
   top: 22%;
   right: 10%;
 }
 .ct-tri-11 {
-  width: 8px;
+  width: 30px;
   bottom: 12%;
   left: 42%;
 }
 .ct-tri-12 {
-  width: 13px;
+  width: 33px;
   bottom: 28%;
-  right: 8%;
+  right: 21%;
 }
 /* 大三角 — 按钮下方醒目箭头（PPT: 指向左下，重叠） */
 .ct-tri-big1 {
-  width: 58px;
-  bottom: 13%;
-  left: 50%;
+  width: 112px;
+  bottom: 16%;
+  left: 52%;
   transform: rotate(150deg);
   z-index: 6;
 }
 .ct-tri-big2 {
-  width: 44px;
-  bottom: 11%;
-  left: 52%;
+  width: 80px;
+  bottom: 18%;
+  left: 54%;
   transform: rotate(135deg);
   z-index: 6;
 }
