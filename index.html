@@ -375,16 +375,22 @@
         data-label="智慧地图"
       ></a>
       <a
-        href="#hobbies"
+        href="#project4"
         class="nav-dot"
         data-section="8"
+        data-label="救援平台"
+      ></a>
+      <a
+        href="#hobbies"
+        class="nav-dot"
+        data-section="9"
         data-label="私人星图"
       ></a>
-      <a href="#awards" class="nav-dot" data-section="9" data-label="荣誉"></a>
+      <a href="#awards" class="nav-dot" data-section="10" data-label="荣誉"></a>
       <a
         href="#contact"
         class="nav-dot"
-        data-section="10"
+        data-section="11"
         data-label="联系"
       ></a>
     </nav>
@@ -1285,7 +1291,121 @@
       </div>
     </section>
 
-    <!-- ===== Section 7: Hobbies / 私人星图 ===== -->
+    <!-- ===== Section 7: Project 4 — 全球急难救援平台 ===== -->
+    <section class="section section-project section-rescue" id="project4">
+      <img class="rescue-planet-top" src="assets/planet-7.png" alt="" />
+      <img class="rescue-planet-bottom" src="assets/planet-main.png" alt="" />
+      <div class="rescue-header anim-fade-up">
+        <div class="voyage-header-planet">
+          <img src="assets/planet-title.png" alt="" class="header-planet-img" />
+          <span class="voyage-num">04</span>
+        </div>
+        <div class="rescue-header-text">
+          <h2 class="rescue-header-title">已探索星球</h2>
+          <p class="rescue-header-sub">全球急难救援平台</p>
+        </div>
+      </div>
+      <div class="section-inner">
+        <div class="rescue-dashboard">
+          <!-- 左侧：指挥终端 -->
+          <div class="rescue-terminal-panel anim-scale-in delay-1">
+            <div class="rescue-terminal-wrapper">
+              <img class="rescue-terminal-frame" src="assets/computer-frame.png" alt="" />
+              <div class="rescue-terminal-screen">
+                <div class="rescue-term-frame">
+                  <div class="rescue-term-topbar">
+                    <span class="mockup-dot"></span>
+                    <span class="mockup-dot"></span>
+                    <span class="mockup-dot"></span>
+                    <span class="rescue-term-title">RESCUE COMMAND CENTER</span>
+                  </div>
+                  <div class="rescue-term-viewport" id="rescueViewport">
+                    <!-- Canvas 动画层 -->
+                    <canvas class="rescue-canvas" id="rescueCanvas"></canvas>
+                    <!-- 信息覆盖层 -->
+                    <div class="rescue-info-overlay" id="rescueInfoOverlay">
+                      <div class="rescue-info-tag" id="rescueInfoTag">SYSTEM READY</div>
+                    </div>
+                    <!-- 扫描线效果 -->
+                    <div class="rescue-scanline"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 右侧：核心贡献面板 -->
+          <div class="rescue-mission-panel anim-fade-up delay-2">
+            <div class="rescue-meta">
+              <span class="rescue-meta-role">前端核心开发</span>
+              <span class="rescue-meta-date">2025.08 — 2025.11</span>
+            </div>
+            <p class="rescue-desc">针对全球范围内极端环境下的救援调度与响应，从零搭建的前端工程底座。</p>
+            <div class="rescue-tech anim-fade-up delay-2">
+              <span class="tech-tag">埋点 SDK</span>
+              <span class="tech-tag">高德地图</span>
+              <span class="tech-tag">WebSocket</span>
+              <span class="tech-tag">Webpack</span>
+              <span class="tech-tag">Vue3</span>
+            </div>
+            <div class="rescue-missions">
+              <button class="rescue-mission-btn active" data-phase="tracking">
+                <span class="rescue-mission-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
+                    <path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    <path d="M9 12l2 2 4-4"/>
+                  </svg>
+                </span>
+                <span class="rescue-mission-info">
+                  <strong>数据驱动体系建设</strong>
+                  <small>从零设计全链路前端埋点方案，独立开发埋点采集 SDK 并对接内部数据分析平台</small>
+                </span>
+                <span class="rescue-mission-arrow">→</span>
+              </button>
+              <button class="rescue-mission-btn" data-phase="gisbase">
+                <span class="rescue-mission-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
+                    <path d="M3 7l6 -3 6 3 6 -3v13l-6 3-6-3-6 3V7z"/>
+                    <path d="M9 4v13M15 7v13"/>
+                  </svg>
+                </span>
+                <span class="rescue-mission-info">
+                  <strong>GIS 底座标准化封装</strong>
+                  <small>独立完成高德地图标准化接入及 SDK 深度封装，构建统一地图交互基底</small>
+                </span>
+                <span class="rescue-mission-arrow">→</span>
+              </button>
+              <button class="rescue-mission-btn" data-phase="message">
+                <span class="rescue-mission-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
+                    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2v10z"/>
+                  </svg>
+                </span>
+                <span class="rescue-mission-info">
+                  <strong>站内信系统搭建</strong>
+                  <small>构建 WebSocket 实时通信、消息中心页面，保障救援指令即时触达</small>
+                </span>
+                <span class="rescue-mission-arrow">→</span>
+              </button>
+              <button class="rescue-mission-btn" data-phase="security">
+                <span class="rescue-mission-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="20" height="20">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  </svg>
+                </span>
+                <span class="rescue-mission-info">
+                  <strong>网络安全与合规治理</strong>
+                  <small>负责外网访问管控方案落地，确保核心救援数据在复杂网络环境下的传输安全</small>
+                </span>
+                <span class="rescue-mission-arrow">→</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Section 8: Hobbies / 私人星图 ===== -->
     <section class="section section-hobbies" id="hobbies">
       <!-- 左侧半露大星球 -->
       <div class="hobbies-big-planet">

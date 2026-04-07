@@ -1440,6 +1440,521 @@
       }
     })();
 
+    // ==========================================
+    // Rescue Command Center — 全球急难救援平台
+    // Canvas-based animated terminal visualizations
+    // ==========================================
+    (function initRescueDashboard() {
+      var viewport = document.getElementById('rescueViewport');
+      if (!viewport) return;
+
+      var canvas = document.getElementById('rescueCanvas');
+      var ctx = canvas.getContext('2d');
+      var infoTag = document.getElementById('rescueInfoTag');
+      var missionBtns = document.querySelectorAll('.rescue-mission-btn');
+      var currentPhase = 'tracking';
+      var animId = null;
+      var particles = [];
+      var nodes = [];
+      var messages = [];
+      var shieldAngle = 0;
+      var frameCount = 0;
+
+      function resize() {
+        var dpr = window.devicePixelRatio || 1;
+        var w = viewport.offsetWidth;
+        var h = viewport.offsetHeight;
+        if (w === 0 || h === 0) return;
+        canvas.width = w * dpr;
+        canvas.height = h * dpr;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      }
+      window.addEventListener('resize', resize);
+
+      var W = function () { return viewport.offsetWidth; };
+      var H = function () { return viewport.offsetHeight; };
+
+      // ---- Phase: Tracking (数据埋点 SDK 数据流) ----
+      function initTracking() {
+        particles = [];
+        nodes = [];
+        var w = W(), h = H();
+        // Pipeline nodes
+        var nodeData = [
+          { x: 0.08, y: 0.5, label: 'SDK', color: '#4dc9f6' },
+          { x: 0.30, y: 0.3, label: 'Collect', color: '#f6794d' },
+          { x: 0.52, y: 0.7, label: 'Process', color: '#67d49e' },
+          { x: 0.74, y: 0.4, label: 'Analyze', color: '#c084fc' },
+          { x: 0.92, y: 0.5, label: 'Dashboard', color: '#fbbf24' }
+        ];
+        nodes = nodeData.map(function (n) {
+          return { x: n.x * w, y: n.y * h, label: n.label, color: n.color, radius: 18, pulse: 0 };
+        });
+      }
+
+      function drawTracking() {
+        var w = W(), h = H();
+        ctx.clearRect(0, 0, w, h);
+
+        // Draw connecting curves
+        ctx.strokeStyle = 'rgba(77, 201, 246, 0.15)';
+        ctx.lineWidth = 2;
+        for (var i = 0; i < nodes.length - 1; i++) {
+          var a = nodes[i], b = nodes[i + 1];
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          var cpx = (a.x + b.x) / 2;
+          ctx.quadraticCurveTo(cpx, (a.y + b.y) / 2 + (i % 2 ? -30 : 30), b.x, b.y);
+          ctx.stroke();
+        }
+
+        // Spawn particles along pipeline
+        if (frameCount % 8 === 0) {
+          var startNode = nodes[0];
+          particles.push({
+            x: startNode.x, y: startNode.y,
+            progress: 0, speed: 0.004 + Math.random() * 0.003,
+            color: ['#4dc9f6', '#f6794d', '#67d49e', '#fbbf24'][Math.floor(Math.random() * 4)],
+            size: 2 + Math.random() * 2
+          });
+        }
+
+        // Update & draw particles
+        for (var i = particles.length - 1; i >= 0; i--) {
+          var p = particles[i];
+          p.progress += p.speed;
+          if (p.progress >= 1) { particles.splice(i, 1); continue; }
+
+          // Interpolate along node path
+          var totalSeg = nodes.length - 1;
+          var seg = Math.min(Math.floor(p.progress * totalSeg), totalSeg - 1);
+          var t = (p.progress * totalSeg) - seg;
+          var a = nodes[seg], b = nodes[seg + 1];
+          var cpx = (a.x + b.x) / 2;
+          var cpy = (a.y + b.y) / 2 + (seg % 2 ? -30 : 30);
+          // Quadratic bezier point
+          var u = 1 - t;
+          p.x = u * u * a.x + 2 * u * t * cpx + t * t * b.x;
+          p.y = u * u * a.y + 2 * u * t * cpy + t * t * b.y;
+
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = 0.8;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+
+          // Trail
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size + 3, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.globalAlpha = 0.15;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+        }
+
+        // Draw nodes
+        nodes.forEach(function (n) {
+          n.pulse = (n.pulse + 0.03) % (Math.PI * 2);
+          var r = n.radius + Math.sin(n.pulse) * 3;
+
+          // Glow
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, r + 8, 0, Math.PI * 2);
+          ctx.fillStyle = n.color;
+          ctx.globalAlpha = 0.06;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+
+          // Node circle
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, r, 0, Math.PI * 2);
+          ctx.strokeStyle = n.color;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+          ctx.fillStyle = 'rgba(6, 13, 24, 0.8)';
+          ctx.fill();
+
+          // Label
+          ctx.fillStyle = n.color;
+          ctx.font = '10px "Share Tech Mono", monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText(n.label, n.x, n.y + 4);
+        });
+
+        // Data counter
+        ctx.fillStyle = 'rgba(100, 220, 160, 0.7)';
+        ctx.font = '10px "Share Tech Mono", monospace';
+        ctx.textAlign = 'right';
+        ctx.fillText('Events: ' + (frameCount * 3 % 9999), w - 12, h - 12);
+      }
+
+      // ---- Phase: GIS Base (地图分层架构) ----
+      var gisLayers = [];
+      function initGisBase() {
+        particles = [];
+        gisLayers = [
+          { y: 0.18, label: 'Application Layer', color: '#c084fc' },
+          { y: 0.38, label: 'GIS Wrapper SDK', color: '#4dc9f6' },
+          { y: 0.58, label: 'AMap Core SDK', color: '#f6794d' },
+          { y: 0.78, label: 'Tile Engine', color: '#67d49e' }
+        ];
+      }
+
+      function drawGisBase() {
+        var w = W(), h = H();
+        ctx.clearRect(0, 0, w, h);
+
+        var layerW = w * 0.75;
+        var layerH = h * 0.14;
+        var startX = (w - layerW) / 2;
+
+        gisLayers.forEach(function (layer, i) {
+          var y = layer.y * h;
+          var progress = Math.min(1, (frameCount - i * 15) / 30);
+          if (progress <= 0) return;
+
+          var currentW = layerW * progress;
+          var x = startX + (layerW - currentW) / 2;
+
+          // Layer box
+          ctx.fillStyle = layer.color;
+          ctx.globalAlpha = 0.08;
+          ctx.fillRect(x, y, currentW, layerH);
+          ctx.globalAlpha = 1;
+
+          ctx.strokeStyle = layer.color;
+          ctx.lineWidth = 1.5;
+          ctx.globalAlpha = 0.5 * progress;
+          ctx.strokeRect(x, y, currentW, layerH);
+          ctx.globalAlpha = 1;
+
+          // Label
+          if (progress > 0.5) {
+            ctx.fillStyle = layer.color;
+            ctx.globalAlpha = (progress - 0.5) * 2;
+            ctx.font = 'bold 12px "Share Tech Mono", monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText(layer.label, w / 2, y + layerH / 2 + 4);
+            ctx.globalAlpha = 1;
+          }
+
+          // Connection arrows between layers
+          if (i < gisLayers.length - 1 && progress >= 1) {
+            var nextY = gisLayers[i + 1].y * h;
+            var arrowX = w / 2;
+            var arrowY1 = y + layerH + 2;
+            var arrowY2 = nextY - 2;
+            ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([4, 4]);
+            ctx.beginPath();
+            ctx.moveTo(arrowX, arrowY1);
+            ctx.lineTo(arrowX, arrowY2);
+            ctx.stroke();
+            ctx.setLineDash([]);
+
+            // Animated dot on arrow
+            var dotProgress = ((frameCount * 2 + i * 40) % 100) / 100;
+            var dotY = arrowY1 + (arrowY2 - arrowY1) * dotProgress;
+            ctx.beginPath();
+            ctx.arc(arrowX, dotY, 2.5, 0, Math.PI * 2);
+            ctx.fillStyle = layer.color;
+            ctx.globalAlpha = 0.8;
+            ctx.fill();
+            ctx.globalAlpha = 1;
+          }
+        });
+
+        // Architecture label
+        ctx.fillStyle = 'rgba(77, 201, 246, 0.5)';
+        ctx.font = '10px "Share Tech Mono", monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText('HIGH COHESION / LOW COUPLING', 12, h - 12);
+      }
+
+      // ---- Phase: Message (站内信实时通信) ----
+      var msgList = [];
+      var msgTimer = 0;
+      var MSG_TEMPLATES = [
+        { type: 'alert', text: '[ALERT] 救援队 Alpha 已就位', icon: '!' },
+        { type: 'info', text: '[INFO] 新任务派发: #RC-4072', icon: 'i' },
+        { type: 'success', text: '[OK] 物资空投确认完成', icon: '✓' },
+        { type: 'alert', text: '[ALERT] 极端天气预警 — 区域 B7', icon: '!' },
+        { type: 'info', text: '[INFO] WebSocket 连接活跃: 328', icon: 'i' },
+        { type: 'success', text: '[OK] 伤员转运路线已规划', icon: '✓' },
+        { type: 'alert', text: '[ALERT] 通信中继站信号恢复', icon: '!' },
+        { type: 'info', text: '[INFO] 消息队列处理中: 47/s', icon: 'i' },
+        { type: 'success', text: '[OK] 跨区域协调指令已下达', icon: '✓' },
+        { type: 'info', text: '[INFO] 卫星链路延迟: 120ms', icon: 'i' }
+      ];
+      var MSG_COLORS = { alert: '#f6794d', info: '#4dc9f6', success: '#67d49e' };
+
+      function initMessage() {
+        msgList = [];
+        msgTimer = 0;
+      }
+
+      function drawMessage() {
+        var w = W(), h = H();
+        ctx.clearRect(0, 0, w, h);
+
+        msgTimer++;
+
+        // Add new message periodically
+        if (msgTimer % 45 === 0) {
+          var tmpl = MSG_TEMPLATES[Math.floor(Math.random() * MSG_TEMPLATES.length)];
+          msgList.unshift({
+            text: tmpl.text, type: tmpl.type, icon: tmpl.icon,
+            age: 0, typed: 0
+          });
+          if (msgList.length > 8) msgList.pop();
+        }
+
+        // Header
+        ctx.fillStyle = 'rgba(77, 201, 246, 0.6)';
+        ctx.font = 'bold 11px "Share Tech Mono", monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText('MESSAGE CENTER — REAL-TIME FEED', 14, 24);
+
+        // Divider
+        ctx.strokeStyle = 'rgba(77, 201, 246, 0.2)';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(14, 32);
+        ctx.lineTo(w - 14, 32);
+        ctx.stroke();
+
+        // Online indicator
+        var blink = Math.sin(frameCount * 0.1) > 0;
+        ctx.beginPath();
+        ctx.arc(w - 24, 20, 4, 0, Math.PI * 2);
+        ctx.fillStyle = blink ? '#67d49e' : 'rgba(103, 212, 158, 0.3)';
+        ctx.fill();
+
+        // Draw messages
+        var startY = 50;
+        var lineH = 28;
+        msgList.forEach(function (msg, i) {
+          msg.age++;
+          msg.typed = Math.min(msg.text.length, msg.typed + 1);
+          var y = startY + i * lineH;
+          var alpha = Math.max(0.15, 1 - i * 0.12);
+
+          // Background bar
+          ctx.fillStyle = MSG_COLORS[msg.type];
+          ctx.globalAlpha = 0.05 * alpha;
+          ctx.fillRect(12, y - 8, w - 24, lineH - 4);
+          ctx.globalAlpha = 1;
+
+          // Left accent bar
+          ctx.fillStyle = MSG_COLORS[msg.type];
+          ctx.globalAlpha = 0.6 * alpha;
+          ctx.fillRect(12, y - 8, 3, lineH - 4);
+          ctx.globalAlpha = 1;
+
+          // Text with typewriter effect
+          var displayText = msg.text.substring(0, msg.typed);
+          ctx.fillStyle = MSG_COLORS[msg.type];
+          ctx.globalAlpha = alpha;
+          ctx.font = '11px "Share Tech Mono", monospace';
+          ctx.textAlign = 'left';
+          ctx.fillText(displayText, 24, y + 5);
+
+          // Cursor blink for latest message
+          if (i === 0 && msg.typed < msg.text.length) {
+            if (Math.sin(frameCount * 0.2) > 0) {
+              var textW = ctx.measureText(displayText).width;
+              ctx.fillRect(24 + textW + 2, y - 4, 7, 14);
+            }
+          }
+          ctx.globalAlpha = 1;
+        });
+
+        // Stats bar at bottom
+        ctx.fillStyle = 'rgba(255,255,255,0.06)';
+        ctx.fillRect(0, h - 28, w, 28);
+        ctx.fillStyle = 'rgba(103, 212, 158, 0.6)';
+        ctx.font = '10px "Share Tech Mono", monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('WS Connected  |  Queue: ' + (Math.floor(Math.random() * 20) + 30) + '/s  |  Latency: ' + (110 + Math.floor(Math.random() * 30)) + 'ms', w / 2, h - 10);
+      }
+
+      // ---- Phase: Security (网络安全加密流) ----
+      var secParticles = [];
+      var secNodes = [];
+      function initSecurity() {
+        secParticles = [];
+        var w = W(), h = H();
+        secNodes = [
+          { x: 0.15, y: 0.5, label: 'Client', size: 22, color: '#4dc9f6' },
+          { x: 0.42, y: 0.3, label: 'WAF', size: 18, color: '#f6794d' },
+          { x: 0.42, y: 0.7, label: 'VPN', size: 18, color: '#67d49e' },
+          { x: 0.68, y: 0.5, label: 'Gateway', size: 20, color: '#c084fc' },
+          { x: 0.88, y: 0.5, label: 'Server', size: 22, color: '#fbbf24' }
+        ];
+      }
+
+      function drawSecurity() {
+        var w = W(), h = H();
+        ctx.clearRect(0, 0, w, h);
+
+        // Shield background animation
+        shieldAngle += 0.008;
+        var cx = w / 2, cy = h / 2;
+        ctx.beginPath();
+        ctx.arc(cx, cy, Math.min(w, h) * 0.38, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(77, 201, 246, 0.06)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Rotating arc
+        ctx.beginPath();
+        ctx.arc(cx, cy, Math.min(w, h) * 0.38, shieldAngle, shieldAngle + Math.PI * 0.6);
+        ctx.strokeStyle = 'rgba(77, 201, 246, 0.15)';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Connections between nodes
+        var connections = [[0, 1], [0, 2], [1, 3], [2, 3], [3, 4]];
+        connections.forEach(function (conn) {
+          var a = secNodes[conn[0]], b = secNodes[conn[1]];
+          ctx.beginPath();
+          ctx.moveTo(a.x * w, a.y * h);
+          ctx.lineTo(b.x * w, b.y * h);
+          ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+          ctx.lineWidth = 1;
+          ctx.setLineDash([6, 4]);
+          ctx.stroke();
+          ctx.setLineDash([]);
+
+          // Animated encrypted packet
+          var t = ((frameCount * 1.5 + conn[0] * 60) % 120) / 120;
+          var px = a.x * w + (b.x * w - a.x * w) * t;
+          var py = a.y * h + (b.y * h - a.y * h) * t;
+          ctx.beginPath();
+          // Draw as small diamond (encrypted packet)
+          ctx.save();
+          ctx.translate(px, py);
+          ctx.rotate(Math.PI / 4);
+          ctx.fillStyle = t < 0.5 ? '#f6794d' : '#67d49e';
+          ctx.globalAlpha = 0.7;
+          ctx.fillRect(-3, -3, 6, 6);
+          ctx.restore();
+          ctx.globalAlpha = 1;
+        });
+
+        // Draw nodes
+        secNodes.forEach(function (n) {
+          var nx = n.x * w, ny = n.y * h;
+          var pulse = Math.sin(frameCount * 0.04 + n.x * 10) * 2;
+
+          // Outer glow
+          ctx.beginPath();
+          ctx.arc(nx, ny, n.size + 6 + pulse, 0, Math.PI * 2);
+          ctx.fillStyle = n.color;
+          ctx.globalAlpha = 0.05;
+          ctx.fill();
+          ctx.globalAlpha = 1;
+
+          // Hexagon shape for security nodes
+          ctx.beginPath();
+          for (var i = 0; i < 6; i++) {
+            var angle = (Math.PI / 3) * i - Math.PI / 6;
+            var hx = nx + (n.size + pulse) * Math.cos(angle);
+            var hy = ny + (n.size + pulse) * Math.sin(angle);
+            if (i === 0) ctx.moveTo(hx, hy); else ctx.lineTo(hx, hy);
+          }
+          ctx.closePath();
+          ctx.strokeStyle = n.color;
+          ctx.lineWidth = 1.5;
+          ctx.stroke();
+          ctx.fillStyle = 'rgba(6, 13, 24, 0.85)';
+          ctx.fill();
+
+          // Label
+          ctx.fillStyle = n.color;
+          ctx.font = '10px "Share Tech Mono", monospace';
+          ctx.textAlign = 'center';
+          ctx.fillText(n.label, nx, ny + 4);
+        });
+
+        // Status text
+        ctx.fillStyle = 'rgba(103, 212, 158, 0.6)';
+        ctx.font = '10px "Share Tech Mono", monospace';
+        ctx.textAlign = 'right';
+        var lockIcon = Math.sin(frameCount * 0.05) > 0 ? '■' : '□';
+        ctx.fillText(lockIcon + ' TLS 1.3 ACTIVE  |  THREATS BLOCKED: ' + (1200 + Math.floor(frameCount / 3)), w - 12, h - 12);
+      }
+
+      // ---- Animation loop ----
+      var PHASE_INFO = {
+        tracking: 'DATA PIPELINE ACTIVE',
+        gisbase: 'GIS ARCHITECTURE VIEW',
+        message: 'LIVE MESSAGE FEED',
+        security: 'SECURITY MESH ACTIVE'
+      };
+
+      function animate() {
+        frameCount++;
+        switch (currentPhase) {
+          case 'tracking': drawTracking(); break;
+          case 'gisbase': drawGisBase(); break;
+          case 'message': drawMessage(); break;
+          case 'security': drawSecurity(); break;
+        }
+        animId = requestAnimationFrame(animate);
+      }
+
+      function switchPhase(phase) {
+        currentPhase = phase;
+        frameCount = 0;
+        particles = [];
+        ctx.clearRect(0, 0, W(), H());
+
+        switch (phase) {
+          case 'tracking': initTracking(); break;
+          case 'gisbase': initGisBase(); break;
+          case 'message': initMessage(); break;
+          case 'security': initSecurity(); break;
+        }
+
+        infoTag.textContent = PHASE_INFO[phase] || 'SYSTEM READY';
+      }
+
+      // Mission button click
+      missionBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          missionBtns.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          switchPhase(btn.dataset.phase);
+        });
+      });
+
+      // Start with tracking phase
+      initTracking();
+
+      // Start animation only when section is visible
+      var rescueSection = document.getElementById('project4');
+      var rescueObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            if (!animId) {
+              resize();
+              switchPhase(currentPhase);
+              animate();
+            }
+          } else {
+            if (animId) {
+              cancelAnimationFrame(animId);
+              animId = null;
+            }
+          }
+        });
+      }, { threshold: 0.2 });
+      rescueObserver.observe(rescueSection);
+    })();
+
     // 鼠标尾焰轨迹
     let lastTrailTime = 0;
     document.addEventListener('mousemove', (e) => {
