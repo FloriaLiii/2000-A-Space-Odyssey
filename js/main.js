@@ -396,7 +396,7 @@
       this.currentIndex = 0;
 
       // 从 photos.json 动态加载照片列表
-      fetch('assets/hobbies/photos.json')
+      fetch('assets/hobbies/photos.json?v=' + Date.now())
         .then(r => r.json())
         .then(data => { this.photos = data; })
         .catch(() => { console.warn('photos.json 未找到，请运行 bash generate-photos.sh'); });
