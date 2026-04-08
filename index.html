@@ -374,7 +374,6 @@
         data-section="7"
         data-label="私人星图"
       ></a>
-      <a href="#awards" class="nav-dot" data-section="8" data-label="荣誉"></a>
       <a href="#contact" class="nav-dot" data-section="9" data-label="联系"></a>
     </nav>
 
@@ -629,45 +628,151 @@
 
     <!-- ===== Section 2: About ===== -->
     <section class="section section-about" id="about">
-      <div class="section-inner">
-        <div class="constellation-bg" id="constellationAbout"></div>
-        <div class="about-layout">
-          <div class="about-avatar-wrap anim-scale-in">
-            <div class="avatar-ring"></div>
-            <div class="avatar-ring ring-outer"></div>
-            <div class="avatar-placeholder">
-              <span class="avatar-letter">黎</span>
-            </div>
-            <div class="avatar-particles">
-              <span></span><span></span><span></span><span></span><span></span
-              ><span></span>
-            </div>
+      <!-- 星空背景粒子 -->
+      <canvas
+        class="about-stars-canvas"
+        id="about-stars-canvas"
+        aria-hidden="true"
+      ></canvas>
+
+      <!-- 标题区（同其他章节风格） -->
+      <div class="about-header anim-fade-up">
+        <div class="about-header-planet">
+          <img src="assets/planet-title.png" alt="" class="header-planet-img" />
+          <span class="about-num">01</span>
+        </div>
+        <h2 class="about-title-text">宇航员档案</h2>
+      </div>
+
+      <!-- 三角形碎片（PPT顶部装饰） -->
+      <div class="about-debris" aria-hidden="true">
+        <svg class="ab-tri ab-tri-1" viewBox="0 0 24 24">
+          <polygon points="12,2 22,20 2,20" fill="#f37043" opacity="0.6" />
+        </svg>
+        <svg class="ab-tri ab-tri-2" viewBox="0 0 24 24">
+          <polygon points="12,2 22,20 2,20" fill="#fa9a1e" opacity="0.5" />
+        </svg>
+        <svg class="ab-tri ab-tri-3" viewBox="0 0 24 24">
+          <polygon points="12,2 22,20 2,20" fill="#e84e34" opacity="0.55" />
+        </svg>
+        <svg class="ab-tri ab-tri-4" viewBox="0 0 24 24">
+          <polygon points="12,2 22,20 2,20" fill="#cca4ae" opacity="0.4" />
+        </svg>
+        <svg class="ab-tri ab-tri-5" viewBox="0 0 24 24">
+          <polygon points="12,2 22,20 2,20" fill="#f37043" opacity="0.45" />
+        </svg>
+        <svg class="ab-tri ab-tri-6" viewBox="0 0 24 24">
+          <polygon points="12,2 22,20 2,20" fill="#fa9a1e" opacity="0.5" />
+        </svg>
+        <svg class="ab-tri ab-tri-7" viewBox="0 0 24 24">
+          <polygon points="12,2 22,20 2,20" fill="#e84e34" opacity="0.35" />
+        </svg>
+        <svg class="ab-tri ab-tri-8" viewBox="0 0 24 24">
+          <polygon points="12,2 22,20 2,20" fill="#cca4ae" opacity="0.6" />
+        </svg>
+      </div>
+
+      <!-- PPT风格：中心大星球 + 轨道 + 四颗卫星 + 文字说明 -->
+      <div class="about-scene">
+        <!-- 虚线轨道环（正圆） -->
+        <svg
+          class="about-orbit-svg"
+          viewBox="0 0 1000 1000"
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <circle cx="500" cy="500" r="440" class="about-orbit-path" />
+          <!-- 轨道上的小圆点装饰 -->
+          <circle cx="500" cy="60" r="3.5" fill="rgba(204,164,174,0.45)" />
+          <circle cx="940" cy="500" r="3.5" fill="rgba(204,164,174,0.45)" />
+          <circle cx="500" cy="940" r="3.5" fill="rgba(204,164,174,0.45)" />
+          <circle cx="60" cy="500" r="3.5" fill="rgba(204,164,174,0.45)" />
+          <circle cx="811" cy="189" r="3" fill="rgba(204,164,174,0.35)" />
+          <circle cx="189" cy="811" r="3" fill="rgba(204,164,174,0.35)" />
+          <circle cx="811" cy="811" r="3" fill="rgba(204,164,174,0.35)" />
+          <circle cx="189" cy="189" r="3" fill="rgba(204,164,174,0.35)" />
+        </svg>
+
+        <!-- 中心大星球（PPT绿色低多边形星球） -->
+        <div class="about-main-planet" id="aboutCenterPlanet">
+          <img src="assets/planet-7.png" alt="" class="about-main-planet-img" />
+          <div class="about-main-planet-glow"></div>
+        </div>
+
+        <!-- 四颗轨道卫星 + 旁侧文字卡片 (PPT布局) -->
+
+        <!-- 卫星1: 右上 — 教育背景（红/橙色星球） -->
+        <div class="about-sat about-sat-1 anim-scale-in delay-1">
+          <div class="about-sat-planet">
+            <img src="assets/planet-5.png" alt="" class="about-sat-img" />
+            <span class="about-sat-ring"></span>
+            <span class="about-sat-icon">🎓</span>
           </div>
-          <div class="about-info">
-            <h2 class="section-title anim-wipe-in">ABOUT ME</h2>
-            <p class="about-subtitle anim-fade-up delay-1">
-              Web 前端开发工程师
+          <div class="about-sat-text about-sat-text-right">
+            <h4 class="about-sat-title">教育背景</h4>
+            <p>
+              西南大学（211工程），计算机科学与技术专业。扎实的计算机基础知识，熟练掌握数据结构、算法与操作系统原理。
             </p>
-            <div class="about-tags anim-fade-up delay-2">
-              <span class="tag">西南大学（211）</span>
-              <span class="tag">计算机科学与技术</span>
-              <span class="tag">Web前端</span>
-              <span class="tag">CET-6</span>
-            </div>
-            <div class="about-stats anim-fade-up delay-3">
-              <div class="stat-item">
-                <span class="stat-number" data-count="2">0</span>
-                <span class="stat-label">项目经验</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-number" data-count="3.2">0</span>
-                <span class="stat-label">GPA</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-number" data-count="6">0</span>
-                <span class="stat-label">核心技能</span>
-              </div>
-            </div>
+          </div>
+        </div>
+
+        <!-- 卫星2: 左中 — 专业方向（米色星球+环） -->
+        <div class="about-sat about-sat-2 anim-scale-in delay-2">
+          <div class="about-sat-planet">
+            <img src="assets/planet-6.png" alt="" class="about-sat-img" />
+            <span class="about-sat-ring"></span>
+            <span class="about-sat-icon">💻</span>
+          </div>
+          <div class="about-sat-text about-sat-text-left">
+            <h4 class="about-sat-title">专业方向</h4>
+            <p>
+              Web 前端开发工程师，熟练使用 Vue / React
+              技术栈，具备组件化开发与性能优化经验，关注用户体验与交互设计。
+            </p>
+          </div>
+        </div>
+
+        <!-- 卫星3: 左下 — 项目 & GPA（红色星球+青色环） -->
+        <div class="about-sat about-sat-3 anim-scale-in delay-2">
+          <div class="about-sat-planet">
+            <img
+              src="assets/planet-orange-ring.png"
+              alt=""
+              class="about-sat-img"
+            />
+            <span class="about-sat-ring about-sat-ring-teal"></span>
+            <span class="about-sat-icon">🚀</span>
+          </div>
+          <div class="about-sat-text about-sat-text-left">
+            <h4 class="about-sat-title">学术 & 项目</h4>
+            <p>
+              GPA <strong class="about-highlight">3.2</strong> / 4.0，<strong
+                class="about-highlight"
+                >2</strong
+              >
+              个完整项目开发经验，涵盖 WebGIS
+              地图平台与应急救援指挥系统，具备完整的项目开发流程实践。
+            </p>
+          </div>
+        </div>
+
+        <!-- 卫星4: 右下 — 技能 & 语言（蓝绿色星球+环） -->
+        <div class="about-sat about-sat-4 anim-scale-in delay-3">
+          <div class="about-sat-planet">
+            <img
+              src="assets/planet-blue.png"
+              alt=""
+              class="about-sat-img about-sat-img-blue"
+            />
+            <span class="about-sat-ring"></span>
+            <span class="about-sat-icon">⚡</span>
+          </div>
+          <div class="about-sat-text about-sat-text-right">
+            <h4 class="about-sat-title">核心技能</h4>
+            <p>
+              <strong class="about-highlight">6</strong> 项核心技术能力，包括
+              JavaScript、Vue、React、Node.js 等前端全栈开发。CET-6
+              英语水平，具备良好的英文技术文档阅读能力。
+            </p>
           </div>
         </div>
       </div>
@@ -1396,53 +1501,6 @@
       </div>
     </div>
 
-    <!-- ===== Section 7: Awards ===== -->
-    <section class="section section-awards" id="awards">
-      <div class="section-inner">
-        <h2 class="section-title anim-wipe-in">HONORS</h2>
-        <p class="section-subtitle anim-fade-up delay-1">荣誉与成就</p>
-        <div class="awards-grid">
-          <div class="award-card anim-fade-up delay-1">
-            <div class="award-icon">🏆</div>
-            <h3>ACM 算法竞赛</h3>
-            <p>程序与算法设计大赛</p>
-            <span class="award-rank">第二名</span>
-            <span class="award-date">2021.10</span>
-          </div>
-          <div class="award-card anim-fade-up delay-2">
-            <div class="award-icon">🎓</div>
-            <h3>校级奖学金</h3>
-            <p>学业表现优异</p>
-            <span class="award-rank">三等奖学金</span>
-          </div>
-          <div class="award-card anim-fade-up delay-3">
-            <div class="award-icon">⭐</div>
-            <h3>三好学生</h3>
-            <p>德智体全面发展</p>
-            <span class="award-rank">优秀学生干部</span>
-          </div>
-          <div class="award-card anim-fade-up delay-1">
-            <div class="award-icon">🌐</div>
-            <h3>英语能力</h3>
-            <p>大学英语等级考试</p>
-            <span class="award-rank">CET-6</span>
-          </div>
-          <div class="award-card anim-fade-up delay-2">
-            <div class="award-icon">🏅</div>
-            <h3>体育活动奖</h3>
-            <p>西南大学体育活动</p>
-            <span class="award-rank">获奖</span>
-          </div>
-          <div class="award-card anim-fade-up delay-3">
-            <div class="award-icon">🎖️</div>
-            <h3>军训优秀学员</h3>
-            <p>本科生军训工作</p>
-            <span class="award-rank">优秀学员</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- ===== Section 7: Contact — 星球主题 ===== -->
     <section class="section section-contact" id="contact">
       <!-- 星空背景粒子（canvas） -->
@@ -1535,7 +1593,11 @@
             alt=""
           />
           <button class="ct-card-btn" onclick="openCommPanel()">
-            <img class="ct-card-label-img" src="assets/contact/通讯面板.png" alt="通讯面板" />
+            <img
+              class="ct-card-label-img"
+              src="assets/contact/通讯面板.png"
+              alt="通讯面板"
+            />
             <span class="ct-card-sub">OPEN COMM PANEL</span>
           </button>
         </div>

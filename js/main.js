@@ -239,9 +239,9 @@
                 fill.style.width = width + '%';
               });
 
-              // Animate stat numbers
+              // Animate stat numbers (both .stat-number and .sat-number)
               if (!this.animated.has(entry.target.id)) {
-                const stats = entry.target.querySelectorAll('.stat-number');
+                const stats = entry.target.querySelectorAll('.stat-number, .sat-number');
                 stats.forEach((stat) => {
                   this.animateNumber(stat);
                 });
@@ -263,6 +263,12 @@
                     mapEl._leafletMap.invalidateSize();
                   }, 300);
                 }
+              }
+
+              // Trigger about section animations
+              if (entry.target.classList.contains('section-about') && !this.animated.has('about')) {
+                this.animated.add('about');
+                entry.target.classList.add('in-view');
               }
 
               // Trigger contact triangles entrance
@@ -686,7 +692,7 @@
             attributionControl: false,
             dragging: true,
             scrollWheelZoom: true,
-            doubleClickZoom: true,
+            doubleClickZoom: false,
             touchZoom: true,
             boxZoom: false,
             keyboard: false
@@ -1953,6 +1959,100 @@
         });
       }, { threshold: 0.2 });
       rescueObserver.observe(rescueSection);
+    })();
+
+    // ==========================================
+    // About Section — 卫星定位 + 星空粒子 + 视差
+    // ==========================================
+    (function initAboutSection() {
+      const aboutSection = document.querySelector('.section-about');
+      if (!aboutSection) return;
+
+      // 星空粒子背景
+      const starCanvas = document.getElementById('about-stars-canvas');
+      if (starCanvas) {
+        new ParticleSystem(starCanvas, { container: aboutSection });
+      }
+
+      // --- 将卫星精确定位到轨道圆上 ---
+      // 4 颗卫星的角度（0°=右, 逆时针）
+      const satAngles = [40, 155, 230, 325]; // sat-1右上, sat-2左, sat-3左下, sat-4右下
+      const sats = aboutSection.querySelectorAll('.about-sat');
+
+      function positionSatsOnOrbit() {
+        const svg = aboutSection.querySelector('.about-orbit-svg');
+        if (!svg) return;
+        const sectionRect = aboutSection.getBoundingClientRect();
+        const svgRect = svg.getBoundingClientRect();
+        // 若 SVG 尚未渲染，跳过（稍后重试）
+        if (svgRect.width === 0) return;
+        // 轨道圆心（相对于 section）
+        const cx = svgRect.left - sectionRect.left + svgRect.width / 2;
+        const cy = svgRect.top - sectionRect.top + svgRect.height / 2;
+        // 轨道半径: SVG viewBox 中 circle r=440, viewBox=1000
+        const radius = svgRect.width * 440 / 1000;
+
+        sats.forEach((sat, i) => {
+          const angle = satAngles[i];
+          const rad = (angle * Math.PI) / 180;
+          // 轨道上的点（相对于 section）
+          const px = cx + radius * Math.cos(rad);
+          const py = cy - radius * Math.sin(rad);
+          // 卫星容器尺寸 = 星球尺寸（CSS 中已设定）
+          const sw = sat.offsetWidth;
+          const sh = sat.offsetHeight;
+          // 居中星球到轨道点
+          sat.style.left = (px - sw / 2) + 'px';
+          sat.style.top = (py - sh / 2) + 'px';
+        });
+      }
+
+      // 用 requestAnimationFrame 确保 layout 完成后再定位
+      function schedulePosition() {
+        requestAnimationFrame(() => positionSatsOnOrbit());
+      }
+
+      // 页面加载时先尝试（可能因 section 不可见而无效）
+      schedulePosition();
+      window.addEventListener('resize', positionSatsOnOrbit);
+      window.addEventListener('load', () => {
+        schedulePosition();
+        setTimeout(positionSatsOnOrbit, 500);
+      });
+
+      // 关键：当 section 进入视口时重新定位（此时才有正确的布局尺寸）
+      var aboutPosObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            requestAnimationFrame(() => {
+              positionSatsOnOrbit();
+              // 额外延迟一次确保字体/图片加载完
+              setTimeout(positionSatsOnOrbit, 200);
+            });
+          }
+        });
+      }, { threshold: 0.1 });
+      aboutPosObserver.observe(aboutSection);
+
+      // 鼠标视差效果
+      aboutSection.addEventListener('mousemove', (e) => {
+        const rect = aboutSection.getBoundingClientRect();
+        const mx = (e.clientX - rect.left) / rect.width - 0.5;
+        const my = (e.clientY - rect.top) / rect.height - 0.5;
+
+        const orbit = aboutSection.querySelector('.about-orbit-svg');
+        if (orbit) orbit.style.transform = `translate(calc(-50% + ${mx * 10}px), calc(-50% + ${my * 10}px))`;
+
+        const planet = aboutSection.querySelector('.about-main-planet');
+        if (planet) planet.style.transform = `translate(calc(-50% + ${mx * -6}px), calc(-50% + ${my * -6}px)) scale(1)`;
+      });
+
+      aboutSection.addEventListener('mouseleave', () => {
+        const orbit = aboutSection.querySelector('.about-orbit-svg');
+        if (orbit) orbit.style.transform = '';
+        const planet = aboutSection.querySelector('.about-main-planet');
+        if (planet) planet.style.transform = 'translate(-50%, -50%) scale(1)';
+      });
     })();
 
     // 鼠标尾焰轨迹

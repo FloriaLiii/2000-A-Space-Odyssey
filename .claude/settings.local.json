@@ -55,7 +55,14 @@
       "Bash(find /Users/likangjue/project/resume/assets -type f -exec ls -lh {})",
       "Read(//private/tmp/planet_unpacked/ppt/slides/_rels/**)",
       "Bash(grep -l \"hobbies\\\\|photography\\\\|sports\" /Users/likangjue/project/resume/css/*.css)",
-      "Bash(ls ~/Desktop/通讯面板*)"
+      "Bash(ls ~/Desktop/通讯面板*)",
+      "Bash(python -m markitdown /Users/likangjue/Desktop/resume.pptx)",
+      "Bash(cd /Users/likangjue/Library/Application Support/Claude/local-agent-mode-sessions/skills-plugin/8e71dae2-463a-425a-8ec6-493eb839c4c1/0a5e5a08-66b5-4a10-b19b-fd4f688d4b45/skills/pptx)",
+      "Bash(ls /Users/likangjue/project/resume/assets/planet*)",
+      "Bash(sort -k5 -n -r)",
+      "Bash(cp /tmp/planet-ppt/pptx_unpacked/ppt/media/image6.png /Users/likangjue/project/resume/assets/about-planet-main.png)",
+      "Bash(cp /tmp/planet-ppt/pptx_unpacked/ppt/media/image9.png /Users/likangjue/project/resume/assets/about-planet-beige.png)",
+      "Bash(cp /tmp/planet-ppt/pptx_unpacked/ppt/media/image7.png /Users/likangjue/project/resume/assets/about-planet-purple.png)"
     ]
   }
 }
