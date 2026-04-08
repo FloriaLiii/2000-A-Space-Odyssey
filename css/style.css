@@ -262,7 +262,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background: url("../assets/planet-3.webp") center/cover no-repeat;
+  background: url("https://img.likangjue.space/assets/planet-3.webp") center/cover no-repeat;
   opacity: 0.12;
   z-index: 0;
 }
@@ -3747,7 +3747,7 @@ body {
   font-weight: 700;
   letter-spacing: 0.3em;
   color: transparent;
-  background: url("../assets/contact/texture-thanks.webp") center / cover;
+  background: url("https://img.likangjue.space/assets/contact/texture-thanks.webp") center / cover;
   -webkit-background-clip: text;
   background-clip: text;
   filter: brightness(1.2) saturate(1.1);

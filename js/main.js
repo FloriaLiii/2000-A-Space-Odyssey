@@ -418,7 +418,7 @@
       this.currentIndex = 0;
 
       // 从 photos.json 动态加载照片列表
-      fetch("assets/hobbies/photos.json?v=" + Date.now())
+      fetch("https://img.likangjue.space/assets/hobbies/photos.json?v=" + Date.now())
         .then((r) => r.json())
         .then((data) => {
           this.photos = data;
