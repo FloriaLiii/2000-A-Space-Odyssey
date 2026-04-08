@@ -20,10 +20,18 @@
   <body>
     <!-- 移动端提示 -->
     <div class="mobile-block" id="mobileBlock">
-      <div class="mobile-block-monitor">
-        <img src="assets/computer2.png" alt="" class="mobile-block-img" />
+      <div class="mobile-block-shell">
         <div class="mobile-block-screen">
-          <p class="mobile-block-text">为保障最佳探索体验<br/>请使用PC端加入冒险</p>
+          <div class="mobile-block-scanline"></div>
+          <div class="mobile-block-glare"></div>
+          <canvas class="mobile-block-noise" id="mobileNoise"></canvas>
+          <p class="mobile-block-text">
+            为保障最佳探索体验<br />请使用PC端加入探险
+          </p>
+        </div>
+        <div class="mobile-block-bottom">
+          <div class="mobile-block-knob"></div>
+          <div class="mobile-block-tag">SIGNAL LOST</div>
         </div>
       </div>
     </div>
@@ -1828,5 +1836,44 @@
     <link rel="stylesheet" href="css/comm-panel.css" />
     <script src="js/comm-panel.js"></script>
     <script src="js/main.js?v=15"></script>
+    <script>
+      // 移动端提示雪花噪点
+      (function () {
+        const canvas = document.getElementById("mobileNoise");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+        canvas.width = 200;
+        canvas.height = 140;
+        // 文字初始隐藏
+        const text = canvas.parentElement.querySelector(".mobile-block-text");
+        if (text) text.style.opacity = "0";
+        let raf;
+        let last = 0;
+        function draw(now) {
+          raf = requestAnimationFrame(draw);
+          if (now - last < 55) return;
+          last = now;
+          const img = ctx.createImageData(canvas.width, canvas.height);
+          const d = img.data;
+          for (let i = 0; i < d.length; i += 4) {
+            const r = Math.random();
+            let v;
+            if (r < 0.42) v = 0;
+            else if (r < 0.82) v = 255;
+            else v = 80 + Math.random() * 100;
+            d[i] = d[i + 1] = d[i + 2] = v;
+            d[i + 3] = 255;
+          }
+          ctx.putImageData(img, 0, 0);
+        }
+        raf = requestAnimationFrame(draw);
+        // 1秒后停止雪花，显示文字
+        setTimeout(function () {
+          cancelAnimationFrame(raf);
+          canvas.style.display = "none";
+          if (text) text.style.opacity = "1";
+        }, 1000);
+      })();
+    </script>
   </body>
 </html>
