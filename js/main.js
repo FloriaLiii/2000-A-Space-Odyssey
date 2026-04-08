@@ -489,14 +489,31 @@
       if (animate) {
         this.imgEl.classList.add("fading");
         setTimeout(() => {
-          this.imgEl.src = src;
-          this.imgEl.classList.remove("fading");
-        }, 200);
+          // 预加载新图，加载完成前保持隐藏
+          const img = new Image();
+          img.onload = () => {
+            this.imgEl.src = src;
+            // 等一帧让浏览器渲染新图后再淡入
+            requestAnimationFrame(() => {
+              this.imgEl.classList.remove("fading");
+            });
+          };
+          img.src = src;
+        }, 300);
       } else {
         this.imgEl.src = src;
       }
       this.counterEl.textContent = `${this.currentIndex + 1} / ${this.currentPhotos.length}`;
       this.updateDots();
+      // 预加载相邻图片
+      const len = this.currentPhotos.length;
+      if (len > 1) {
+        [1, -1].forEach((offset) => {
+          const i = (this.currentIndex + offset + len) % len;
+          const preImg = new Image();
+          preImg.src = this.currentPhotos[i];
+        });
+      }
     }
 
     renderDots() {
