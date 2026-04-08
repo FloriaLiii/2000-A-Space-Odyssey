@@ -2034,7 +2034,7 @@
       }, { threshold: 0.1 });
       aboutPosObserver.observe(aboutSection);
 
-      // 鼠标视差效果
+      // 鼠标视差效果（仅轨道，大星球有持续旋转动画，不设置 inline transform）
       aboutSection.addEventListener('mousemove', (e) => {
         const rect = aboutSection.getBoundingClientRect();
         const mx = (e.clientX - rect.left) / rect.width - 0.5;
@@ -2042,16 +2042,11 @@
 
         const orbit = aboutSection.querySelector('.about-orbit-svg');
         if (orbit) orbit.style.transform = `translate(calc(-50% + ${mx * 10}px), calc(-50% + ${my * 10}px))`;
-
-        const planet = aboutSection.querySelector('.about-main-planet');
-        if (planet) planet.style.transform = `translate(calc(-50% + ${mx * -6}px), calc(-50% + ${my * -6}px)) scale(1)`;
       });
 
       aboutSection.addEventListener('mouseleave', () => {
         const orbit = aboutSection.querySelector('.about-orbit-svg');
         if (orbit) orbit.style.transform = '';
-        const planet = aboutSection.querySelector('.about-main-planet');
-        if (planet) planet.style.transform = 'translate(-50%, -50%) scale(1)';
       });
     })();
 
