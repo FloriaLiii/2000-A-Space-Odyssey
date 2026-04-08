@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>黎康珏的探索之旅</title>
+    <title>LIKANGJUE星际漫游指南</title>
     <link rel="stylesheet" href="css/style.css" />
     <!-- Leaflet (轻量地图渲染) -->
     <link
@@ -18,6 +18,11 @@
     />
   </head>
   <body>
+    <!-- 竖屏旋转提示 -->
+    <div class="rotate-hint">
+      <div class="rotate-hint-icon"></div>
+      <p class="rotate-hint-text">请横屏浏览，体验更佳</p>
+    </div>
     <!-- 粒子画布 -->
     <canvas id="particles-canvas"></canvas>
 
@@ -1431,11 +1436,7 @@
         </div>
         <div class="hobby-card">
           <div class="hobby-card-arrow"></div>
-          <img
-            src="assets/planet-5.png"
-            alt="旅游"
-            class="hobby-card-img"
-          />
+          <img src="assets/planet-5.png" alt="旅游" class="hobby-card-img" />
           <span class="hobby-card-label">旅游</span>
         </div>
       </div>

@@ -1,5 +1,5 @@
 /* ============================================
-   黎康珏的探索之旅 - 个人简历网站
+   LIKANGJUE星际漫游指南 - 个人简历网站
    配色复刻自 PPT 模板:
    主色: #76465C #6D3E50 #774253 (莓果紫红)
    强调: #FA9A1E #F37043 #E84E34 (橙/珊瑚)
@@ -954,15 +954,27 @@ body {
 }
 .about-orbit-svg {
   --orbit-reveal: 0deg;
-  -webkit-mask-image: conic-gradient(from 0deg, #000 var(--orbit-reveal), transparent 0);
-  mask-image: conic-gradient(from 0deg, #000 var(--orbit-reveal), transparent 0);
+  -webkit-mask-image: conic-gradient(
+    from 0deg,
+    #000 var(--orbit-reveal),
+    transparent 0
+  );
+  mask-image: conic-gradient(
+    from 0deg,
+    #000 var(--orbit-reveal),
+    transparent 0
+  );
 }
 .section-about.in-view .about-orbit-svg {
   animation: orbitWipeIn 1s ease-out 3.8s forwards;
 }
 @keyframes orbitWipeIn {
-  from { --orbit-reveal: 0deg; }
-  to   { --orbit-reveal: 360deg; }
+  from {
+    --orbit-reveal: 0deg;
+  }
+  to {
+    --orbit-reveal: 360deg;
+  }
 }
 
 /* ---- 中心大星球 ---- */
@@ -1002,18 +1014,33 @@ body {
   animation: aboutPlanetFloat 10s ease-in-out infinite;
 }
 @keyframes aboutPlanetFloat {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-8px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
 }
 .section-about.in-view .about-main-planet-img {
   animation: planetSpinFloat 5s linear infinite;
 }
 @keyframes planetSpinFloat {
-  0%   { transform: rotate(0deg)    translateY(0); }
-  25%  { transform: rotate(-90deg)  translateY(-4px); }
-  50%  { transform: rotate(-180deg) translateY(-8px); }
-  75%  { transform: rotate(-270deg) translateY(-4px); }
-  100% { transform: rotate(-360deg) translateY(0); }
+  0% {
+    transform: rotate(0deg) translateY(0);
+  }
+  25% {
+    transform: rotate(-90deg) translateY(-4px);
+  }
+  50% {
+    transform: rotate(-180deg) translateY(-8px);
+  }
+  75% {
+    transform: rotate(-270deg) translateY(-4px);
+  }
+  100% {
+    transform: rotate(-360deg) translateY(0);
+  }
 }
 .about-main-planet-glow {
   position: absolute;
@@ -1125,10 +1152,18 @@ body {
 .sat-fly-in .about-sat-planet {
   opacity: 0;
 }
-.sat-fly-rt .about-sat-planet { transform: translate(120px, -120px) scale(0.3); }
-.sat-fly-rb .about-sat-planet { transform: translate(120px, 120px) scale(0.3); }
-.sat-fly-lb .about-sat-planet { transform: translate(-120px, 120px) scale(0.3); }
-.sat-fly-lt .about-sat-planet { transform: translate(-120px, -120px) scale(0.3); }
+.sat-fly-rt .about-sat-planet {
+  transform: translate(120px, -120px) scale(0.3);
+}
+.sat-fly-rb .about-sat-planet {
+  transform: translate(120px, 120px) scale(0.3);
+}
+.sat-fly-lb .about-sat-planet {
+  transform: translate(-120px, 120px) scale(0.3);
+}
+.sat-fly-lt .about-sat-planet {
+  transform: translate(-120px, -120px) scale(0.3);
+}
 
 /* in-view 时触发飞入 */
 .section-about.in-view .sat-fly-in {
@@ -1140,10 +1175,18 @@ body {
 
 /* 飞入顺序：右上(sat-1) → 右下(sat-4) → 左下(sat-3) → 左上(sat-2) */
 /* 基础延迟 = 大星球入场结束 1.2s */
-.section-about.in-view .about-sat-1 .about-sat-planet { animation-delay: 0.8s; }
-.section-about.in-view .about-sat-4 .about-sat-planet { animation-delay: 1.7s; }
-.section-about.in-view .about-sat-3 .about-sat-planet { animation-delay: 2.2s; }
-.section-about.in-view .about-sat-2 .about-sat-planet { animation-delay: 2.7s; }
+.section-about.in-view .about-sat-1 .about-sat-planet {
+  animation-delay: 0.8s;
+}
+.section-about.in-view .about-sat-4 .about-sat-planet {
+  animation-delay: 1.7s;
+}
+.section-about.in-view .about-sat-3 .about-sat-planet {
+  animation-delay: 2.2s;
+}
+.section-about.in-view .about-sat-2 .about-sat-planet {
+  animation-delay: 2.7s;
+}
 
 @keyframes satFlyIn {
   0% {
@@ -1164,10 +1207,18 @@ body {
   animation: satTextDrop 0.5s ease-out forwards;
 }
 /* 文本在星球飞入完成后出现（各延迟 +0.5s） */
-.section-about.in-view .about-sat-1 .about-sat-text { animation-delay: 1.3s; }
-.section-about.in-view .about-sat-4 .about-sat-text { animation-delay: 2.2s; }
-.section-about.in-view .about-sat-3 .about-sat-text { animation-delay: 2.7s; }
-.section-about.in-view .about-sat-2 .about-sat-text { animation-delay: 3.2s; }
+.section-about.in-view .about-sat-1 .about-sat-text {
+  animation-delay: 1.3s;
+}
+.section-about.in-view .about-sat-4 .about-sat-text {
+  animation-delay: 2.2s;
+}
+.section-about.in-view .about-sat-3 .about-sat-text {
+  animation-delay: 2.7s;
+}
+.section-about.in-view .about-sat-2 .about-sat-text {
+  animation-delay: 3.2s;
+}
 
 @keyframes satTextDrop {
   0% {
@@ -4146,8 +4197,7 @@ a.star-planet:nth-child(even):hover .planet-img {
 
 /* --- Planet labels --- */
 .planet-label {
-  font-family:
-    "Noto Serif SC", serif;
+  font-family: "Noto Serif SC", serif;
   font-weight: 900;
   text-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
   white-space: nowrap;
@@ -5707,16 +5757,56 @@ a.star-planet:nth-child(even):hover .planet-img {
   letter-spacing: 0.1em;
 }
 
-/* 移动端竖屏时强制横屏显示 */
-@media screen and (max-width: 1024px) and (orientation: portrait) {
-  html {
+/* 移动端竖屏提示旋转 */
+.rotate-hint {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: #0a0a1a;
+  color: #fff;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  font-family: "Orbitron", sans-serif;
+}
+.rotate-hint-icon {
+  width: 64px;
+  height: 64px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  position: relative;
+  animation: rotatePhone 2s ease-in-out infinite;
+}
+.rotate-hint-icon::after {
+  content: "";
+  position: absolute;
+  bottom: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 2px;
+}
+@keyframes rotatePhone {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  30%,
+  70% {
     transform: rotate(90deg);
-    transform-origin: top left;
-    width: 100vh;
-    height: 100vw;
-    position: absolute;
-    top: 0;
-    left: 100%;
-    overflow-x: hidden;
+  }
+}
+.rotate-hint-text {
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+}
+@media screen and (max-width: 1024px) and (orientation: portrait) {
+  .rotate-hint {
+    display: flex;
   }
 }
