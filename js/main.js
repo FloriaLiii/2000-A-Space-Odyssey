@@ -552,7 +552,7 @@
     });
 
     const green = planets.photography; // 上方
-    const red = planets.travel; // 左下
+    const red = planets.rap; // 左下
     const blue = planets.sports; // 右下
 
     // PPT 原版用大圆弧，圆心在左侧屏幕外
