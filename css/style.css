@@ -5706,3 +5706,17 @@ a.star-planet:nth-child(even):hover .planet-img {
   color: var(--text-muted);
   letter-spacing: 0.1em;
 }
+
+/* 移动端竖屏时强制横屏显示 */
+@media screen and (max-width: 1024px) and (orientation: portrait) {
+  html {
+    transform: rotate(90deg);
+    transform-origin: top left;
+    width: 100vh;
+    height: 100vw;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    overflow-x: hidden;
+  }
+}
