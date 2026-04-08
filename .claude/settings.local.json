@@ -63,7 +63,11 @@
       "Bash(cp /tmp/planet-ppt/pptx_unpacked/ppt/media/image6.png /Users/likangjue/project/resume/assets/about-planet-main.png)",
       "Bash(cp /tmp/planet-ppt/pptx_unpacked/ppt/media/image9.png /Users/likangjue/project/resume/assets/about-planet-beige.png)",
       "Bash(cp /tmp/planet-ppt/pptx_unpacked/ppt/media/image7.png /Users/likangjue/project/resume/assets/about-planet-purple.png)",
-      "Bash(sips -g pixelHeight -g pixelWidth /Users/likangjue/project/resume/assets/computer2.png)"
+      "Bash(sips -g pixelHeight -g pixelWidth /Users/likangjue/project/resume/assets/computer2.png)",
+      "Bash(find /Users/likangjue/project/resume/assets -type f \\\\\\( -name \"*.png\" -o -name \"*.jpg\" \\\\\\) -exec ls -lhS {} +)",
+      "Bash(ls assets/*.webp)",
+      "Bash(find assets:*)",
+      "Bash(sort -k5 -rh)"
     ]
   }
 }

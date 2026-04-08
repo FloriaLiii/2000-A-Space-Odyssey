@@ -111,7 +111,7 @@
 .comm-console {
   position: relative;
   background:
-    url("../assets/contact/bg-space.png") center center / cover no-repeat,
+    url("../assets/contact/bg-space.webp") center center / cover no-repeat,
     radial-gradient(
       ellipse at 50% 30%,
       rgba(80, 50, 100, 0.3) 0%,
