@@ -711,145 +711,141 @@
         <h2 class="about-title-text">宇航员档案</h2>
       </div>
 
-      <!-- 三角形碎片（PPT顶部装饰） -->
+      <!-- 三角形碎片（PPT左侧凌乱装饰） -->
       <div class="about-debris" aria-hidden="true">
+        <!-- 左上区域 -->
         <svg class="ab-tri ab-tri-1" viewBox="0 0 24 24">
           <polygon points="12,2 22,20 2,20" fill="#f37043" opacity="0.6" />
         </svg>
         <svg class="ab-tri ab-tri-2" viewBox="0 0 24 24">
           <polygon points="12,2 22,20 2,20" fill="#fa9a1e" opacity="0.5" />
         </svg>
+        <!-- 左侧中部 -->
         <svg class="ab-tri ab-tri-3" viewBox="0 0 24 24">
-          <polygon points="12,2 22,20 2,20" fill="#e84e34" opacity="0.55" />
+          <polygon points="12,2 22,20 2,20" fill="#e84e34" opacity="0.7" />
         </svg>
         <svg class="ab-tri ab-tri-4" viewBox="0 0 24 24">
           <polygon points="12,2 22,20 2,20" fill="#cca4ae" opacity="0.4" />
         </svg>
+        <!-- 左下区域 -->
         <svg class="ab-tri ab-tri-5" viewBox="0 0 24 24">
-          <polygon points="12,2 22,20 2,20" fill="#f37043" opacity="0.45" />
+          <polygon points="12,2 22,20 2,20" fill="#f37043" opacity="0.55" />
         </svg>
         <svg class="ab-tri ab-tri-6" viewBox="0 0 24 24">
-          <polygon points="12,2 22,20 2,20" fill="#fa9a1e" opacity="0.5" />
+          <polygon points="12,2 22,20 2,20" fill="#e84e34" opacity="0.65" />
         </svg>
         <svg class="ab-tri ab-tri-7" viewBox="0 0 24 24">
-          <polygon points="12,2 22,20 2,20" fill="#e84e34" opacity="0.35" />
+          <polygon points="12,2 22,20 2,20" fill="#fa9a1e" opacity="0.45" />
         </svg>
         <svg class="ab-tri ab-tri-8" viewBox="0 0 24 24">
-          <polygon points="12,2 22,20 2,20" fill="#cca4ae" opacity="0.6" />
+          <polygon points="12,2 22,20 2,20" fill="#cca4ae" opacity="0.5" />
+        </svg>
+        <!-- 额外散落三角 -->
+        <svg class="ab-tri ab-tri-9" viewBox="0 0 24 24">
+          <polygon points="12,2 22,20 2,20" fill="#e84e34" opacity="0.5" />
+        </svg>
+        <svg class="ab-tri ab-tri-10" viewBox="0 0 24 24">
+          <polygon points="12,2 22,20 2,20" fill="#f37043" opacity="0.4" />
+        </svg>
+        <svg class="ab-tri ab-tri-11" viewBox="0 0 24 24">
+          <polygon points="12,2 22,20 2,20" fill="#fa9a1e" opacity="0.55" />
         </svg>
       </div>
 
-      <!-- PPT风格：中心大星球 + 轨道 + 四颗卫星 + 文字说明 -->
-      <div class="about-scene">
-        <!-- 虚线轨道环（正圆） -->
-        <svg
-          class="about-orbit-svg"
-          viewBox="0 0 1000 1000"
-          preserveAspectRatio="xMidYMid meet"
-        >
-          <circle cx="500" cy="500" r="440" class="about-orbit-path" />
-          <!-- 轨道上的小圆点装饰 -->
-          <circle cx="500" cy="60" r="3.5" fill="rgba(204,164,174,0.45)" />
-          <circle cx="940" cy="500" r="3.5" fill="rgba(204,164,174,0.45)" />
-          <circle cx="500" cy="940" r="3.5" fill="rgba(204,164,174,0.45)" />
-          <circle cx="60" cy="500" r="3.5" fill="rgba(204,164,174,0.45)" />
-          <circle cx="811" cy="189" r="3" fill="rgba(204,164,174,0.35)" />
-          <circle cx="189" cy="811" r="3" fill="rgba(204,164,174,0.35)" />
-          <circle cx="811" cy="811" r="3" fill="rgba(204,164,174,0.35)" />
-          <circle cx="189" cy="189" r="3" fill="rgba(204,164,174,0.35)" />
-        </svg>
-
-        <!-- 中心大星球（PPT绿色低多边形星球） -->
-        <div class="about-main-planet" id="aboutCenterPlanet">
-          <img
-            src="https://img.likangjue.space/assets/planet-7.webp"
-            alt=""
-            class="about-main-planet-img"
-          />
-          <div class="about-main-planet-glow"></div>
+      <!-- PPT风格：三列卡片布局 -->
+      <div class="about-cards">
+        <!-- 卡片1: 关于我 -->
+        <div class="about-card about-card-1">
+          <div class="about-card-arc">
+            <svg viewBox="0 0 160 160" class="arc-svg">
+              <circle cx="80" cy="80" r="68" class="arc-circle" />
+            </svg>
+            <div class="about-card-icon">
+              <!-- 人物图标 -->
+              <svg viewBox="0 0 64 64" fill="white" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="24" cy="18" r="9" />
+                <path d="M10,44 C10,32 16,26 24,26 C32,26 38,32 38,44Z" />
+                <circle cx="40" cy="22" r="7" />
+                <path d="M30,46 C30,36 34,31 40,31 C46,31 50,36 50,46Z" />
+              </svg>
+            </div>
+          </div>
+          <h4 class="about-card-title">关于我</h4>
+          <ul class="about-card-list">
+            <li>00后</li>
+            <li>湖北人</li>
+            <li>创造力</li>
+            <li>抗压</li>
+            <li>完美主义者</li>
+          </ul>
         </div>
 
-        <!-- 四颗轨道卫星 + 旁侧文字卡片 (PPT布局) -->
-
-        <!-- 卫星1: 右上 — 教育背景（红/橙色星球） -->
-        <div class="about-sat about-sat-1 sat-fly-in sat-fly-rt">
-          <div class="about-sat-planet">
-            <img
-              src="https://img.likangjue.space/assets/planet-5.webp"
-              alt=""
-              class="about-sat-img"
-            />
-            <span class="about-sat-ring"></span>
+        <!-- 卡片2: 专业&工作 -->
+        <div class="about-card about-card-2">
+          <div class="about-card-arc">
+            <svg viewBox="0 0 160 160" class="arc-svg">
+              <circle cx="80" cy="80" r="68" class="arc-circle" />
+            </svg>
+            <div class="about-card-icon">
+              <!-- 咖啡杯图标 -->
+              <svg viewBox="0 0 64 64" fill="white" xmlns="http://www.w3.org/2000/svg">
+                <rect x="12" y="16" width="32" height="34" rx="4" />
+                <path d="M44,22 C52,22 56,26 56,32 C56,38 52,42 44,42" fill="none" stroke="white" stroke-width="3" />
+                <rect x="12" y="54" width="32" height="4" rx="2" />
+                <text x="28" y="40" text-anchor="middle" font-size="12" font-weight="bold" fill="rgba(0,0,0,0.3)">tea</text>
+              </svg>
+            </div>
           </div>
-          <div class="about-sat-text about-sat-text-right">
-            <h4 class="about-sat-title">教育背景</h4>
-            <p>
-              西南大学（211工程），计算机科学与技术专业。扎实的计算机基础知识，熟练掌握数据结构、算法与操作系统原理。
-            </p>
-          </div>
+          <h4 class="about-card-title">专业&工作</h4>
+          <ul class="about-card-list">
+            <li>西南大学</li>
+            <li>计算机科学与技术</li>
+            <li>Web前端</li>
+            <li>3年经验</li>
+            <li>CET-6</li>
+          </ul>
         </div>
 
-        <!-- 卫星2: 左中 — 专业方向（米色星球+环） -->
-        <div class="about-sat about-sat-2 sat-fly-in sat-fly-lt">
-          <div class="about-sat-planet">
-            <img
-              src="https://img.likangjue.space/assets/planet-6.webp"
-              alt=""
-              class="about-sat-img"
-            />
-            <span class="about-sat-ring"></span>
+        <!-- 卡片3: 隐藏技能 -->
+        <div class="about-card about-card-3">
+          <div class="about-card-arc">
+            <svg viewBox="0 0 160 160" class="arc-svg">
+              <circle cx="80" cy="80" r="68" class="arc-circle" />
+            </svg>
+            <div class="about-card-icon">
+              <!-- 山/图片图标 -->
+              <svg viewBox="0 0 64 64" fill="white" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="32,12 54,48 10,48" />
+                <polygon points="18,48 28,32 38,48" opacity="0.6" />
+              </svg>
+            </div>
           </div>
-          <div class="about-sat-text about-sat-text-left">
-            <h4 class="about-sat-title">专业方向</h4>
-            <p>
-              Web 前端开发工程师，熟练使用 Vue / React
-              技术栈，具备组件化开发与性能优化经验，关注用户体验与交互设计。
-            </p>
-          </div>
+          <h4 class="about-card-title">隐藏技能</h4>
+          <ul class="about-card-list">
+            <li>文案创作</li>
+            <li>摄影</li>
+            <li>海报制作</li>
+            <li>团建策划</li>
+          </ul>
         </div>
+      </div>
 
-        <!-- 卫星3: 左下 — 项目 & GPA（红色星球+青色环） -->
-        <div class="about-sat about-sat-3 sat-fly-in sat-fly-lb">
-          <div class="about-sat-planet">
-            <img
-              src="https://img.likangjue.space/assets/planet-orange-ring.webp"
-              alt=""
-              class="about-sat-img"
-            />
-            <span class="about-sat-ring about-sat-ring-teal"></span>
-          </div>
-          <div class="about-sat-text about-sat-text-left">
-            <h4 class="about-sat-title">学术 & 项目</h4>
-            <p>
-              GPA <strong class="about-highlight">3.2</strong> / 4.0，<strong
-                class="about-highlight"
-                >2</strong
-              >
-              个完整项目开发经验，涵盖 WebGIS
-              地图平台与应急救援指挥系统，具备完整的项目开发流程实践。
-            </p>
-          </div>
-        </div>
+      <!-- 右下角装饰大星球 -->
+      <div class="about-deco-planet">
+        <img
+          src="https://img.likangjue.space/assets/planet-7.webp"
+          alt=""
+          class="about-deco-planet-img"
+        />
+      </div>
 
-        <!-- 卫星4: 右下 — 技能 & 语言（蓝绿色星球+环） -->
-        <div class="about-sat about-sat-4 sat-fly-in sat-fly-rb">
-          <div class="about-sat-planet">
-            <img
-              src="https://img.likangjue.space/assets/planet-blue.webp"
-              alt=""
-              class="about-sat-img about-sat-img-blue"
-            />
-            <span class="about-sat-ring"></span>
-          </div>
-          <div class="about-sat-text about-sat-text-right">
-            <h4 class="about-sat-title">核心技能</h4>
-            <p>
-              <strong class="about-highlight">6</strong> 项核心技术能力，包括
-              JavaScript、Vue、React、Node.js 等前端全栈开发。CET-6
-              英语水平，具备良好的英文技术文档阅读能力。
-            </p>
-          </div>
-        </div>
+      <!-- 右上角装饰星球 -->
+      <div class="about-deco-planet-tr">
+        <img
+          src="https://img.likangjue.space/assets/planet-gray-ring.webp"
+          alt=""
+          class="about-deco-planet-tr-img"
+        />
       </div>
     </section>
 
@@ -1718,17 +1714,11 @@
         <svg class="ct-tri ct-tri-2 anim-tri" viewBox="0 0 24 24">
           <polygon points="12,2 22,20 2,20" fill="#d04848" opacity="0.5" />
         </svg>
-        <svg class="ct-tri ct-tri-3 anim-tri" viewBox="0 0 24 24">
-          <polygon points="12,2 22,20 2,20" fill="#c04040" opacity="0.6" />
-        </svg>
         <svg class="ct-tri ct-tri-4 anim-tri" viewBox="0 0 24 24">
           <polygon points="12,2 22,20 2,20" fill="#e87878" opacity="0.45" />
         </svg>
         <svg class="ct-tri ct-tri-5 anim-tri" viewBox="0 0 24 24">
           <polygon points="12,2 22,20 2,20" fill="#d05858" opacity="0.55" />
-        </svg>
-        <svg class="ct-tri ct-tri-6 anim-tri" viewBox="0 0 24 24">
-          <polygon points="12,2 22,20 2,20" fill="#c87080" opacity="0.5" />
         </svg>
         <svg class="ct-tri ct-tri-7 anim-tri" viewBox="0 0 24 24">
           <polygon points="12,2 22,20 2,20" fill="#e06060" opacity="0.6" />

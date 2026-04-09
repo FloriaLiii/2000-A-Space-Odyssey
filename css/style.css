@@ -965,45 +965,77 @@ html.is-loading {
     ctTriFloat 11s ease-in-out 1.9s infinite;
 }
 
+/* 左侧凌乱分布的三角碎片 */
 .ab-tri-1 {
-  width: 18px;
-  top: 8%;
-  left: 12%;
+  width: 16px;
+  top: 28%;
+  left: 6%;
 }
 .ab-tri-2 {
-  width: 14px;
-  top: 5%;
-  left: 35%;
+  width: 12px;
+  top: 18%;
+  left: 14%;
 }
 .ab-tri-3 {
-  width: 22px;
-  top: 4%;
-  right: 18%;
+  width: 24px;
+  top: 42%;
+  left: 3%;
 }
 .ab-tri-4 {
-  width: 12px;
-  top: 10%;
-  right: 8%;
+  width: 10px;
+  top: 35%;
+  left: 11%;
 }
 .ab-tri-5 {
-  width: 16px;
-  top: 2%;
-  left: 55%;
+  width: 20px;
+  top: 58%;
+  left: 5%;
 }
 .ab-tri-6 {
-  width: 24px;
-  top: 6%;
-  right: 30%;
+  width: 14px;
+  top: 68%;
+  left: 2%;
 }
 .ab-tri-7 {
   width: 10px;
-  top: 12%;
-  left: 22%;
+  top: 50%;
+  left: 12%;
 }
 .ab-tri-8 {
-  width: 15px;
-  top: 3%;
-  right: 45%;
+  width: 16px;
+  top: 75%;
+  left: 8%;
+}
+.ab-tri-9 {
+  width: 8px;
+  top: 22%;
+  left: 2%;
+}
+.ab-tri-10 {
+  width: 18px;
+  top: 82%;
+  left: 4%;
+}
+.ab-tri-11 {
+  width: 11px;
+  top: 15%;
+  left: 8%;
+}
+/* 新三角的入场动画 */
+.section-about.in-view .ab-tri-9 {
+  animation:
+    abFlyIn1 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) 0.7s forwards,
+    ctTriFloat 9s ease-in-out 1.8s infinite;
+}
+.section-about.in-view .ab-tri-10 {
+  animation:
+    abFlyIn5 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.8s forwards,
+    ctTriFloat 10s ease-in-out 2.1s infinite;
+}
+.section-about.in-view .ab-tri-11 {
+  animation:
+    abFlyIn2 0.85s cubic-bezier(0.22, 0.61, 0.36, 1) 0.35s forwards,
+    ctTriFloat 8s ease-in-out 1.4s infinite;
 }
 
 @keyframes abFlyIn1 {
@@ -1087,322 +1119,195 @@ html.is-loading {
   }
 }
 
-/* ---- PPT 场景容器 ---- */
-.about-scene {
+/* ---- PPT 三列卡片布局 ---- */
+.about-cards {
+  position: absolute;
+  top: 50%;
+  left: 48%;
+  transform: translate(-50%, -46%);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: clamp(24px, 4.5vw, 70px);
+  z-index: 5;
+  width: 70%;
+  max-width: 800px;
+}
+
+/* 单张卡片 */
+.about-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  opacity: 0;
+  transform: translateY(30px);
+}
+.section-about.in-view .about-card {
+  animation: aboutCardIn 0.7s ease-out forwards;
+}
+.section-about.in-view .about-card-1 {
+  animation-delay: 2.8s;
+}
+.section-about.in-view .about-card-2 {
+  animation-delay: 3.2s;
+}
+.section-about.in-view .about-card-3 {
+  animation-delay: 3.6s;
+}
+
+@keyframes aboutCardIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 圆弧容器 */
+.about-card-arc {
+  position: relative;
+  width: clamp(120px, 16vw, 190px);
+  height: clamp(120px, 16vw, 190px);
+  margin-bottom: clamp(14px, 2.5vh, 28px);
+}
+
+/* SVG 圆弧 — 270度弧线，顶部开口 */
+.arc-svg {
   position: absolute;
   inset: 0;
-  z-index: 3;
+  width: 100%;
+  height: 100%;
 }
-
-/* 虚线轨道环 — 正圆，和中心星球同心 */
-.about-orbit-svg {
-  position: absolute;
-  width: min(950px, 78vh);
-  height: min(950px, 78vh);
-  top: 48%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  z-index: 2;
-}
-.about-orbit-path {
+.arc-circle {
   fill: none;
   stroke: rgba(255, 255, 255, 0.35);
-  stroke-width: 2;
-  stroke-dasharray: 8 10;
-}
-.section-about.in-view .about-orbit-path {
-  animation: orbitSpin 100s linear infinite;
-  transform-origin: 500px 500px;
-}
-@keyframes orbitSpin {
-  to {
-    transform: rotate(360deg);
-  }
+  stroke-width: 2.5;
+  stroke-dasharray: 320 107;
+  stroke-dashoffset: -160;
+  stroke-linecap: round;
 }
 
-/* 轨道圈擦出动画 — 顺时针揭示 */
-@property --orbit-reveal {
-  syntax: "<angle>";
-  inherits: false;
-  initial-value: 0deg;
-}
-.about-orbit-svg {
-  --orbit-reveal: 0deg;
-  -webkit-mask-image: conic-gradient(
-    from 0deg,
-    #000 var(--orbit-reveal),
-    transparent 0
-  );
-  mask-image: conic-gradient(
-    from 0deg,
-    #000 var(--orbit-reveal),
-    transparent 0
-  );
-}
-.section-about.in-view .about-orbit-svg {
-  animation: orbitWipeIn 1s ease-out 3.8s forwards;
-}
-@keyframes orbitWipeIn {
-  from {
-    --orbit-reveal: 0deg;
-  }
-  to {
-    --orbit-reveal: 360deg;
-  }
-}
-
-/* ---- 中心大星球 ---- */
-.about-main-planet {
+/* 圆弧内图标 */
+.about-card-icon {
   position: absolute;
-  width: clamp(380px, 55vh, 580px);
-  height: clamp(380px, 55vh, 580px);
-  top: 48%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 5;
+  width: 52%;
+  height: 52%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-/* 中心大星球入场动画 — 外层容器：由小变大逆时针旋转闪现 */
-.about-main-planet {
+.about-card-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* 卡片标题 */
+.about-card-title {
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-size: clamp(18px, 2vw, 26px);
+  font-weight: 900;
+  color: var(--accent);
+  margin-bottom: clamp(8px, 1.2vh, 16px);
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+
+/* 卡片列表 */
+.about-card-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+.about-card-list li {
+  font-size: clamp(15px, 1.5vw, 19px);
+  color: var(--rose);
+  line-height: 2.1;
+  letter-spacing: 0.03em;
+}
+
+/* ---- 装饰星球 ---- */
+/* 右下角大星球 — 从右下飞入 */
+.about-deco-planet {
+  position: absolute;
+  right: -14%;
+  bottom: -10%;
+  width: clamp(280px, 38vw, 480px);
+  height: clamp(280px, 38vw, 480px);
+  z-index: 4;
+  pointer-events: none;
   opacity: 0;
-  transform: translate(-50%, -50%) scale(0) rotate(180deg);
+  transform: translate(60%, 60%);
 }
-.section-about.in-view .about-main-planet {
-  animation: planetBurstIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.section-about.in-view .about-deco-planet {
+  animation:
+    decoBottomFlyIn 1.4s cubic-bezier(0.22, 0.61, 0.36, 1) 1.4s forwards,
+    aboutDecoFloat 12s ease-in-out 3s infinite;
 }
-@keyframes planetBurstIn {
-  0% {
-    opacity: 0;
-    transform: translate(-50%, -50%) scale(0) rotate(180deg);
-  }
-  100% {
-    opacity: 1;
-    transform: translate(-50%, -50%) scale(1) rotate(0deg);
-  }
-}
-/* 内层图片：持续逆时针旋转（不与入场动画冲突） */
-.about-main-planet-img {
+.about-deco-planet-img {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: drop-shadow(0 0 40px rgba(80, 160, 140, 0.25));
-  animation: aboutPlanetFloat 10s ease-in-out infinite;
+  filter: blur(12px) saturate(1.6) brightness(1.15) hue-rotate(10deg);
 }
-@keyframes aboutPlanetFloat {
+
+/* 右上角小装饰星球 — 从右侧平移出现 */
+.about-deco-planet-tr {
+  position: absolute;
+  top: 4%;
+  right: 3%;
+  width: clamp(100px, 14vw, 180px);
+  height: clamp(100px, 14vw, 180px);
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(120%);
+}
+.section-about.in-view .about-deco-planet-tr {
+  animation:
+    decoRightSlideIn 1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.4s forwards,
+    aboutDecoFloat 10s ease-in-out 1.6s infinite;
+}
+.about-deco-planet-tr-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 12px rgba(100, 80, 140, 0.3));
+}
+
+/* 右上角星球 — 从右侧平移入场 */
+@keyframes decoRightSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(120%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+/* 右下角星球 — 从右下角向左上飞入 */
+@keyframes decoBottomFlyIn {
+  from {
+    opacity: 0;
+    transform: translate(60%, 60%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes aboutDecoFloat {
   0%,
   100% {
     transform: translateY(0);
   }
   50% {
-    transform: translateY(-8px);
-  }
-}
-.section-about.in-view .about-main-planet-img {
-  animation: planetSpinFloat 5s linear infinite;
-}
-@keyframes planetSpinFloat {
-  0% {
-    transform: rotate(0deg) translateY(0);
-  }
-  25% {
-    transform: rotate(-90deg) translateY(-4px);
-  }
-  50% {
-    transform: rotate(-180deg) translateY(-8px);
-  }
-  75% {
-    transform: rotate(-270deg) translateY(-4px);
-  }
-  100% {
-    transform: rotate(-360deg) translateY(0);
-  }
-}
-.about-main-planet-glow {
-  position: absolute;
-  inset: -25%;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(80, 180, 140, 0.12) 0%,
-    transparent 65%
-  );
-  pointer-events: none;
-  animation: glowPulse 5s ease-in-out infinite;
-  z-index: -1;
-}
-@keyframes glowPulse {
-  0%,
-  100% {
-    opacity: 0.5;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.08);
-  }
-}
-
-/* ---- 卫星 + 旁侧文字（PPT布局） ---- */
-.about-sat {
-  position: absolute;
-  /* 容器尺寸等于星球尺寸，文字通过绝对定位向外延伸 */
-  width: clamp(80px, 12vh, 130px);
-  height: clamp(80px, 12vh, 130px);
-  z-index: 8;
-}
-
-/* 卫星小星球 */
-.about-sat-planet {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.about-sat-img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-/* 修复#6: 右下蓝绿色星球缩小显示 */
-.about-sat-img-blue {
-  filter: drop-shadow(0 0 12px rgba(80, 180, 160, 0.4));
-}
-/* 小星球环 — 隐藏（图片自带轨道环） */
-.about-sat-ring {
-  display: none;
-}
-/* 悬浮放大 */
-.about-sat:hover .about-sat-planet {
-  transform: scale(1.2);
-}
-.about-sat:hover .about-sat-planet img {
-  filter: drop-shadow(0 0 16px rgba(243, 112, 67, 0.4));
-}
-
-/* 旁侧文字卡片 — 绝对定位向外延伸 */
-.about-sat-text {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: clamp(180px, 22vw, 280px);
-}
-/* 文字在星球右侧（右侧卫星） */
-.about-sat-text-right {
-  left: 100%;
-  margin-left: clamp(10px, 1.5vw, 20px);
-  text-align: left;
-}
-/* 文字在星球左侧（左侧卫星） */
-.about-sat-text-left {
-  right: 100%;
-  margin-right: clamp(10px, 1.5vw, 20px);
-  text-align: right;
-}
-.about-sat-title {
-  font-family: "Noto Serif SC", "Songti SC", serif;
-  font-size: clamp(14px, 1.6vw, 18px);
-  font-weight: 900;
-  color: var(--accent);
-  margin-bottom: 4px;
-  letter-spacing: 0.05em;
-}
-.about-sat-text p {
-  font-size: clamp(12px, 1.3vw, 15px);
-  color: var(--rose);
-  line-height: 1.6;
-}
-.about-highlight {
-  font-family: "Orbitron", sans-serif;
-  font-weight: 900;
-  color: var(--accent);
-  font-size: 1.1em;
-}
-
-/* ---- 卫星飞入动画 ---- */
-/* 初始状态：隐藏 + 偏移到对应角落 */
-.sat-fly-in {
-  opacity: 0;
-}
-.sat-fly-in .about-sat-planet {
-  opacity: 0;
-}
-.sat-fly-rt .about-sat-planet {
-  transform: translate(120px, -120px) scale(0.3);
-}
-.sat-fly-rb .about-sat-planet {
-  transform: translate(120px, 120px) scale(0.3);
-}
-.sat-fly-lb .about-sat-planet {
-  transform: translate(-120px, 120px) scale(0.3);
-}
-.sat-fly-lt .about-sat-planet {
-  transform: translate(-120px, -120px) scale(0.3);
-}
-
-/* in-view 时触发飞入 */
-.section-about.in-view .sat-fly-in {
-  opacity: 1;
-}
-.section-about.in-view .sat-fly-in .about-sat-planet {
-  animation: satFlyIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-/* 飞入顺序：右上(sat-1) → 右下(sat-4) → 左下(sat-3) → 左上(sat-2) */
-/* 基础延迟 = 大星球入场结束 1.2s */
-.section-about.in-view .about-sat-1 .about-sat-planet {
-  animation-delay: 0.8s;
-}
-.section-about.in-view .about-sat-4 .about-sat-planet {
-  animation-delay: 1.7s;
-}
-.section-about.in-view .about-sat-3 .about-sat-planet {
-  animation-delay: 2.2s;
-}
-.section-about.in-view .about-sat-2 .about-sat-planet {
-  animation-delay: 2.7s;
-}
-
-@keyframes satFlyIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-    transform: translate(0, 0) scale(1);
-  }
-}
-
-/* ---- 卫星文本下降出现 ---- */
-.sat-fly-in .about-sat-text {
-  opacity: 0;
-  transform: translateY(-30px);
-}
-.section-about.in-view .sat-fly-in .about-sat-text {
-  animation: satTextDrop 0.5s ease-out forwards;
-}
-/* 文本在星球飞入完成后出现（各延迟 +0.5s） */
-.section-about.in-view .about-sat-1 .about-sat-text {
-  animation-delay: 1.3s;
-}
-.section-about.in-view .about-sat-4 .about-sat-text {
-  animation-delay: 2.2s;
-}
-.section-about.in-view .about-sat-3 .about-sat-text {
-  animation-delay: 2.7s;
-}
-.section-about.in-view .about-sat-2 .about-sat-text {
-  animation-delay: 3.2s;
-}
-
-@keyframes satTextDrop {
-  0% {
-    opacity: 0;
-    transform: translateY(-30px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(-50%);
+    transform: translateY(-10px);
   }
 }
 
@@ -2035,38 +1940,86 @@ html.is-loading {
   z-index: 6;
   opacity: 0;
 }
-.sk-tri-1 { width: 18px; top: 8%; left: 12%; }
-.sk-tri-2 { width: 14px; top: 5%; left: 35%; }
-.sk-tri-3 { width: 22px; top: 4%; right: 18%; }
-.sk-tri-4 { width: 12px; top: 10%; right: 8%; }
-.sk-tri-5 { width: 16px; top: 2%; left: 55%; }
-.sk-tri-6 { width: 24px; top: 6%; right: 30%; }
-.sk-tri-7 { width: 10px; top: 12%; left: 22%; }
-.sk-tri-8 { width: 15px; top: 3%; right: 45%; }
+.sk-tri-1 {
+  width: 18px;
+  top: 8%;
+  left: 12%;
+}
+.sk-tri-2 {
+  width: 14px;
+  top: 5%;
+  left: 35%;
+}
+.sk-tri-3 {
+  width: 22px;
+  top: 4%;
+  right: 18%;
+}
+.sk-tri-4 {
+  width: 12px;
+  top: 10%;
+  right: 8%;
+}
+.sk-tri-5 {
+  width: 16px;
+  top: 2%;
+  left: 55%;
+}
+.sk-tri-6 {
+  width: 24px;
+  top: 6%;
+  right: 30%;
+}
+.sk-tri-7 {
+  width: 10px;
+  top: 12%;
+  left: 22%;
+}
+.sk-tri-8 {
+  width: 15px;
+  top: 3%;
+  right: 45%;
+}
 
 .section-skills.in-view .sk-tri-1 {
-  animation: abFlyIn1 1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards, ctTriFloat 9s ease-in-out 1.5s infinite;
+  animation:
+    abFlyIn1 1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards,
+    ctTriFloat 9s ease-in-out 1.5s infinite;
 }
 .section-skills.in-view .sk-tri-2 {
-  animation: abFlyIn2 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.5s forwards, ctTriFloat 10s ease-in-out 1.8s infinite;
+  animation:
+    abFlyIn2 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.5s forwards,
+    ctTriFloat 10s ease-in-out 1.8s infinite;
 }
 .section-skills.in-view .sk-tri-3 {
-  animation: abFlyIn3 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) 0.2s forwards, ctTriFloat 8s ease-in-out 1.3s infinite;
+  animation:
+    abFlyIn3 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) 0.2s forwards,
+    ctTriFloat 8s ease-in-out 1.3s infinite;
 }
 .section-skills.in-view .sk-tri-4 {
-  animation: abFlyIn4 1.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.6s forwards, ctTriFloat 11s ease-in-out 2s infinite;
+  animation:
+    abFlyIn4 1.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.6s forwards,
+    ctTriFloat 11s ease-in-out 2s infinite;
 }
 .section-skills.in-view .sk-tri-5 {
-  animation: abFlyIn5 1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.4s forwards, ctTriFloat 9s ease-in-out 1.6s infinite;
+  animation:
+    abFlyIn5 1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.4s forwards,
+    ctTriFloat 9s ease-in-out 1.6s infinite;
 }
 .section-skills.in-view .sk-tri-6 {
-  animation: abFlyIn6 0.85s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s forwards, ctTriFloat 10s ease-in-out 1.2s infinite;
+  animation:
+    abFlyIn6 0.85s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s forwards,
+    ctTriFloat 10s ease-in-out 1.2s infinite;
 }
 .section-skills.in-view .sk-tri-7 {
-  animation: abFlyIn7 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.45s forwards, ctTriFloat 8s ease-in-out 1.7s infinite;
+  animation:
+    abFlyIn7 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.45s forwards,
+    ctTriFloat 8s ease-in-out 1.7s infinite;
 }
 .section-skills.in-view .sk-tri-8 {
-  animation: abFlyIn8 0.95s cubic-bezier(0.22, 0.61, 0.36, 1) 0.55s forwards, ctTriFloat 11s ease-in-out 1.9s infinite;
+  animation:
+    abFlyIn8 0.95s cubic-bezier(0.22, 0.61, 0.36, 1) 0.55s forwards,
+    ctTriFloat 11s ease-in-out 1.9s infinite;
 }
 
 /* 场景容器 */
@@ -2087,8 +2040,16 @@ html.is-loading {
   pointer-events: none;
   z-index: 2;
   --orbit-reveal: 0deg;
-  -webkit-mask-image: conic-gradient(from 0deg, #000 var(--orbit-reveal), transparent 0);
-  mask-image: conic-gradient(from 0deg, #000 var(--orbit-reveal), transparent 0);
+  -webkit-mask-image: conic-gradient(
+    from 0deg,
+    #000 var(--orbit-reveal),
+    transparent 0
+  );
+  mask-image: conic-gradient(
+    from 0deg,
+    #000 var(--orbit-reveal),
+    transparent 0
+  );
 }
 .skills-orbit-path {
   fill: none;
@@ -2104,8 +2065,12 @@ html.is-loading {
   animation: skOrbitWipeIn 1s ease-out 3.8s forwards;
 }
 @keyframes skOrbitWipeIn {
-  from { --orbit-reveal: 0deg; }
-  to { --orbit-reveal: 360deg; }
+  from {
+    --orbit-reveal: 0deg;
+  }
+  to {
+    --orbit-reveal: 360deg;
+  }
 }
 
 /* 中心大星球 */
@@ -2136,7 +2101,11 @@ html.is-loading {
   position: absolute;
   inset: -25%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(80, 180, 140, 0.12) 0%, transparent 65%);
+  background: radial-gradient(
+    circle,
+    rgba(80, 180, 140, 0.12) 0%,
+    transparent 65%
+  );
   pointer-events: none;
   animation: glowPulse 5s ease-in-out infinite;
   z-index: -1;
@@ -2229,11 +2198,21 @@ html.is-loading {
   animation: satFlyIn 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 /* 飞入顺序 */
-.section-skills.in-view .skills-sat-1 .skills-sat-planet { animation-delay: 0.8s; }
-.section-skills.in-view .skills-sat-2 .skills-sat-planet { animation-delay: 1.3s; }
-.section-skills.in-view .skills-sat-3 .skills-sat-planet { animation-delay: 1.8s; }
-.section-skills.in-view .skills-sat-4 .skills-sat-planet { animation-delay: 2.3s; }
-.section-skills.in-view .skills-sat-5 .skills-sat-planet { animation-delay: 2.8s; }
+.section-skills.in-view .skills-sat-1 .skills-sat-planet {
+  animation-delay: 0.8s;
+}
+.section-skills.in-view .skills-sat-2 .skills-sat-planet {
+  animation-delay: 1.3s;
+}
+.section-skills.in-view .skills-sat-3 .skills-sat-planet {
+  animation-delay: 1.8s;
+}
+.section-skills.in-view .skills-sat-4 .skills-sat-planet {
+  animation-delay: 2.3s;
+}
+.section-skills.in-view .skills-sat-5 .skills-sat-planet {
+  animation-delay: 2.8s;
+}
 
 /* 卫星文本下降出现 */
 .sk-fly-in .skills-sat-text {
@@ -2243,11 +2222,21 @@ html.is-loading {
 .section-skills.in-view .sk-fly-in .skills-sat-text {
   animation: satTextDrop 0.5s ease-out forwards;
 }
-.section-skills.in-view .skills-sat-1 .skills-sat-text { animation-delay: 1.3s; }
-.section-skills.in-view .skills-sat-2 .skills-sat-text { animation-delay: 1.8s; }
-.section-skills.in-view .skills-sat-3 .skills-sat-text { animation-delay: 2.3s; }
-.section-skills.in-view .skills-sat-4 .skills-sat-text { animation-delay: 2.8s; }
-.section-skills.in-view .skills-sat-5 .skills-sat-text { animation-delay: 3.3s; }
+.section-skills.in-view .skills-sat-1 .skills-sat-text {
+  animation-delay: 1.3s;
+}
+.section-skills.in-view .skills-sat-2 .skills-sat-text {
+  animation-delay: 1.8s;
+}
+.section-skills.in-view .skills-sat-3 .skills-sat-text {
+  animation-delay: 2.3s;
+}
+.section-skills.in-view .skills-sat-4 .skills-sat-text {
+  animation-delay: 2.8s;
+}
+.section-skills.in-view .skills-sat-5 .skills-sat-text {
+  animation-delay: 3.3s;
+}
 
 /* ============================================
    SECTION 4 & 5: PROJECTS
@@ -3796,11 +3785,7 @@ html.is-loading {
     ctFlyIn2 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.35s forwards,
     ctTriFloat 10s ease-in-out 1.6s infinite;
 }
-.section-contact.in-view .ct-tri-3 {
-  animation:
-    ctFlyIn3 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) 0.15s forwards,
-    ctTriFloat 8s ease-in-out 1.2s infinite;
-}
+
 .section-contact.in-view .ct-tri-4 {
   animation:
     ctFlyIn4 1.2s cubic-bezier(0.22, 0.61, 0.36, 1) 0.4s forwards,
@@ -3811,11 +3796,7 @@ html.is-loading {
     ctFlyIn5 1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.5s forwards,
     ctTriFloat 9s ease-in-out 1.7s infinite;
 }
-.section-contact.in-view .ct-tri-6 {
-  animation:
-    ctFlyIn6 0.85s cubic-bezier(0.22, 0.61, 0.36, 1) 0.1s forwards,
-    ctTriFloat 10s ease-in-out 1.1s infinite;
-}
+
 .section-contact.in-view .ct-tri-7 {
   animation:
     ctFlyIn7 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s forwards,
@@ -3869,26 +3850,7 @@ html.is-loading {
     transform: translate(0, 0) rotate(180deg);
   }
 }
-@keyframes ctFlyIn3 {
-  0% {
-    opacity: 0;
-    transform: translate(-100vw, -50vh) rotate(-30deg);
-  }
-  100% {
-    opacity: 1;
-    transform: translate(0, 0) rotate(210deg);
-  }
-}
-@keyframes ctFlyIn6 {
-  0% {
-    opacity: 0;
-    transform: translate(-110vw, 0) rotate(20deg);
-  }
-  100% {
-    opacity: 1;
-    transform: translate(0, 0) rotate(130deg);
-  }
-}
+
 @keyframes ctFlyIn7 {
   0% {
     opacity: 0;
@@ -4026,11 +3988,7 @@ html.is-loading {
   top: 48%;
   left: 44%;
 }
-.ct-tri-3 {
-  width: 42px;
-  top: 28%;
-  left: 30%;
-}
+
 .ct-tri-4 {
   width: 48px;
   bottom: 18%;
@@ -4041,15 +3999,11 @@ html.is-loading {
   bottom: 22%;
   right: 22%;
 }
-.ct-tri-6 {
-  width: 60px;
-  top: 18%;
-  left: 12%;
-}
+
 .ct-tri-7 {
   width: 50px;
-  top: 60%;
-  left: 32%;
+  top: 56%;
+  left: 34%;
   z-index: 10;
 }
 .ct-tri-8 {
@@ -4079,7 +4033,7 @@ html.is-loading {
 }
 /* 大三角 — 按钮下方醒目箭头（PPT: 指向左下，重叠） */
 .ct-tri-big1 {
-  width: 112px;
+  width: 100px;
   bottom: 12%;
   left: 56%;
   transform: rotate(150deg);
@@ -4088,7 +4042,7 @@ html.is-loading {
 .ct-tri-big2 {
   width: 70px;
   bottom: 15%;
-  left: 59%;
+  left: 58%;
   transform: rotate(145deg);
   z-index: 8;
 }
