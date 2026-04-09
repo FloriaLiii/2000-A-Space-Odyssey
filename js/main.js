@@ -219,14 +219,21 @@
       this.setupScrollListener();
       this.setupNavigation();
 
-      // Trigger landing animations immediately
-      setTimeout(() => {
-        document
-          .querySelectorAll(".section-landing .anim-fade-up")
-          .forEach((el) => {
-            el.classList.add("visible");
-          });
-      }, 300);
+      // Trigger landing animations after loader is dismissed
+      const triggerLanding = () => {
+        setTimeout(() => {
+          document
+            .querySelectorAll(".section-landing .anim-fade-up")
+            .forEach((el) => {
+              el.classList.add("visible");
+            });
+        }, 300);
+      };
+      if (document.documentElement.classList.contains("is-loading")) {
+        document.addEventListener("loaderDismissed", triggerLanding, { once: true });
+      } else {
+        triggerLanding();
+      }
     }
 
     setupObserver() {
@@ -610,6 +617,80 @@
   // Initialize
   // ==========================================
   document.addEventListener("DOMContentLoaded", () => {
+    // ---------- 资源加载遮罩 ----------
+    const overlay = document.getElementById("loadingOverlay");
+    const percentEl = document.getElementById("loadingPercent");
+    const orbitSvg = document.querySelector(".loading-orbit-svg");
+
+    // 禁止滚动
+    document.documentElement.classList.add("is-loading");
+
+    // 收集需要等待的图片：排除私人星图照片和 loading 星球自身
+    const allImgs = Array.from(document.querySelectorAll("img"));
+    const criticalImgs = allImgs.filter(
+      (img) => !img.classList.contains("hobby-card-img")
+            && !img.classList.contains("loading-sphere")
+            && img.src,
+    );
+
+    let loaded = 0;
+    const total = criticalImgs.length || 1;
+
+    function updateProgress() {
+      loaded++;
+      const pct = Math.min(Math.round((loaded / total) * 100), 100);
+      // 更新轨道环绘制进度
+      if (orbitSvg) orbitSvg.style.setProperty("--orbit-progress", (pct / 100 * 360) + "deg");
+      if (percentEl) percentEl.textContent = pct + "%";
+      if (loaded >= total) dismissLoader();
+    }
+
+    let loaderDismissed = false;
+    function dismissLoader() {
+      if (loaderDismissed) return;
+      loaderDismissed = true;
+      if (orbitSvg) orbitSvg.style.setProperty("--orbit-progress", "360deg");
+      if (percentEl) percentEl.textContent = "100%";
+      // 闪光动画
+      const planet = document.querySelector(".loading-planet");
+      if (planet) planet.classList.add("complete");
+      // 闪光 + 停顿后再退场
+      setTimeout(() => {
+        document.documentElement.classList.remove("is-loading");
+        document.dispatchEvent(new Event("loaderDismissed"));
+        if (overlay) overlay.classList.add("hidden");
+        setTimeout(() => {
+          if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        }, 700);
+        preloadHobbyPhotos();
+      }, 1200);
+    }
+
+    function preloadHobbyPhotos() {
+      fetch("https://img.likangjue.space/assets/hobbies/photos.json?v=" + Date.now())
+        .then((r) => r.json())
+        .then((data) => {
+          const urls = Object.values(data).flat();
+          urls.forEach((url) => {
+            const img = new Image();
+            img.src = url;
+          });
+        })
+        .catch(() => {});
+    }
+
+    criticalImgs.forEach((img) => {
+      if (img.complete && img.naturalWidth > 0) {
+        updateProgress();
+      } else {
+        img.addEventListener("load", updateProgress, { once: true });
+        img.addEventListener("error", updateProgress, { once: true });
+      }
+    });
+
+    // 兜底：最多 8 秒强制关闭
+    setTimeout(dismissLoader, 8000);
+
     // Particle system — hero
     const canvas = document.getElementById("particles-canvas");
     if (canvas) {

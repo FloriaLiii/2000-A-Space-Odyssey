@@ -96,7 +96,13 @@
       "Bash(rclone --config /tmp/r2-rclone.conf ls r2:resume-assets/assets/hobbies/photography/)",
       "Bash(rclone --config /tmp/r2-rclone.conf ls r2:resume-assets/assets/hobbies/rap/)",
       "Bash(rclone --config /tmp/r2-rclone.conf copyto /Users/likangjue/project/resume/assets/hobbies/photos.json r2:resume-assets/assets/hobbies/photos.json)",
-      "Bash(rclone --config /tmp/r2-rclone.conf cat r2:resume-assets/assets/hobbies/photos.json)"
+      "Bash(rclone --config /tmp/r2-rclone.conf cat r2:resume-assets/assets/hobbies/photos.json)",
+      "Bash(curl -s \"https://img.likangjue.space/assets/hobbies/photography/LKJ_0766.webp\")",
+      "Bash(md5)",
+      "Bash(curl -s \"https://img.likangjue.space/assets/hobbies/photography/LKJ_0892.webp\")",
+      "Bash(curl -s \"https://img.likangjue.space/assets/hobbies/photography/LKJ_1240.webp\")",
+      "Bash(curl -s \"https://img.likangjue.space/assets/hobbies/photography/LKJ_1663.webp\")",
+      "Bash(curl -sI https://img.likangjue.space/assets/hobbies/photography/__TRACKED_VAR__)"
     ]
   }
 }

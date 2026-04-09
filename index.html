@@ -19,6 +19,20 @@
     />
   </head>
   <body>
+    <!-- 加载遮罩 -->
+    <div class="loading-overlay" id="loadingOverlay">
+      <div class="loading-content">
+        <div class="loading-planet">
+          <svg class="loading-orbit-svg" viewBox="0 0 180 180">
+            <circle class="loading-orbit-path" id="loadingOrbitPath" cx="90" cy="90" r="70" />
+          </svg>
+          <img src="assets/planet.png" alt="" class="loading-sphere" />
+        </div>
+        <p class="loading-percent" id="loadingPercent">0%</p>
+        <p class="loading-text">星际航线校准中<span class="loading-dots"></span></p>
+      </div>
+    </div>
+
     <!-- 移动端提示 -->
     <div class="mobile-block" id="mobileBlock">
       <div class="mobile-block-shell">
@@ -1437,6 +1451,7 @@
             src="https://img.likangjue.space/assets/hobbies/photography/LKJ_0766.webp"
             alt="摄影"
             class="hobby-card-img"
+            loading="lazy"
           />
           <span class="hobby-card-label">摄影</span>
         </div>
@@ -1449,7 +1464,7 @@
         </div>
         <div class="hobby-card">
           <div class="hobby-card-arrow"></div>
-          <img src="https://img.likangjue.space/assets/hobbies/rap/70bcdd6e8abefb64f09e192f97dbcb77.webp" alt="说唱" class="hobby-card-img" />
+          <img src="https://img.likangjue.space/assets/hobbies/rap/70bcdd6e8abefb64f09e192f97dbcb77.webp" alt="说唱" class="hobby-card-img" loading="lazy" />
           <span class="hobby-card-label">说唱</span>
         </div>
       </div>
@@ -1469,6 +1484,7 @@
             src="https://img.likangjue.space/assets/hobbies/sports/7e3e798be9011d63065d6b7688510bcc.webp"
             alt="运动"
             class="hobby-card-img"
+            loading="lazy"
           />
           <span class="hobby-card-label">运动</span>
         </div>
