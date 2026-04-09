@@ -32,7 +32,8 @@
   color: var(--accent);
 }
 .comm-btn-text {
-  font-family: "ZCOOL QingKe HuangYou", sans-serif;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
   font-size: 18px;
   letter-spacing: 0.15em;
 }
@@ -111,7 +112,8 @@
 .comm-console {
   position: relative;
   background:
-    url("https://img.likangjue.space/assets/contact/bg-space.webp") center center / cover no-repeat,
+    url("https://img.likangjue.space/assets/contact/bg-space.webp") center
+      center / cover no-repeat,
     radial-gradient(
       ellipse at 50% 30%,
       rgba(80, 50, 100, 0.3) 0%,
@@ -783,8 +785,8 @@
 }
 .comm-bar-label {
   font-family: "Share Tech Mono", monospace;
-  font-size: 8px;
-  color: #6d5a62;
+  font-size: 14px;
+  color: #e25c6b;
   letter-spacing: 0.2em;
   text-transform: uppercase;
   opacity: 0.4;

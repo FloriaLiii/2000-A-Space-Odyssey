@@ -657,21 +657,24 @@
     function dismissLoader() {
       if (loaderDismissed) return;
       loaderDismissed = true;
+      // 先将进度设为 100%
       if (orbitSvg) orbitSvg.style.setProperty("--orbit-progress", "360deg");
       if (percentEl) percentEl.textContent = "100%";
-      // 闪光动画
-      const planet = document.querySelector(".loading-planet");
-      if (planet) planet.classList.add("complete");
-      // 闪光 + 停顿后再退场
+      // 等待轨道环过渡和百分比渲染完成后再触发闪光
       setTimeout(() => {
-        document.documentElement.classList.remove("is-loading");
-        document.dispatchEvent(new Event("loaderDismissed"));
-        if (overlay) overlay.classList.add("hidden");
+        const planet = document.querySelector(".loading-planet");
+        if (planet) planet.classList.add("complete");
+        // 闪光 + 停顿后再退场
         setTimeout(() => {
-          if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
-        }, 700);
-        preloadHobbyPhotos();
-      }, 1200);
+          document.documentElement.classList.remove("is-loading");
+          document.dispatchEvent(new Event("loaderDismissed"));
+          if (overlay) overlay.classList.add("hidden");
+          setTimeout(() => {
+            if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+          }, 700);
+          preloadHobbyPhotos();
+        }, 1200);
+      }, 400);
     }
 
     function preloadHobbyPhotos() {

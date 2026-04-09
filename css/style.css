@@ -110,7 +110,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 0.6s ease, visibility 0.6s ease;
+  transition:
+    opacity 0.6s ease,
+    visibility 0.6s ease;
 }
 .loading-overlay.hidden {
   opacity: 0;
@@ -144,8 +146,12 @@ body {
   z-index: 1;
 }
 @keyframes loading-spin {
-  0%   { transform: translate(-50%, -50%) rotate(0deg); }
-  100% { transform: translate(-50%, -50%) rotate(-360deg); }
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(-360deg);
+  }
 }
 
 /* 轨道环 — 虚线圆，从顶部开始逐步绘制 */
@@ -156,8 +162,16 @@ body {
   height: 100%;
   transform: rotate(-90deg);
   --orbit-progress: 0deg;
-  -webkit-mask-image: conic-gradient(from 90deg, #000 var(--orbit-progress), transparent 0);
-  mask-image: conic-gradient(from 90deg, #000 var(--orbit-progress), transparent 0);
+  -webkit-mask-image: conic-gradient(
+    from 90deg,
+    #000 var(--orbit-progress),
+    transparent 0
+  );
+  mask-image: conic-gradient(
+    from 90deg,
+    #000 var(--orbit-progress),
+    transparent 0
+  );
   transition: --orbit-progress 0.3s ease;
 }
 .loading-orbit-path {
@@ -188,10 +202,18 @@ body {
   animation: loading-dots 1.5s steps(3, end) infinite;
 }
 @keyframes loading-dots {
-  0%   { content: ""; }
-  33%  { content: "."; }
-  66%  { content: ".."; }
-  100% { content: "..."; }
+  0% {
+    content: "";
+  }
+  33% {
+    content: ".";
+  }
+  66% {
+    content: "..";
+  }
+  100% {
+    content: "...";
+  }
 }
 
 /* 加载完成闪光 + 放大 */
@@ -205,19 +227,39 @@ body {
   animation: loading-orbit-flash 0.8s ease-out forwards;
 }
 @keyframes loading-scale-pulse {
-  0%   { transform: scale(1); }
-  30%  { transform: scale(1.12); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+  }
+  30% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 @keyframes loading-flash {
-  0%   { filter: drop-shadow(0 0 20px rgba(118, 200, 150, 0.3)); }
-  30%  { filter: drop-shadow(0 0 40px rgba(200, 255, 220, 0.8)) brightness(1.3); }
-  100% { filter: drop-shadow(0 0 20px rgba(118, 200, 150, 0.3)) brightness(1); }
+  0% {
+    filter: drop-shadow(0 0 20px rgba(118, 200, 150, 0.3));
+  }
+  30% {
+    filter: drop-shadow(0 0 40px rgba(200, 255, 220, 0.8)) brightness(1.3);
+  }
+  100% {
+    filter: drop-shadow(0 0 20px rgba(118, 200, 150, 0.3)) brightness(1);
+  }
 }
 @keyframes loading-orbit-flash {
-  0%   { stroke: rgba(255, 255, 255, 0.35); }
-  30%  { stroke: rgba(200, 255, 220, 0.9); filter: drop-shadow(0 0 8px rgba(200, 255, 220, 0.6)); }
-  100% { stroke: rgba(255, 255, 255, 0.35); filter: none; }
+  0% {
+    stroke: rgba(255, 255, 255, 0.35);
+  }
+  30% {
+    stroke: rgba(200, 255, 220, 0.9);
+    filter: drop-shadow(0 0 8px rgba(200, 255, 220, 0.6));
+  }
+  100% {
+    stroke: rgba(255, 255, 255, 0.35);
+    filter: none;
+  }
 }
 
 /* 加载中禁止滚动 */
@@ -392,7 +434,8 @@ html.is-loading {
   left: 0;
   right: 0;
   bottom: 0;
-  background: url("https://img.likangjue.space/assets/planet-3.webp") center/cover no-repeat;
+  background: url("https://img.likangjue.space/assets/planet-3.webp")
+    center/cover no-repeat;
   opacity: 0.12;
   z-index: 0;
 }
@@ -856,20 +899,22 @@ html.is-loading {
 }
 .about-num {
   position: relative;
-  font-family: "HYLiLiangHei", "HYChaoJiZhanJia", "Arial Black", sans-serif;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 900;
   font-size: clamp(32px, 3.5vw, 50px);
   font-weight: 900;
   color: var(--white);
   z-index: 1;
   line-height: 1;
-  letter-spacing: 0.05em;
+  letter-spacing: 0;
   margin-top: 1vw;
 }
 .about-title-text {
-  font-family: "ZCOOL QingKe HuangYou", "Noto Serif SC", serif;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
   font-size: clamp(24px, 2.5vw, 36px);
   color: var(--white);
-  letter-spacing: 0.15em;
+  letter-spacing: 0;
 }
 
 /* 三角形碎片 */
@@ -1409,21 +1454,23 @@ html.is-loading {
 
 .voyage-num {
   position: relative;
-  font-family: "HYLiLiangHei", "HYChaoJiZhanJia", "Arial Black", sans-serif;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 900;
   font-size: clamp(32px, 3.5vw, 50px);
   font-weight: 900;
   color: var(--white);
   z-index: 1;
   line-height: 1;
-  letter-spacing: 0.05em;
+  letter-spacing: 0;
   margin-top: 1vw;
 }
 
 .voyage-title {
-  font-family: "ZCOOL QingKe HuangYou", "Noto Serif SC", serif;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
   font-size: clamp(24px, 2.5vw, 36px);
   color: var(--white);
-  letter-spacing: 0.15em;
+  letter-spacing: 0;
 }
 
 /* 左侧月球 */
@@ -1549,7 +1596,8 @@ html.is-loading {
 /* 地名标签 */
 .node-label {
   margin-top: 10px;
-  font-family: "ZCOOL QingKe HuangYou", sans-serif;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
   font-size: clamp(14px, 1.3vw, 20px);
   color: #f37043;
   text-align: center;
@@ -2241,10 +2289,11 @@ html.is-loading {
 }
 
 .gis-header-title {
-  font-family: "ZCOOL QingKe HuangYou", "Noto Serif SC", serif;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
   font-size: clamp(24px, 2.5vw, 36px);
   color: var(--white);
-  letter-spacing: 0.15em;
+  letter-spacing: 0;
   margin: 0;
 }
 
@@ -2971,10 +3020,11 @@ html.is-loading {
 }
 
 .rescue-header-title {
-  font-family: "ZCOOL QingKe HuangYou", "Noto Serif SC", serif;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
   font-size: clamp(24px, 2.5vw, 36px);
   color: var(--white);
-  letter-spacing: 0.15em;
+  letter-spacing: 0;
   margin: 0;
 }
 
@@ -3877,7 +3927,8 @@ html.is-loading {
   font-weight: 700;
   letter-spacing: 0.3em;
   color: transparent;
-  background: url("https://img.likangjue.space/assets/contact/texture-thanks.webp") center / cover;
+  background: url("https://img.likangjue.space/assets/contact/texture-thanks.webp")
+    center / cover;
   -webkit-background-clip: text;
   background-clip: text;
   filter: brightness(1.2) saturate(1.1);
@@ -5547,20 +5598,22 @@ a.star-planet:nth-child(even):hover .planet-img {
 }
 .hobbies-number {
   position: relative;
-  font-family: "HYLiLiangHei", "HYChaoJiZhanJia", "Arial Black", sans-serif;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 900;
   font-size: clamp(32px, 3.5vw, 50px);
   font-weight: 900;
   color: var(--white);
   z-index: 1;
   line-height: 1;
-  letter-spacing: 0.05em;
+  letter-spacing: 0;
   margin-top: 10px;
 }
 .hobbies-title {
-  font-family: "ZCOOL QingKe HuangYou", "Noto Serif SC", serif;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
   font-size: clamp(24px, 2.5vw, 36px);
   color: var(--white);
-  letter-spacing: 0.15em;
+  letter-spacing: 0;
 }
 
 /* 月亮 */
@@ -5597,7 +5650,7 @@ a.star-planet:nth-child(even):hover .planet-img {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   line-height: 1.8;
-  text-align: center;
+  text-align: right;
 }
 
 /* === 星球 + 卡片组 === */
@@ -5739,10 +5792,11 @@ a.star-planet:nth-child(even):hover .planet-img {
 .hobby-card-label {
   display: block;
   margin-top: 8px;
-  font-family: "ZCOOL QingKe HuangYou", sans-serif;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
   font-size: clamp(0.8rem, 1.1vw, 1rem);
   color: var(--rose);
-  letter-spacing: 0.1em;
+  letter-spacing: 0;
 }
 
 /* ============================================
@@ -5802,11 +5856,12 @@ a.star-planet:nth-child(even):hover .planet-img {
   opacity: 1;
 }
 .hobby-modal-title {
-  font-family: "ZCOOL QingKe HuangYou", sans-serif;
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
   font-size: 1.4rem;
   color: var(--rose);
   margin-bottom: 16px;
-  letter-spacing: 0.15em;
+  letter-spacing: 0;
 }
 .hobby-modal-gallery {
   display: flex;
