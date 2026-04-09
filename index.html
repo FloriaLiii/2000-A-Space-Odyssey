@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LIKANGJUE星际漫游指南</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/style.css?v=3" />
     <!-- Leaflet (轻量地图渲染) -->
     <link
       rel="stylesheet"
@@ -388,14 +388,24 @@
         data-section="1"
         data-label="星图导览"
       ></a>
-      <a href="#about" class="nav-dot" data-section="2" data-label="关于我"></a>
+      <a
+        href="#about"
+        class="nav-dot"
+        data-section="2"
+        data-label="宇航员档案"
+      ></a>
       <a
         href="#education"
         class="nav-dot"
         data-section="3"
         data-label="航行日志"
       ></a>
-      <a href="#skills" class="nav-dot" data-section="4" data-label="技能"></a>
+      <a
+        href="#skills"
+        class="nav-dot"
+        data-section="4"
+        data-label="燃料库"
+      ></a>
       <a
         href="#project3"
         class="nav-dot"
@@ -985,142 +995,164 @@
       </div>
     </section>
 
-    <!-- ===== Section 3: Skills ===== -->
+    <!-- ===== Section 3: Skills (宇航员档案风格) ===== -->
     <section class="section section-skills" id="skills">
-      <div class="section-inner">
-        <h2 class="section-title anim-wipe-in">SKILLS</h2>
-        <p class="section-subtitle anim-fade-up delay-1">专业技能</p>
-        <div class="skills-grid">
-          <div class="skill-card anim-fade-up delay-1">
-            <div class="skill-icon-wrap">
-              <svg
-                class="skill-icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-              >
-                <path
-                  d="M4 7l8-4 8 4M4 7l8 4M4 7v10l8 4M12 11l8-4M12 11v10M20 7v10l-8 4"
-                />
-              </svg>
-            </div>
-            <h3 class="skill-name">HTML / CSS</h3>
-            <div class="skill-bar">
-              <div class="skill-fill" data-width="90"></div>
-            </div>
-            <p class="skill-desc">
-              熟练使用，能独立完成网页静态布局与基础交互功能
+      <!-- 星空背景粒子 -->
+      <canvas
+        class="skills-stars-canvas"
+        id="skills-stars-canvas"
+        aria-hidden="true"
+      ></canvas>
+
+      <!-- 标题区 -->
+      <div class="skills-header anim-fade-up">
+        <div class="skills-header-planet">
+          <img
+            src="https://img.likangjue.space/assets/planet-title.webp"
+            alt=""
+            class="header-planet-img"
+          />
+          <span class="skills-num">03</span>
+        </div>
+        <h2 class="skills-title-text">燃料库</h2>
+      </div>
+
+      <!-- 三角形碎片装饰 -->
+      <div class="skills-debris" aria-hidden="true">
+        <svg class="sk-tri sk-tri-1" viewBox="0 0 24 24">
+          <polygon points="12,2 22,20 2,20" fill="#f37043" opacity="0.6" />
+        </svg>
+        <svg class="sk-tri sk-tri-2" viewBox="0 0 24 24">
+          <polygon points="12,2 22,20 2,20" fill="#fa9a1e" opacity="0.5" />
+        </svg>
+        <svg class="sk-tri sk-tri-3" viewBox="0 0 24 24">
+          <polygon points="12,2 22,20 2,20" fill="#e84e34" opacity="0.55" />
+        </svg>
+        <svg class="sk-tri sk-tri-4" viewBox="0 0 24 24">
+          <polygon points="12,2 22,20 2,20" fill="#cca4ae" opacity="0.4" />
+        </svg>
+        <svg class="sk-tri sk-tri-5" viewBox="0 0 24 24">
+          <polygon points="12,2 22,20 2,20" fill="#f37043" opacity="0.45" />
+        </svg>
+        <svg class="sk-tri sk-tri-6" viewBox="0 0 24 24">
+          <polygon points="12,2 22,20 2,20" fill="#fa9a1e" opacity="0.5" />
+        </svg>
+        <svg class="sk-tri sk-tri-7" viewBox="0 0 24 24">
+          <polygon points="12,2 22,20 2,20" fill="#e84e34" opacity="0.35" />
+        </svg>
+        <svg class="sk-tri sk-tri-8" viewBox="0 0 24 24">
+          <polygon points="12,2 22,20 2,20" fill="#cca4ae" opacity="0.6" />
+        </svg>
+      </div>
+
+      <!-- 中心大星球 + 轨道 + 六颗卫星 -->
+      <div class="skills-scene">
+        <!-- 虚线轨道环 -->
+        <svg
+          class="skills-orbit-svg"
+          viewBox="0 0 1000 1000"
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <circle cx="500" cy="500" r="440" class="skills-orbit-path" />
+          <circle cx="500" cy="60" r="3.5" fill="rgba(204,164,174,0.45)" />
+          <circle cx="940" cy="500" r="3.5" fill="rgba(204,164,174,0.45)" />
+          <circle cx="500" cy="940" r="3.5" fill="rgba(204,164,174,0.45)" />
+          <circle cx="60" cy="500" r="3.5" fill="rgba(204,164,174,0.45)" />
+          <circle cx="811" cy="189" r="3" fill="rgba(204,164,174,0.35)" />
+          <circle cx="189" cy="811" r="3" fill="rgba(204,164,174,0.35)" />
+          <circle cx="811" cy="811" r="3" fill="rgba(204,164,174,0.35)" />
+          <circle cx="189" cy="189" r="3" fill="rgba(204,164,174,0.35)" />
+        </svg>
+
+        <!-- 中心大星球 -->
+        <div class="skills-main-planet" id="skillsCenterPlanet">
+          <img
+            src="https://img.likangjue.space/assets/planet-7.webp"
+            alt=""
+            class="skills-main-planet-img"
+          />
+          <div class="skills-main-planet-glow"></div>
+        </div>
+
+        <!-- 卫星1: 右上 — JavaScript -->
+        <div class="skills-sat skills-sat-1 sk-fly-in sk-fly-rt">
+          <div class="skills-sat-planet">
+            <img
+              src="https://img.likangjue.space/assets/planet-5.webp"
+              alt=""
+              class="skills-sat-img"
+            />
+          </div>
+          <div class="skills-sat-text skills-sat-text-right">
+            <h4 class="skills-sat-title">核心基础</h4>
+            <p>
+              深入理解 JS 异步机制、原型链及闭包；精通
+              ES6+，具备良好的代码抽象能力
             </p>
           </div>
-          <div class="skill-card anim-fade-up delay-2">
-            <div class="skill-icon-wrap">
-              <svg
-                class="skill-icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-              >
-                <path
-                  d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"
-                />
-              </svg>
-            </div>
-            <h3 class="skill-name">JavaScript</h3>
-            <div class="skill-bar">
-              <div class="skill-fill" data-width="85"></div>
-            </div>
-            <p class="skill-desc">
-              熟悉基础语法，理解原型链、闭包、事件循环；熟悉 ES6+
+        </div>
+
+        <!-- 卫星2: 左上 — Vue -->
+        <div class="skills-sat skills-sat-2 sk-fly-in sk-fly-lt">
+          <div class="skills-sat-planet">
+            <img
+              src="https://img.likangjue.space/assets/planet-6.webp"
+              alt=""
+              class="skills-sat-img"
+            />
+          </div>
+          <div class="skills-sat-text skills-sat-text-left">
+            <h4 class="skills-sat-title">框架生态</h4>
+            <p>熟练使用 Vue 全家桶，</p>
+            <p>深入理解 Vue 底层响应式原理</p>
+          </div>
+        </div>
+
+        <!-- 卫星3: 左中 — Webpack -->
+        <div class="skills-sat skills-sat-3 sk-fly-in sk-fly-lt">
+          <div class="skills-sat-planet">
+            <img
+              src="https://img.likangjue.space/assets/planet-orange-ring.webp"
+              alt=""
+              class="skills-sat-img"
+            />
+          </div>
+          <div class="skills-sat-text skills-sat-text-left">
+            <h4 class="skills-sat-title">工程化</h4>
+            <p>
+              熟练使用 Webpack 进行项目构建与优化；熟悉 Git 工作流及 CI/CD 流程
             </p>
           </div>
-          <div class="skill-card anim-fade-up delay-3">
-            <div class="skill-icon-wrap">
-              <svg
-                class="skill-icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-              >
-                <polygon points="12,2 22,8.5 22,15.5 12,22 2,15.5 2,8.5" />
-                <line x1="12" y1="2" x2="12" y2="22" />
-                <line x1="2" y1="8.5" x2="22" y2="8.5" />
-                <line x1="2" y1="15.5" x2="22" y2="15.5" />
-              </svg>
-            </div>
-            <h3 class="skill-name">Vue 3</h3>
-            <div class="skill-bar">
-              <div class="skill-fill" data-width="85"></div>
-            </div>
-            <p class="skill-desc">
-              熟悉 Vue3 / Vue Router / Vuex，理解生命周期与组件通信
-            </p>
+        </div>
+
+        <!-- 卫星4: 左下 — GIS -->
+        <div class="skills-sat skills-sat-4 sk-fly-in sk-fly-lb">
+          <div class="skills-sat-planet">
+            <img
+              src="https://img.likangjue.space/assets/planet-4.webp"
+              alt=""
+              class="skills-sat-img"
+            />
           </div>
-          <div class="skill-card anim-fade-up delay-1">
-            <div class="skill-icon-wrap">
-              <svg
-                class="skill-icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-              >
-                <circle cx="12" cy="12" r="3" />
-                <path
-                  d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"
-                />
-              </svg>
-            </div>
-            <h3 class="skill-name">Axios / HTTP</h3>
-            <div class="skill-bar">
-              <div class="skill-fill" data-width="80"></div>
-            </div>
-            <p class="skill-desc">
-              熟悉 axios 前后端交互，了解跨域问题及 HTTP/TCP 协议
-            </p>
+          <div class="skills-sat-text skills-sat-text-left">
+            <h4 class="skills-sat-title">地图开发</h4>
+            <p>掌握 GIS 的标准化封装与应用</p>
+            <p>有地图可视化开发经验</p>
           </div>
-          <div class="skill-card anim-fade-up delay-2">
-            <div class="skill-icon-wrap">
-              <svg
-                class="skill-icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-              >
-                <circle cx="18" cy="18" r="3" />
-                <circle cx="6" cy="6" r="3" />
-                <path d="M6 21V9a9 9 0 0 0 9 9" />
-                <line x1="18" y1="15" x2="18" y2="3" />
-              </svg>
-            </div>
-            <h3 class="skill-name">Git</h3>
-            <div class="skill-bar">
-              <div class="skill-fill" data-width="75"></div>
-            </div>
-            <p class="skill-desc">了解协作开发、分支管理、版本管理</p>
+        </div>
+
+        <!-- 卫星5: 右下 — HTTP / 网络 -->
+        <div class="skills-sat skills-sat-5 sk-fly-in sk-fly-rb">
+          <div class="skills-sat-planet">
+            <img
+              src="https://img.likangjue.space/assets/planet-blue.webp"
+              alt=""
+              class="skills-sat-img skills-sat-img-blue"
+            />
           </div>
-          <div class="skill-card anim-fade-up delay-3">
-            <div class="skill-icon-wrap">
-              <svg
-                class="skill-icon"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.5"
-              >
-                <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
-                <line x1="8" y1="21" x2="16" y2="21" />
-                <line x1="12" y1="17" x2="12" y2="21" />
-              </svg>
-            </div>
-            <h3 class="skill-name">Vite / Webpack</h3>
-            <div class="skill-bar">
-              <div class="skill-fill" data-width="70"></div>
-            </div>
-            <p class="skill-desc">了解现代前端构建工具链</p>
+          <div class="skills-sat-text skills-sat-text-right">
+            <h4 class="skills-sat-title">计算机基础</h4>
+            <p>了解 HTTP/HTTPS、TCP/IP 协议、浏览器渲染机制、跨域解决方案</p>
           </div>
         </div>
       </div>
@@ -1235,12 +1267,15 @@
 
           <!-- 右侧：任务阶段切换面板 -->
           <div class="gis-mission-panel anim-fade-up delay-2">
+            <div class="gis-meta">
+              <span class="gis-meta-role">前端核心开发</span>
+              <span class="gis-meta-date">2024.11 — 2025.03</span>
+            </div>
             <div class="gis-tech anim-fade-up delay-2">
               <span class="tech-tag">PAMap SDK</span>
-              <span class="tech-tag">Canvas</span>
               <span class="tech-tag">瓦片渲染</span>
               <span class="tech-tag">GeoJSON</span>
-              <span class="tech-tag">Vue3</span>
+              <span class="tech-tag">Vue</span>
             </div>
             <div class="gis-missions">
               <button class="gis-mission-btn active" data-phase="migrate">
@@ -1408,11 +1443,11 @@
               针对全球范围内极端环境下的救援调度与响应，从零搭建的前端工程底座。
             </p>
             <div class="rescue-tech anim-fade-up delay-2">
-              <span class="tech-tag">埋点 SDK</span>
+              <span class="tech-tag">埋点体系建设</span>
               <span class="tech-tag">高德地图</span>
               <span class="tech-tag">WebSocket</span>
               <span class="tech-tag">Webpack</span>
-              <span class="tech-tag">Vue3</span>
+              <span class="tech-tag">Vue</span>
             </div>
             <div class="rescue-missions">
               <button class="rescue-mission-btn active" data-phase="tracking">
@@ -1965,7 +2000,7 @@
 
     <link rel="stylesheet" href="css/comm-panel.css" />
     <script src="js/comm-panel.js"></script>
-    <script src="js/main.js?v=15"></script>
+    <script src="js/main.js?v=17"></script>
     <script>
       // 移动端提示雪花噪点
       (function () {

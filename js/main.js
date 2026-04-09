@@ -304,6 +304,15 @@
                 entry.target.classList.add("in-view");
               }
 
+              // Trigger skills section animations
+              if (
+                entry.target.classList.contains("section-skills") &&
+                !this.animated.has("skills")
+              ) {
+                this.animated.add("skills");
+                entry.target.classList.add("in-view");
+              }
+
               // Trigger contact triangles entrance
               if (
                 entry.target.classList.contains("section-contact") &&
@@ -2513,6 +2522,87 @@
 
       aboutSection.addEventListener("mouseleave", () => {
         const orbit = aboutSection.querySelector(".about-orbit-svg");
+        if (orbit) orbit.style.transform = "";
+      });
+    })();
+
+    // ========== Skills Section (宇航员档案风格) ==========
+    (function () {
+      const skillsSection = document.querySelector(".section-skills");
+      if (!skillsSection) return;
+
+      // 星空粒子背景
+      const starCanvas = document.getElementById("skills-stars-canvas");
+      if (starCanvas) {
+        new ParticleSystem(starCanvas, { container: skillsSection });
+      }
+
+      // --- 将卫星精确定位到轨道圆上 ---
+      // 5 颗卫星的角度（0°=右, 逆时针）
+      const skSatAngles = [55, 140, 200, 260, 330]; // sat-1右上, sat-2左上, sat-3左中偏下, sat-4左下, sat-5右下
+      const skSats = skillsSection.querySelectorAll(".skills-sat");
+
+      function positionSkillsSatsOnOrbit() {
+        const svg = skillsSection.querySelector(".skills-orbit-svg");
+        if (!svg) return;
+        const sectionRect = skillsSection.getBoundingClientRect();
+        const svgRect = svg.getBoundingClientRect();
+        if (svgRect.width === 0) return;
+        const cx = svgRect.left - sectionRect.left + svgRect.width / 2;
+        const cy = svgRect.top - sectionRect.top + svgRect.height / 2;
+        const radius = (svgRect.width * 440) / 1000;
+
+        skSats.forEach((sat, i) => {
+          const angle = skSatAngles[i];
+          const rad = (angle * Math.PI) / 180;
+          const px = cx + radius * Math.cos(rad);
+          const py = cy - radius * Math.sin(rad);
+          const sw = sat.offsetWidth;
+          const sh = sat.offsetHeight;
+          sat.style.left = px - sw / 2 + "px";
+          sat.style.top = py - sh / 2 + "px";
+        });
+      }
+
+      function scheduleSkillsPosition() {
+        requestAnimationFrame(() => positionSkillsSatsOnOrbit());
+      }
+
+      scheduleSkillsPosition();
+      window.addEventListener("resize", positionSkillsSatsOnOrbit);
+      window.addEventListener("load", () => {
+        scheduleSkillsPosition();
+        setTimeout(positionSkillsSatsOnOrbit, 500);
+      });
+
+      var skillsPosObserver = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              requestAnimationFrame(() => {
+                positionSkillsSatsOnOrbit();
+                setTimeout(positionSkillsSatsOnOrbit, 200);
+              });
+            }
+          });
+        },
+        { threshold: 0.1 },
+      );
+      skillsPosObserver.observe(skillsSection);
+
+      // 鼠标视差效果
+      skillsSection.addEventListener("mousemove", (e) => {
+        const rect = skillsSection.getBoundingClientRect();
+        const mx = (e.clientX - rect.left) / rect.width - 0.5;
+        const my = (e.clientY - rect.top) / rect.height - 0.5;
+
+        const orbit = skillsSection.querySelector(".skills-orbit-svg");
+        if (orbit)
+          orbit.style.transform = `translate(calc(-50% + ${mx * 10}px), calc(-50% + ${my * 10}px))`;
+      });
+
+      skillsSection.addEventListener("mouseleave", () => {
+        const orbit = skillsSection.querySelector(".skills-orbit-svg");
         if (orbit) orbit.style.transform = "";
       });
     })();
