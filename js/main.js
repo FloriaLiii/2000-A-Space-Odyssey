@@ -241,6 +241,14 @@
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
+              // 加载期间跳过 landing section，由 loaderDismissed 事件单独触发
+              if (
+                entry.target.classList.contains("section-landing") &&
+                document.documentElement.classList.contains("is-loading")
+              ) {
+                return;
+              }
+
               // Animate child elements
               const animChildren = entry.target.querySelectorAll(
                 ".anim-fade-up, .anim-wipe-in, .anim-scale-in, .anim-fade-left, .anim-fade-right",
