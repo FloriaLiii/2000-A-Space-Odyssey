@@ -102,6 +102,11 @@ body {
   inherits: false;
   initial-value: 0deg;
 }
+@property --orbit-reveal {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
 .loading-overlay {
   position: fixed;
   inset: 0;
@@ -1307,6 +1312,194 @@ html.is-loading {
   }
 }
 
+/* ---- 图标彩蛋交互 ---- */
+.about-card-arc {
+  cursor: pointer;
+}
+/* 点击时圆弧发光 */
+.about-card-arc.egg-active .arc-circle {
+  stroke: rgba(243, 112, 67, 0.6);
+  stroke-width: 3;
+  filter: drop-shadow(0 0 6px rgba(243, 112, 67, 0.4));
+  transition: all 0.3s;
+}
+/* 点击时整个圆弧区域弹跳（不影响图标的入场动画） */
+.about-card-arc.egg-active {
+  animation: eggBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes eggBounce {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.15); }
+  50% { transform: scale(0.92); }
+  70% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* === 彩蛋1: 爱心粒子（关于我） === */
+.egg-hearts {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+.egg-heart {
+  position: absolute;
+  font-size: 14px;
+  color: #f37043;
+  opacity: 0;
+  top: 50%;
+  left: 50%;
+}
+.egg-active .egg-heart {
+  animation: heartFloat 1.2s ease-out forwards;
+}
+.egg-active .egg-heart:nth-child(1) { animation-delay: 0s; }
+.egg-active .egg-heart:nth-child(2) { animation-delay: 0.1s; font-size: 11px; color: #fa9a1e; }
+.egg-active .egg-heart:nth-child(3) { animation-delay: 0.2s; font-size: 16px; }
+.egg-active .egg-heart:nth-child(4) { animation-delay: 0.15s; font-size: 10px; color: #e84e34; }
+.egg-active .egg-heart:nth-child(5) { animation-delay: 0.25s; font-size: 13px; color: #fa9a1e; }
+
+@keyframes heartFloat {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0) rotate(0deg);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(var(--hx, -10px), -15px) scale(1) rotate(var(--hr, -20deg));
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--hx2, -20px), -60px) scale(0.5) rotate(var(--hr2, -40deg));
+  }
+}
+.egg-heart:nth-child(1) { --hx: -18px; --hx2: -30px; --hr: -15deg; --hr2: -30deg; }
+.egg-heart:nth-child(2) { --hx: 8px;   --hx2: 20px;  --hr: 10deg;  --hr2: 25deg;  }
+.egg-heart:nth-child(3) { --hx: -5px;  --hx2: -10px; --hr: -25deg; --hr2: -45deg; }
+.egg-heart:nth-child(4) { --hx: 20px;  --hx2: 35px;  --hr: 20deg;  --hr2: 40deg;  }
+.egg-heart:nth-child(5) { --hx: -25px; --hx2: -40px; --hr: -10deg; --hr2: -35deg; }
+
+/* === 彩蛋2: 蒸汽（专业&工作） === */
+.egg-steam {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 40px;
+  pointer-events: none;
+  z-index: 10;
+}
+.egg-wisp {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  opacity: 0;
+  bottom: 0;
+}
+.egg-wisp:nth-child(1) { left: 6px; }
+.egg-wisp:nth-child(2) { left: 16px; }
+.egg-wisp:nth-child(3) { left: 26px; }
+
+.egg-active .egg-wisp {
+  animation: steamRise 1.4s ease-out forwards;
+}
+.egg-active .egg-wisp:nth-child(1) { animation-delay: 0s; }
+.egg-active .egg-wisp:nth-child(2) { animation-delay: 0.15s; }
+.egg-active .egg-wisp:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes steamRise {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.5);
+  }
+  20% {
+    opacity: 0.8;
+    transform: translateY(-8px) scale(1);
+  }
+  60% {
+    opacity: 0.5;
+    transform: translateY(-25px) scaleX(1.8) scaleY(0.6);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-45px) scaleX(2.5) scaleY(0.3);
+  }
+}
+
+/* === 彩蛋3: 山顶旗帜 + 星星爆发（隐藏技能） === */
+.egg-flag {
+  position: absolute;
+  top: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 32px;
+  pointer-events: none;
+  z-index: 10;
+  opacity: 0;
+}
+.egg-flag-svg {
+  width: 100%;
+  height: 100%;
+}
+.egg-active .egg-flag {
+  animation: flagPop 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+@keyframes flagPop {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(20px) scale(0);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-4px) scale(1.15);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+
+.egg-stars {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+.egg-star {
+  position: absolute;
+  font-size: 12px;
+  color: #fa9a1e;
+  opacity: 0;
+  top: 50%;
+  left: 50%;
+}
+.egg-active .egg-star {
+  animation: starBurst 0.8s ease-out forwards;
+}
+.egg-active .egg-star:nth-child(1) { animation-delay: 0.1s; --sx: -30px; --sy: -25px; }
+.egg-active .egg-star:nth-child(2) { animation-delay: 0.15s; --sx: 25px; --sy: -30px; font-size: 10px; color: #f37043; }
+.egg-active .egg-star:nth-child(3) { animation-delay: 0.2s; --sx: -20px; --sy: 15px; font-size: 14px; }
+.egg-active .egg-star:nth-child(4) { animation-delay: 0.25s; --sx: 30px; --sy: 10px; font-size: 9px; color: #e84e34; }
+
+@keyframes starBurst {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0) rotate(0deg);
+  }
+  40% {
+    opacity: 1;
+    transform: translate(var(--sx), var(--sy)) scale(1.2) rotate(180deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(var(--sx) * 1.5), calc(var(--sy) * 1.5)) scale(0) rotate(360deg);
+  }
+}
+
 /* ---- 装饰星球 ---- */
 /* 右下角大星球 — 从右下飞入 */
 .about-deco-planet {
@@ -2314,6 +2507,71 @@ html.is-loading {
 }
 .section-skills.in-view .skills-sat-5 .skills-sat-text {
   animation-delay: 3.3s;
+}
+
+@keyframes orbitSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes planetBurstIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0) rotate(180deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  }
+}
+
+@keyframes planetSpinFloat {
+  0% {
+    transform: rotate(0deg) translateY(0);
+  }
+  50% {
+    transform: rotate(180deg) translateY(-8px);
+  }
+  100% {
+    transform: rotate(360deg) translateY(0);
+  }
+}
+
+@keyframes glowPulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@keyframes satFlyIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+}
+
+@keyframes satTextDrop {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ============================================

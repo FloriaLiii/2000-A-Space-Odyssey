@@ -2447,6 +2447,48 @@
       }
 
       // (三列卡片布局，无需轨道定位JS)
+
+      // 图标彩蛋交互（点击 + 自动随机触发）
+      var eggArcs = aboutSection.querySelectorAll(".about-card-arc[data-egg]");
+
+      function triggerEgg(arc) {
+        if (arc.classList.contains("egg-active")) return;
+        arc.classList.add("egg-active");
+        setTimeout(function () {
+          arc.classList.remove("egg-active");
+        }, 1500);
+      }
+
+      // 点击触发
+      eggArcs.forEach(function (arc) {
+        arc.addEventListener("click", function () {
+          triggerEgg(arc);
+        });
+      });
+
+      // 自动随机触发（3~7秒间隔，随机选一个图标）
+      var autoEggTimer = null;
+      function scheduleAutoEgg() {
+        var delay = 3000 + Math.random() * 4000;
+        autoEggTimer = setTimeout(function () {
+          var idx = Math.floor(Math.random() * eggArcs.length);
+          triggerEgg(eggArcs[idx]);
+          scheduleAutoEgg();
+        }, delay);
+      }
+
+      // 仅在 section 可见时自动触发
+      var eggObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            if (!autoEggTimer) scheduleAutoEgg();
+          } else {
+            clearTimeout(autoEggTimer);
+            autoEggTimer = null;
+          }
+        });
+      }, { threshold: 0.3 });
+      eggObserver.observe(aboutSection);
     })();
 
     // ========== Skills Section (宇航员档案风格) ==========
