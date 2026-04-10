@@ -756,135 +756,225 @@
       <div class="about-cards">
         <!-- 卡片1: 关于我 -->
         <div class="about-card about-card-1">
-          <div class="about-card-arc" data-egg="people">
-            <svg viewBox="0 0 160 160" class="arc-svg">
-              <circle cx="80" cy="80" r="68" class="arc-circle" />
-            </svg>
-            <div class="about-card-icon">
-              <!-- 人物图标 -->
-              <svg
-                viewBox="0 0 64 64"
-                fill="white"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g transform="translate(2,4)">
-                  <circle cx="24" cy="18" r="9" />
-                  <path d="M10,44 C10,32 16,26 24,26 C32,26 38,32 38,44Z" />
-                  <circle cx="40" cy="22" r="7" />
-                  <path d="M30,46 C30,36 34,31 40,31 C46,31 50,36 50,46Z" />
-                </g>
-              </svg>
+          <!-- 星尘粒子容器 -->
+          <div class="flip-particles" aria-hidden="true">
+            <span class="flip-particle"></span><span class="flip-particle"></span>
+            <span class="flip-particle"></span><span class="flip-particle"></span>
+            <span class="flip-particle"></span><span class="flip-particle"></span>
+            <span class="flip-particle"></span><span class="flip-particle"></span>
+            <span class="flip-particle"></span><span class="flip-particle"></span>
+            <span class="flip-particle"></span><span class="flip-particle"></span>
+          </div>
+          <div class="about-card-inner">
+            <!-- 封面（初始可见，盖着的状态） -->
+            <div class="about-card-cover">
+              <div class="cover-deco-line"></div>
+              <div class="cover-icon-wrap" data-egg="people">
+                <div class="cover-icon">
+                  <svg viewBox="0 0 64 64" fill="white" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="translate(2,4)">
+                      <circle cx="24" cy="18" r="9" />
+                      <path d="M10,44 C10,32 16,26 24,26 C32,26 38,32 38,44Z" />
+                      <circle cx="40" cy="22" r="7" />
+                      <path d="M30,46 C30,36 34,31 40,31 C46,31 50,36 50,46Z" />
+                    </g>
+                  </svg>
+                </div>
+                <!-- 彩蛋：爱心粒子 -->
+                <div class="egg-hearts" aria-hidden="true">
+                  <span class="egg-heart">&#10084;</span>
+                  <span class="egg-heart">&#10084;</span>
+                  <span class="egg-heart">&#10084;</span>
+                  <span class="egg-heart">&#10084;</span>
+                  <span class="egg-heart">&#10084;</span>
+                </div>
+              </div>
+              <h4 class="cover-title">关于我</h4>
+              <span class="cover-hint">CLICK TO REVEAL</span>
+              <div class="cover-deco-line"></div>
             </div>
-            <!-- 彩蛋：爱心粒子 -->
-            <div class="egg-hearts" aria-hidden="true">
-              <span class="egg-heart">&#10084;</span>
-              <span class="egg-heart">&#10084;</span>
-              <span class="egg-heart">&#10084;</span>
-              <span class="egg-heart">&#10084;</span>
-              <span class="egg-heart">&#10084;</span>
+            <!-- 内容面（翻转后显示） -->
+            <div class="about-card-reveal">
+              <div class="about-card-arc" data-egg="people">
+                <svg viewBox="0 0 160 160" class="arc-svg">
+                  <circle cx="80" cy="80" r="68" class="arc-circle" />
+                </svg>
+                <div class="about-card-icon">
+                  <svg viewBox="0 0 64 64" fill="white" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="translate(2,4)">
+                      <circle cx="24" cy="18" r="9" />
+                      <path d="M10,44 C10,32 16,26 24,26 C32,26 38,32 38,44Z" />
+                      <circle cx="40" cy="22" r="7" />
+                      <path d="M30,46 C30,36 34,31 40,31 C46,31 50,36 50,46Z" />
+                    </g>
+                  </svg>
+                </div>
+                <div class="egg-hearts" aria-hidden="true">
+                  <span class="egg-heart">&#10084;</span>
+                  <span class="egg-heart">&#10084;</span>
+                  <span class="egg-heart">&#10084;</span>
+                  <span class="egg-heart">&#10084;</span>
+                  <span class="egg-heart">&#10084;</span>
+                </div>
+              </div>
+              <h4 class="about-card-title">关于我</h4>
+              <ul class="about-card-list">
+                <li>00后</li>
+                <li>创造力</li>
+                <li>抗压</li>
+                <li>完美主义</li>
+              </ul>
             </div>
           </div>
-          <h4 class="about-card-title">关于我</h4>
-          <ul class="about-card-list">
-            <li>00后</li>
-            <li>创造力</li>
-            <li>抗压</li>
-            <li>完美主义</li>
-          </ul>
         </div>
 
         <!-- 卡片2: 专业&工作 -->
         <div class="about-card about-card-2">
-          <div class="about-card-arc" data-egg="tea">
-            <svg viewBox="0 0 160 160" class="arc-svg">
-              <circle cx="80" cy="80" r="68" class="arc-circle" />
-            </svg>
-            <div class="about-card-icon">
-              <!-- 咖啡杯图标 -->
-              <svg
-                viewBox="0 0 64 64"
-                fill="white"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g transform="translate(-2,-5)">
-                  <rect x="12" y="16" width="32" height="34" rx="4" />
-                  <path
-                    d="M44,22 C52,22 56,26 56,32 C56,38 52,42 44,42"
-                    fill="none"
-                    stroke="white"
-                    stroke-width="3"
-                  />
-                  <rect x="12" y="54" width="32" height="4" rx="2" />
-                  <text
-                    x="28"
-                    y="40"
-                    text-anchor="middle"
-                    font-size="12"
-                    font-weight="bold"
-                    fill="rgba(0,0,0,0.3)"
-                  >
-                    tea
-                  </text>
-                </g>
-              </svg>
+          <div class="flip-particles" aria-hidden="true">
+            <span class="flip-particle"></span><span class="flip-particle"></span>
+            <span class="flip-particle"></span><span class="flip-particle"></span>
+            <span class="flip-particle"></span><span class="flip-particle"></span>
+            <span class="flip-particle"></span><span class="flip-particle"></span>
+            <span class="flip-particle"></span><span class="flip-particle"></span>
+            <span class="flip-particle"></span><span class="flip-particle"></span>
+          </div>
+          <div class="about-card-inner">
+            <!-- 封面 -->
+            <div class="about-card-cover">
+              <div class="cover-deco-line"></div>
+              <div class="cover-icon-wrap" data-egg="tea">
+                <div class="cover-icon">
+                  <svg viewBox="0 0 64 64" fill="white" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="translate(-2,-5)">
+                      <rect x="12" y="16" width="32" height="34" rx="4" />
+                      <path d="M44,22 C52,22 56,26 56,32 C56,38 52,42 44,42" fill="none" stroke="white" stroke-width="3" />
+                      <rect x="12" y="54" width="32" height="4" rx="2" />
+                      <text x="28" y="40" text-anchor="middle" font-size="12" font-weight="bold" fill="rgba(0,0,0,0.3)">tea</text>
+                    </g>
+                  </svg>
+                </div>
+                <!-- 彩蛋：蒸汽 -->
+                <div class="egg-steam" aria-hidden="true">
+                  <span class="egg-wisp"></span>
+                  <span class="egg-wisp"></span>
+                  <span class="egg-wisp"></span>
+                </div>
+              </div>
+              <h4 class="cover-title">专业&工作</h4>
+              <span class="cover-hint">CLICK TO REVEAL</span>
+              <div class="cover-deco-line"></div>
             </div>
-            <!-- 彩蛋：蒸汽 -->
-            <div class="egg-steam" aria-hidden="true">
-              <span class="egg-wisp"></span>
-              <span class="egg-wisp"></span>
-              <span class="egg-wisp"></span>
+            <!-- 内容面 -->
+            <div class="about-card-reveal">
+              <div class="about-card-arc" data-egg="tea">
+                <svg viewBox="0 0 160 160" class="arc-svg">
+                  <circle cx="80" cy="80" r="68" class="arc-circle" />
+                </svg>
+                <div class="about-card-icon">
+                  <svg viewBox="0 0 64 64" fill="white" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="translate(-2,-5)">
+                      <rect x="12" y="16" width="32" height="34" rx="4" />
+                      <path d="M44,22 C52,22 56,26 56,32 C56,38 52,42 44,42" fill="none" stroke="white" stroke-width="3" />
+                      <rect x="12" y="54" width="32" height="4" rx="2" />
+                      <text x="28" y="40" text-anchor="middle" font-size="12" font-weight="bold" fill="rgba(0,0,0,0.3)">tea</text>
+                    </g>
+                  </svg>
+                </div>
+                <div class="egg-steam" aria-hidden="true">
+                  <span class="egg-wisp"></span>
+                  <span class="egg-wisp"></span>
+                  <span class="egg-wisp"></span>
+                </div>
+              </div>
+              <h4 class="about-card-title">专业&工作</h4>
+              <ul class="about-card-list">
+                <li>西南大学</li>
+                <li>计算机科学与技术</li>
+                <li>Web前端</li>
+                <li>3年经验</li>
+                <li>CET-6</li>
+              </ul>
             </div>
           </div>
-          <h4 class="about-card-title">专业&工作</h4>
-          <ul class="about-card-list">
-            <li>西南大学</li>
-            <li>计算机科学与技术</li>
-            <li>Web前端</li>
-            <li>3年经验</li>
-            <li>CET-6</li>
-          </ul>
         </div>
 
         <!-- 卡片3: 隐藏技能 -->
         <div class="about-card about-card-3">
-          <div class="about-card-arc" data-egg="mountain">
-            <svg viewBox="0 0 160 160" class="arc-svg">
-              <circle cx="80" cy="80" r="68" class="arc-circle" />
-            </svg>
-            <div class="about-card-icon">
-              <!-- 山/图片图标 -->
-              <svg
-                viewBox="0 0 64 64"
-                fill="white"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g transform="translate(0,2)">
-                  <polygon points="32,12 54,48 10,48" />
-                  <polygon points="18,48 28,32 38,48" opacity="0.6" />
-                </g>
-              </svg>
+          <div class="flip-particles" aria-hidden="true">
+            <span class="flip-particle"></span><span class="flip-particle"></span>
+            <span class="flip-particle"></span><span class="flip-particle"></span>
+            <span class="flip-particle"></span><span class="flip-particle"></span>
+            <span class="flip-particle"></span><span class="flip-particle"></span>
+            <span class="flip-particle"></span><span class="flip-particle"></span>
+            <span class="flip-particle"></span><span class="flip-particle"></span>
+          </div>
+          <div class="about-card-inner">
+            <!-- 封面 -->
+            <div class="about-card-cover">
+              <div class="cover-deco-line"></div>
+              <div class="cover-icon-wrap" data-egg="mountain">
+                <div class="cover-icon">
+                  <svg viewBox="0 0 64 64" fill="white" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="translate(0,2)">
+                      <polygon points="32,12 54,48 10,48" />
+                      <polygon points="18,48 28,32 38,48" opacity="0.6" />
+                    </g>
+                  </svg>
+                </div>
+                <!-- 彩蛋：山顶小旗 + 星星 -->
+                <div class="egg-flag" aria-hidden="true">
+                  <svg viewBox="0 0 30 40" class="egg-flag-svg">
+                    <line x1="6" y1="0" x2="6" y2="36" stroke="white" stroke-width="2" />
+                    <polygon points="8,2 26,10 8,18" fill="#f37043" />
+                  </svg>
+                </div>
+                <div class="egg-stars" aria-hidden="true">
+                  <span class="egg-star">&#10022;</span>
+                  <span class="egg-star">&#10022;</span>
+                  <span class="egg-star">&#10022;</span>
+                  <span class="egg-star">&#10022;</span>
+                </div>
+              </div>
+              <h4 class="cover-title">隐藏技能</h4>
+              <span class="cover-hint">CLICK TO REVEAL</span>
+              <div class="cover-deco-line"></div>
             </div>
-            <!-- 彩蛋：山顶小旗 + 星星 -->
-            <div class="egg-flag" aria-hidden="true">
-              <svg viewBox="0 0 30 40" class="egg-flag-svg">
-                <line x1="6" y1="0" x2="6" y2="36" stroke="white" stroke-width="2" />
-                <polygon points="8,2 26,10 8,18" fill="#f37043" />
-              </svg>
-            </div>
-            <div class="egg-stars" aria-hidden="true">
-              <span class="egg-star">&#10022;</span>
-              <span class="egg-star">&#10022;</span>
-              <span class="egg-star">&#10022;</span>
-              <span class="egg-star">&#10022;</span>
+            <!-- 内容面 -->
+            <div class="about-card-reveal">
+              <div class="about-card-arc" data-egg="mountain">
+                <svg viewBox="0 0 160 160" class="arc-svg">
+                  <circle cx="80" cy="80" r="68" class="arc-circle" />
+                </svg>
+                <div class="about-card-icon">
+                  <svg viewBox="0 0 64 64" fill="white" xmlns="http://www.w3.org/2000/svg">
+                    <g transform="translate(0,2)">
+                      <polygon points="32,12 54,48 10,48" />
+                      <polygon points="18,48 28,32 38,48" opacity="0.6" />
+                    </g>
+                  </svg>
+                </div>
+                <div class="egg-flag" aria-hidden="true">
+                  <svg viewBox="0 0 30 40" class="egg-flag-svg">
+                    <line x1="6" y1="0" x2="6" y2="36" stroke="white" stroke-width="2" />
+                    <polygon points="8,2 26,10 8,18" fill="#f37043" />
+                  </svg>
+                </div>
+                <div class="egg-stars" aria-hidden="true">
+                  <span class="egg-star">&#10022;</span>
+                  <span class="egg-star">&#10022;</span>
+                  <span class="egg-star">&#10022;</span>
+                  <span class="egg-star">&#10022;</span>
+                </div>
+              </div>
+              <h4 class="about-card-title">隐藏技能</h4>
+              <ul class="about-card-list">
+                <li>文案创作</li>
+                <li>摄影</li>
+                <li>海报制作</li>
+                <li>团建策划</li>
+              </ul>
             </div>
           </div>
-          <h4 class="about-card-title">隐藏技能</h4>
-          <ul class="about-card-list">
-            <li>文案创作</li>
-            <li>摄影</li>
-            <li>海报制作</li>
-            <li>团建策划</li>
-          </ul>
         </div>
       </div>
 

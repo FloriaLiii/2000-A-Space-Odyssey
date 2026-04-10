@@ -2448,31 +2448,74 @@
 
       // (三列卡片布局，无需轨道定位JS)
 
-      // 图标彩蛋交互（点击 + 自动随机触发）
-      var eggArcs = aboutSection.querySelectorAll(".about-card-arc[data-egg]");
+      // 卡片翻转交互（C 星尘粒子 + E 联动退让）
+      var flipCards = aboutSection.querySelectorAll(".about-card");
+      var cardsContainer = aboutSection.querySelector(".about-cards");
 
-      function triggerEgg(arc) {
-        if (arc.classList.contains("egg-active")) return;
-        arc.classList.add("egg-active");
-        setTimeout(function () {
-          arc.classList.remove("egg-active");
-        }, 1500);
-      }
+      flipCards.forEach(function (card) {
+        card.addEventListener("click", function (e) {
+          // 翻转后点击彩蛋区域不翻回（让彩蛋优先）
+          if (card.classList.contains("flipped") && e.target.closest(".about-card-arc")) return;
 
-      // 点击触发
-      eggArcs.forEach(function (arc) {
-        arc.addEventListener("click", function () {
-          triggerEgg(arc);
+          var wasFlipped = card.classList.contains("flipped");
+
+          // 触发粒子爆炸动画（每次点击都有）
+          card.classList.add("flipping");
+          setTimeout(function () {
+            card.classList.remove("flipping");
+          }, 1000);
+
+          if (wasFlipped) {
+            // 翻回：清除自己 flipped
+            card.classList.remove("flipped");
+          } else {
+            // 翻开：先清掉其他卡片的 flipped（同一时间只能一张翻开）
+            flipCards.forEach(function (c) {
+              if (c !== card) c.classList.remove("flipped");
+            });
+            card.classList.add("flipped");
+          }
+
+          // 联动退让：容器根据是否有卡片翻开切换状态
+          var anyFlipped = Array.prototype.some.call(flipCards, function (c) {
+            return c.classList.contains("flipped");
+          });
+          if (anyFlipped) {
+            cardsContainer.classList.add("has-active");
+          } else {
+            cardsContainer.classList.remove("has-active");
+          }
         });
       });
 
-      // 自动随机触发（3~7秒间隔，随机选一个图标）
+      // 图标彩蛋自动触发（封面小图标上播放爱心/蒸汽/旗子动画）
+      var eggIcons = aboutSection.querySelectorAll(".cover-icon-wrap[data-egg]");
+
+      function triggerEgg(iconWrap) {
+        if (iconWrap.classList.contains("egg-active")) return;
+        // 所在卡片翻转后就不再播彩蛋，避免看不见却在运行
+        var parentCard = iconWrap.closest(".about-card");
+        if (parentCard && parentCard.classList.contains("flipped")) return;
+        iconWrap.classList.add("egg-active");
+        setTimeout(function () {
+          iconWrap.classList.remove("egg-active");
+        }, 1500);
+      }
+
+      // 自动随机触发（2.5~5秒间隔，随机选一个图标）
       var autoEggTimer = null;
       function scheduleAutoEgg() {
-        var delay = 3000 + Math.random() * 4000;
+        var delay = 2500 + Math.random() * 2500;
         autoEggTimer = setTimeout(function () {
-          var idx = Math.floor(Math.random() * eggArcs.length);
-          triggerEgg(eggArcs[idx]);
+          // 只从未翻转的卡片里选
+          var available = Array.prototype.filter.call(eggIcons, function (el) {
+            var card = el.closest(".about-card");
+            return !(card && card.classList.contains("flipped"));
+          });
+          if (available.length > 0) {
+            var idx = Math.floor(Math.random() * available.length);
+            triggerEgg(available[idx]);
+          }
           scheduleAutoEgg();
         }, delay);
       }

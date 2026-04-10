@@ -1139,24 +1139,248 @@ html.is-loading {
   max-width: 800px;
 }
 
-/* 单张卡片 — 容器仅控制可见性 */
+/* 单张卡片 — 3D翻转容器 */
 .about-card {
+  flex: 1;
+  opacity: 0;
+  transform: translateY(30px) scale(0.92);
+  perspective: 900px;
+  cursor: pointer;
+  position: relative;
+  transition: opacity 0.6s cubic-bezier(0.22, 0.61, 0.36, 1),
+              transform 0.6s cubic-bezier(0.22, 0.61, 0.36, 1),
+              filter 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.section-about.in-view .about-card {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.section-about.in-view .about-card-1 { transition-delay: 2.0s, 2.0s, 0s; }
+.section-about.in-view .about-card-2 { transition-delay: 2.4s, 2.4s, 0s; }
+.section-about.in-view .about-card-3 { transition-delay: 2.8s, 2.8s, 0s; }
+/* 翻转/联动时重置delay，让响应更灵敏 */
+.about-cards.has-active .about-card {
+  transition-delay: 0s !important;
+}
+
+/* ========== 方案 E：联动退让 ========== */
+/* 当有卡片被翻转时，其他卡片退让并变暗 */
+.about-cards.has-active .about-card:not(.flipped) {
+  filter: brightness(0.35) blur(2px) saturate(0.6);
+}
+.about-cards.has-active .about-card.about-card-1:not(.flipped) {
+  transform: translateX(-40px) scale(0.92);
+}
+.about-cards.has-active .about-card.about-card-3:not(.flipped) {
+  transform: translateX(40px) scale(0.92);
+}
+.about-cards.has-active .about-card.about-card-2:not(.flipped) {
+  transform: scale(0.88);
+}
+/* 被翻转的卡片稍微放大突出 */
+.about-cards.has-active .about-card.flipped {
+  transform: scale(1.05);
+  z-index: 10;
+}
+
+/* ========== 方案 C：星尘粒子爆炸 ========== */
+.flip-particles {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 20;
+}
+.flip-particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  top: -3px;
+  left: -3px;
+  border-radius: 50%;
+  opacity: 0;
+  box-shadow: 0 0 8px currentColor;
+}
+/* 12 颗粒子分布在不同方向，颜色交替 */
+.flip-particle:nth-child(1)  { --px: -90px;  --py: -65px; color: #f37043; background: #f37043; }
+.flip-particle:nth-child(2)  { --px: 90px;   --py: -75px; color: #fa9a1e; background: #fa9a1e; }
+.flip-particle:nth-child(3)  { --px: -100px; --py: 45px;  color: #fff;    background: #fff; }
+.flip-particle:nth-child(4)  { --px: 100px;  --py: 65px;  color: #f37043; background: #f37043; }
+.flip-particle:nth-child(5)  { --px: -45px;  --py: -110px;color: #fa9a1e; background: #fa9a1e; }
+.flip-particle:nth-child(6)  { --px: 45px;   --py: 110px; color: #fff;    background: #fff; }
+.flip-particle:nth-child(7)  { --px: -120px; --py: 5px;   color: #f37043; background: #f37043; }
+.flip-particle:nth-child(8)  { --px: 120px;  --py: -15px; color: #fa9a1e; background: #fa9a1e; }
+.flip-particle:nth-child(9)  { --px: -35px;  --py: 120px; color: #fff;    background: #fff; }
+.flip-particle:nth-child(10) { --px: 35px;   --py: -120px;color: #f37043; background: #f37043; }
+.flip-particle:nth-child(11) { --px: -130px; --py: 55px;  color: #fa9a1e; background: #fa9a1e; }
+.flip-particle:nth-child(12) { --px: 130px;  --py: -55px; color: #fff;    background: #fff; }
+
+.about-card.flipping .flip-particle {
+  animation: flipParticleBurst 1s ease-out forwards;
+}
+.about-card.flipping .flip-particle:nth-child(2n) { animation-delay: 0.03s; }
+.about-card.flipping .flip-particle:nth-child(3n) { animation-delay: 0.06s; }
+.about-card.flipping .flip-particle:nth-child(4n) { animation-delay: 0.09s; }
+
+@keyframes flipParticleBurst {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(calc(var(--px) * 0.3), calc(var(--py) * 0.3)) scale(1.3);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--px), var(--py)) scale(0.3);
+  }
+}
+.about-card-inner {
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s cubic-bezier(0.4, 0.0, 0.2, 1);
+  height: clamp(340px, 46vh, 440px);
+}
+.about-card.flipped .about-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* ---- 两面共用 ---- */
+.about-card-cover,
+.about-card-reveal {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
-  flex: 1;
-  opacity: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: clamp(24px, 3vw, 36px) clamp(16px, 2vw, 24px);
+  background: radial-gradient(ellipse at 50% 30%, rgba(90, 60, 120, 0.15) 0%, transparent 70%),
+              linear-gradient(165deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.01) 100%);
+  box-shadow:
+    0 0 0 1px rgba(243, 112, 67, 0.08) inset,
+    0 8px 32px rgba(0, 0, 0, 0.3);
 }
-.section-about.in-view .about-card {
-  animation: aboutCardShow 0.01s linear forwards;
+
+/* ---- 封面（初始可见，盖着的卡面） ---- */
+.about-card-cover {
+  transform: rotateY(0deg);
+  justify-content: center;
+  gap: clamp(12px, 1.5vh, 20px);
 }
-/* 三张卡片依次启动，大星球入场完(2.0s)后开始 */
-.section-about.in-view .about-card-1 { animation-delay: 2.0s; }
-.section-about.in-view .about-card-2 { animation-delay: 3.2s; }
-.section-about.in-view .about-card-3 { animation-delay: 4.4s; }
-@keyframes aboutCardShow {
-  to { opacity: 1; }
+.about-card:hover .about-card-cover {
+  border-color: rgba(243, 112, 67, 0.35);
+  box-shadow:
+    0 0 0 1px rgba(243, 112, 67, 0.15) inset,
+    0 0 20px rgba(243, 112, 67, 0.08),
+    0 8px 32px rgba(0, 0, 0, 0.3);
+  transition: border-color 0.4s, box-shadow 0.4s;
 }
+
+/* 封面装饰横线 */
+.cover-deco-line {
+  width: 50%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(243, 112, 67, 0.5), transparent);
+}
+
+/* 封面图标容器（承载彩蛋动画） */
+.cover-icon-wrap {
+  position: relative;
+  width: clamp(60px, 7vw, 80px);
+  height: clamp(60px, 7vw, 80px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* 封面图标 */
+.cover-icon {
+  width: 70%;
+  height: 70%;
+  opacity: 0.7;
+}
+.cover-icon svg {
+  width: 100%;
+  height: 100%;
+}
+/* 彩蛋激活时图标弹跳 */
+.cover-icon-wrap.egg-active .cover-icon {
+  animation: eggBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* 封面标题 */
+.cover-title {
+  font-family: "Noto Serif SC", "Songti SC", serif;
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 900;
+  color: var(--accent);
+  letter-spacing: 0.1em;
+  text-align: center;
+}
+
+/* 封面提示文字 */
+.cover-hint {
+  font-family: "Orbitron", monospace;
+  font-size: clamp(9px, 0.9vw, 11px);
+  color: rgba(255, 255, 255, 0.25);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  transition: color 0.4s;
+}
+.about-card:hover .cover-hint {
+  color: rgba(243, 112, 67, 0.6);
+}
+
+/* ---- 内容面（翻转后显示） ---- */
+.about-card-reveal {
+  transform: rotateY(180deg);
+  justify-content: center;
+  gap: clamp(10px, 1.5vh, 18px);
+  border-color: rgba(243, 112, 67, 0.25);
+}
+/* 翻页后隐藏大圆弧图标（节省空间） */
+.about-card-reveal .about-card-arc {
+  display: none;
+}
+/* 内容面的标题更大更突出 */
+.about-card-reveal .about-card-title {
+  font-size: clamp(22px, 2.4vw, 30px);
+  margin-bottom: clamp(6px, 1vh, 12px);
+  padding-bottom: clamp(8px, 1.2vh, 14px);
+  border-bottom: 1px solid rgba(243, 112, 67, 0.25);
+  min-width: 60%;
+}
+.about-card-reveal .about-card-list li {
+  font-size: clamp(16px, 1.6vw, 20px);
+  line-height: 2.2;
+}
+/* 翻转后内容面的标题和列表直接可见，不需要入场动画 */
+.about-card.flipped .about-card-title,
+.about-card.flipped .about-card-list li {
+  opacity: 1;
+  transform: translateY(0);
+  animation: none;
+}
+.about-card.flipped .about-card-icon {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+  animation: none;
+}
+.about-card.flipped .arc-circle {
+  stroke-dashoffset: 0;
+  animation: none;
+}
+/* 入场动画已改为 transition（在顶部 .about-card 定义） */
 
 /* ---- 圆弧容器 ---- */
 .about-card-arc {
@@ -1189,16 +1413,7 @@ html.is-loading {
   stroke-dashoffset: 320;
   stroke-linecap: round;
 }
-/* 圆弧擦出：从顶部逆时针展开 */
-.section-about.in-view .about-card-1 .arc-circle {
-  animation: arcWipeIn 0.8s ease-out 2.0s forwards;
-}
-.section-about.in-view .about-card-2 .arc-circle {
-  animation: arcWipeIn 0.8s ease-out 3.2s forwards;
-}
-.section-about.in-view .about-card-3 .arc-circle {
-  animation: arcWipeIn 0.8s ease-out 4.4s forwards;
-}
+/* 圆弧擦出：翻转后才播放（不再跟随入场动画） */
 @keyframes arcWipeIn {
   from {
     stroke-dashoffset: 320;
@@ -1224,16 +1439,7 @@ html.is-loading {
   width: 100%;
   height: 100%;
 }
-/* 图标：逆时针从小到大旋转出现（圆弧擦出后） */
-.section-about.in-view .about-card-1 .about-card-icon {
-  animation: iconSpinIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 2.6s forwards;
-}
-.section-about.in-view .about-card-2 .about-card-icon {
-  animation: iconSpinIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 3.8s forwards;
-}
-.section-about.in-view .about-card-3 .about-card-icon {
-  animation: iconSpinIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 5.0s forwards;
-}
+/* 图标：翻转后才显示（不再跟随入场动画） */
 @keyframes iconSpinIn {
   from {
     opacity: 0;
@@ -1257,16 +1463,7 @@ html.is-loading {
   opacity: 0;
   transform: translateY(-15px);
 }
-/* 标题跳落（图标出现后） */
-.section-about.in-view .about-card-1 .about-card-title {
-  animation: textDropIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 3.1s forwards;
-}
-.section-about.in-view .about-card-2 .about-card-title {
-  animation: textDropIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 4.3s forwards;
-}
-.section-about.in-view .about-card-3 .about-card-title {
-  animation: textDropIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) 5.5s forwards;
-}
+/* 标题和列表不再需要入场动画（在reveal面，翻转后直接可见） */
 
 /* ---- 卡片列表 ---- */
 .about-card-list {
@@ -1283,23 +1480,6 @@ html.is-loading {
   opacity: 0;
   transform: translateY(-12px);
 }
-/* 列表项逐行跳落 */
-.section-about.in-view .about-card-1 .about-card-list li:nth-child(1) { animation: textDropIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 3.25s forwards; }
-.section-about.in-view .about-card-1 .about-card-list li:nth-child(2) { animation: textDropIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 3.35s forwards; }
-.section-about.in-view .about-card-1 .about-card-list li:nth-child(3) { animation: textDropIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 3.45s forwards; }
-.section-about.in-view .about-card-1 .about-card-list li:nth-child(4) { animation: textDropIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 3.55s forwards; }
-.section-about.in-view .about-card-1 .about-card-list li:nth-child(5) { animation: textDropIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 3.65s forwards; }
-
-.section-about.in-view .about-card-2 .about-card-list li:nth-child(1) { animation: textDropIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 4.45s forwards; }
-.section-about.in-view .about-card-2 .about-card-list li:nth-child(2) { animation: textDropIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 4.55s forwards; }
-.section-about.in-view .about-card-2 .about-card-list li:nth-child(3) { animation: textDropIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 4.65s forwards; }
-.section-about.in-view .about-card-2 .about-card-list li:nth-child(4) { animation: textDropIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 4.75s forwards; }
-.section-about.in-view .about-card-2 .about-card-list li:nth-child(5) { animation: textDropIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 4.85s forwards; }
-
-.section-about.in-view .about-card-3 .about-card-list li:nth-child(1) { animation: textDropIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 5.65s forwards; }
-.section-about.in-view .about-card-3 .about-card-list li:nth-child(2) { animation: textDropIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 5.75s forwards; }
-.section-about.in-view .about-card-3 .about-card-list li:nth-child(3) { animation: textDropIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 5.85s forwards; }
-.section-about.in-view .about-card-3 .about-card-list li:nth-child(4) { animation: textDropIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) 5.95s forwards; }
 
 @keyframes textDropIn {
   from {
