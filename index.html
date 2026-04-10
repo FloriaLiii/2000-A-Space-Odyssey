@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LIKANGJUE星际漫游指南</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="stylesheet" href="css/style.css?v=3" />
+    <link rel="stylesheet" href="css/style.css?v=8" />
     <!-- Leaflet (轻量地图渲染) -->
     <link
       rel="stylesheet"
@@ -789,7 +789,7 @@
                   <span class="egg-heart">&#10084;</span>
                 </div>
               </div>
-              <h4 class="cover-title">关于我</h4>
+              <h4 class="cover-title">身份铭牌</h4>
               <span class="cover-hint">CLICK TO REVEAL</span>
               <div class="cover-deco-line"></div>
             </div>
@@ -817,7 +817,7 @@
                   <span class="egg-heart">&#10084;</span>
                 </div>
               </div>
-              <h4 class="about-card-title">关于我</h4>
+              <h4 class="about-card-title">身份铭牌</h4>
               <ul class="about-card-list">
                 <li>00后</li>
                 <li>创造力</li>
@@ -860,7 +860,7 @@
                   <span class="egg-wisp"></span>
                 </div>
               </div>
-              <h4 class="cover-title">专业&工作</h4>
+              <h4 class="cover-title">训练履历</h4>
               <span class="cover-hint">CLICK TO REVEAL</span>
               <div class="cover-deco-line"></div>
             </div>
@@ -886,7 +886,7 @@
                   <span class="egg-wisp"></span>
                 </div>
               </div>
-              <h4 class="about-card-title">专业&工作</h4>
+              <h4 class="about-card-title">训练履历</h4>
               <ul class="about-card-list">
                 <li>西南大学</li>
                 <li>计算机科学与技术</li>
@@ -935,7 +935,7 @@
                   <span class="egg-star">&#10022;</span>
                 </div>
               </div>
-              <h4 class="cover-title">隐藏技能</h4>
+              <h4 class="cover-title">秘密装备</h4>
               <span class="cover-hint">CLICK TO REVEAL</span>
               <div class="cover-deco-line"></div>
             </div>
@@ -966,13 +966,50 @@
                   <span class="egg-star">&#10022;</span>
                 </div>
               </div>
-              <h4 class="about-card-title">隐藏技能</h4>
-              <ul class="about-card-list">
-                <li>文案创作</li>
-                <li>摄影</li>
-                <li>海报制作</li>
-                <li>团建策划</li>
-              </ul>
+              <h4 class="about-card-title">秘密装备</h4>
+              <div class="icon-matrix">
+                <div class="matrix-item" style="--i:0">
+                  <div class="matrix-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/>
+                      <circle cx="12" cy="13" r="4"/>
+                    </svg>
+                  </div>
+                  <div class="matrix-label">摄影</div>
+                </div>
+                <div class="matrix-item" style="--i:1">
+                  <div class="matrix-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="2" width="6" height="12" rx="3"/>
+                      <path d="M5 10v2a7 7 0 0014 0v-2"/>
+                      <line x1="12" y1="19" x2="12" y2="23"/>
+                      <line x1="8" y1="23" x2="16" y2="23"/>
+                    </svg>
+                  </div>
+                  <div class="matrix-label">说唱</div>
+                </div>
+                <div class="matrix-item" style="--i:2">
+                  <div class="matrix-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="3" width="18" height="18" rx="2"/>
+                      <circle cx="8.5" cy="8.5" r="1.5"/>
+                      <path d="M21 15l-5-5L5 21"/>
+                    </svg>
+                  </div>
+                  <div class="matrix-label">海报制作</div>
+                </div>
+                <div class="matrix-item" style="--i:3">
+                  <div class="matrix-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                      <circle cx="9" cy="7" r="4"/>
+                      <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+                      <path d="M16 3.13a4 4 0 010 7.75"/>
+                    </svg>
+                  </div>
+                  <div class="matrix-label">团建策划</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1809,6 +1846,19 @@
       </div>
     </div>
 
+    <!-- 隐藏技能 侧边抽屉 -->
+    <div class="skill-drawer-backdrop" id="skillDrawerBackdrop"></div>
+    <aside class="skill-drawer" id="skillDrawer" aria-hidden="true">
+      <header class="skill-drawer-header">
+        <div class="skill-drawer-titlebar">
+          <span class="skill-drawer-eyebrow">SKILL SHOWCASE</span>
+          <h3 class="skill-drawer-title"></h3>
+        </div>
+        <button class="skill-drawer-close" aria-label="关闭">&times;</button>
+      </header>
+      <div class="skill-drawer-body" id="skillDrawerBody"></div>
+    </aside>
+
     <!-- ===== Section 7: Contact — 星球主题 ===== -->
     <section class="section section-contact" id="contact">
       <!-- 星空背景粒子（canvas） -->
@@ -2138,7 +2188,7 @@
 
     <link rel="stylesheet" href="css/comm-panel.css" />
     <script src="js/comm-panel.js"></script>
-    <script src="js/main.js?v=17"></script>
+    <script src="js/main.js?v=31"></script>
     <script>
       // 移动端提示雪花噪点
       (function () {

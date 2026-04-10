@@ -7,6 +7,33 @@
   "use strict";
 
   // ==========================================
+  // Scroll Lock (页面主滚动容器是 <html>,不是 <body>)
+  // 使用引用计数,避免嵌套弹层互相干扰
+  // ==========================================
+  var __scrollLockCount = 0;
+  function lockScroll() {
+    if (__scrollLockCount === 0) {
+      var docEl = document.documentElement;
+      var scrollbarW = window.innerWidth - docEl.clientWidth;
+      docEl.style.overflow = "hidden";
+      if (scrollbarW > 0) {
+        docEl.style.paddingRight = scrollbarW + "px";
+      }
+      document.body.style.overflow = "hidden";
+    }
+    __scrollLockCount++;
+  }
+  function unlockScroll() {
+    __scrollLockCount = Math.max(0, __scrollLockCount - 1);
+    if (__scrollLockCount === 0) {
+      var docEl = document.documentElement;
+      docEl.style.overflow = "";
+      docEl.style.paddingRight = "";
+      document.body.style.overflow = "";
+    }
+  }
+
+  // ==========================================
   // Starfield System (PPT 繁星闪烁效果)
   // Static white dots that twinkle — appear & disappear
   // ==========================================
@@ -230,7 +257,9 @@
         }, 300);
       };
       if (document.documentElement.classList.contains("is-loading")) {
-        document.addEventListener("loaderDismissed", triggerLanding, { once: true });
+        document.addEventListener("loaderDismissed", triggerLanding, {
+          once: true,
+        });
       } else {
         triggerLanding();
       }
@@ -442,7 +471,10 @@
       this.currentIndex = 0;
 
       // 从 photos.json 动态加载照片列表
-      fetch("https://img.likangjue.space/assets/hobbies/photos.json?v=" + Date.now())
+      fetch(
+        "https://img.likangjue.space/assets/hobbies/photos.json?v=" +
+          Date.now(),
+      )
         .then((r) => r.json())
         .then((data) => {
           this.photos = data;
@@ -479,19 +511,55 @@
       });
     }
 
-    open(hobby, title) {
+    open(hobby, title, returnCtx) {
       this.currentPhotos = this.photos[hobby] || [];
       this.currentIndex = 0;
       this.titleEl.textContent = title;
       this.renderDots();
       this.showPhoto(false);
+      this.returnCtx = returnCtx || null;
+      this.renderReturnBtn();
       this.modal.classList.add("active");
-      document.body.style.overflow = "hidden";
+      if (!this._locked) {
+        lockScroll();
+        this._locked = true;
+      }
     }
 
     close() {
       this.modal.classList.remove("active");
-      document.body.style.overflow = "";
+      if (this._locked) {
+        unlockScroll();
+        this._locked = false;
+      }
+      this.returnCtx = null;
+      var existing = this.modal.querySelector(".hobby-modal-return");
+      if (existing) existing.remove();
+    }
+
+    renderReturnBtn() {
+      var existing = this.modal.querySelector(".hobby-modal-return");
+      if (existing) existing.remove();
+      if (!this.returnCtx) return;
+      var self = this;
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "hobby-modal-return";
+      btn.innerHTML =
+        '<svg viewBox="0 0 24 24"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>' +
+        (this.returnCtx.label || "返回");
+      btn.addEventListener("click", function () {
+        var ctx = self.returnCtx;
+        self.close();
+        setTimeout(function () {
+          var target = document.querySelector(ctx.target || "#about");
+          if (target)
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 280);
+      });
+      // 放到 modal-content 内(position: absolute 相对 content)
+      var content = this.modal.querySelector(".hobby-modal-content");
+      if (content) content.appendChild(btn);
     }
 
     prev() {
@@ -557,6 +625,250 @@
       this.dotsEl.querySelectorAll(".hobby-modal-dot").forEach((dot, i) => {
         dot.classList.toggle("active", i === this.currentIndex);
       });
+    }
+  }
+
+  // ==========================================
+  // Skill Gallery Modal (隐藏技能)
+  // ==========================================
+  var SKILL_DATA = {
+    photography: {
+      title: "摄影",
+      items: [
+        {
+          src: "https://img.likangjue.space/assets/skills/photography.jpg",
+          desc: "频繁记录是为了让幸福可以翻阅。",
+          portfolio: {
+            label: "查看作品集",
+            target: "#hobbies",
+            hobby: "photography",
+          },
+        },
+      ],
+    },
+    rap: {
+      title: "说唱",
+      items: [
+        {
+          images: [
+            "https://img.likangjue.space/assets/skills/rap-2.jpg",
+            "https://img.likangjue.space/assets/skills/rap-1.jpg",
+          ],
+          desc: "只想跟懂我的说一声幸会。",
+        },
+      ],
+    },
+    poster: {
+      title: "海报制作",
+      items: [
+        {
+          images: [
+            "https://img.likangjue.space/assets/skills/poster-2.jpg",
+            "https://img.likangjue.space/assets/skills/poster.jpg",
+          ],
+          long: true,
+          desc: "慢慢铺一张长图是为了让努力都能被看见。",
+        },
+      ],
+    },
+    team: {
+      title: "团建策划",
+      items: [
+        {
+          images: [
+            "https://img.likangjue.space/assets/skills/team-notes.jpg",
+            "https://img.likangjue.space/assets/skills/team-chat.jpg",
+          ],
+          long: true,
+          desc: "接住所有琐碎是为了让大家只管尽兴。",
+        },
+      ],
+    },
+  };
+
+  class SkillDrawer {
+    constructor() {
+      this.drawer = document.getElementById("skillDrawer");
+      this.backdrop = document.getElementById("skillDrawerBackdrop");
+      if (!this.drawer || !this.backdrop) return;
+
+      this.titleEl = this.drawer.querySelector(".skill-drawer-title");
+      this.bodyEl = this.drawer.querySelector(".skill-drawer-body");
+      this.closeBtn = this.drawer.querySelector(".skill-drawer-close");
+
+      this.bindEvents();
+    }
+
+    bindEvents() {
+      var self = this;
+      // 点击 隐藏技能 图标矩阵
+      document
+        .querySelectorAll(".about-card-3 .matrix-item")
+        .forEach(function (item) {
+          item.addEventListener("click", function (e) {
+            e.stopPropagation();
+            var parentCard = item.closest(".about-card");
+            if (!parentCard || !parentCard.classList.contains("flipped"))
+              return;
+            var labelEl = item.querySelector(".matrix-label");
+            var label = labelEl ? labelEl.textContent.trim() : "";
+            var key = {
+              摄影: "photography",
+              说唱: "rap",
+              海报制作: "poster",
+              团建策划: "team",
+            }[label];
+            if (key) self.open(key);
+          });
+        });
+
+      this.closeBtn.addEventListener("click", function () {
+        self.close();
+      });
+      this.backdrop.addEventListener("click", function () {
+        self.close();
+      });
+
+      document.addEventListener("keydown", function (e) {
+        if (!self.drawer.classList.contains("active")) return;
+        if (e.key === "Escape") self.close();
+      });
+    }
+
+    open(key) {
+      var data = SKILL_DATA[key];
+      if (!data) return;
+      this.titleEl.textContent = data.title;
+      this.renderItems(data.items || []);
+      this.drawer.classList.add("active");
+      this.backdrop.classList.add("active");
+      this.drawer.setAttribute("aria-hidden", "false");
+      if (!this._locked) {
+        lockScroll();
+        this._locked = true;
+      }
+      // 滚到顶
+      this.bodyEl.scrollTop = 0;
+    }
+
+    close() {
+      this.drawer.classList.remove("active");
+      this.backdrop.classList.remove("active");
+      this.drawer.setAttribute("aria-hidden", "true");
+      if (this._locked) {
+        unlockScroll();
+        this._locked = false;
+      }
+    }
+
+    renderItems(items) {
+      var self = this;
+      var frag = document.createDocumentFragment();
+      items.forEach(function (item) {
+        var wrap = document.createElement("div");
+        var hasImage = !!(item.src || (item.images && item.images.length));
+        wrap.className = "skill-drawer-item" + (hasImage ? "" : " no-image");
+
+        if (item.tag) {
+          var tag = document.createElement("span");
+          tag.className = "skill-drawer-tag";
+          tag.textContent = item.tag;
+          wrap.appendChild(tag);
+        }
+        if (item.heading) {
+          var h = document.createElement("h4");
+          h.className = "skill-drawer-heading";
+          h.textContent = item.heading;
+          wrap.appendChild(h);
+        }
+        if (item.desc) {
+          var p = document.createElement("p");
+          p.className = "skill-drawer-desc";
+          p.textContent = item.desc;
+          wrap.appendChild(p);
+        }
+        // 图片集合:支持 images 数组 或 单张 src
+        var imgList =
+          item.images && item.images.length
+            ? item.images
+            : item.src
+              ? [item.src]
+              : [];
+        if (imgList.length) {
+          imgList.forEach(function (srcPath) {
+            var img = document.createElement("img");
+            img.className = "skill-drawer-img";
+            img.src = srcPath;
+            img.alt = item.heading || "";
+            img.loading = "lazy";
+            // 点击图片:有 portfolio 的跳转作品集,否则打开原图
+            img.addEventListener("click", function () {
+              if (item.portfolio) {
+                self.gotoPortfolio(item.portfolio);
+              } else {
+                window.open(srcPath, "_blank", "noopener");
+              }
+            });
+            wrap.appendChild(img);
+          });
+
+          if (item.portfolio) {
+            wrap.appendChild(document.createElement("br"));
+            // 查看作品集 按钮:跳到 私人星图 对应爱好
+            var pbtn = document.createElement("button");
+            pbtn.type = "button";
+            pbtn.className = "skill-drawer-view-orig";
+            pbtn.innerHTML =
+              '<svg viewBox="0 0 24 24">' +
+              '<rect x="3" y="3" width="7" height="7" rx="1"/>' +
+              '<rect x="14" y="3" width="7" height="7" rx="1"/>' +
+              '<rect x="3" y="14" width="7" height="7" rx="1"/>' +
+              '<rect x="14" y="14" width="7" height="7" rx="1"/>' +
+              "</svg>" +
+              (item.portfolio.label || "查看作品集");
+            pbtn.addEventListener("click", function (e) {
+              e.preventDefault();
+              self.gotoPortfolio(item.portfolio);
+            });
+            wrap.appendChild(pbtn);
+          }
+        }
+        frag.appendChild(wrap);
+      });
+      this.bodyEl.innerHTML = "";
+      this.bodyEl.appendChild(frag);
+    }
+
+    gotoPortfolio(portfolio) {
+      // 1) 关闭抽屉
+      this.close();
+      // 2) 翻回第三张卡(隐藏技能)的封面，让页面状态干净
+      var card3 = document.querySelector(".about-card-3");
+      if (card3 && card3.classList.contains("flipped")) {
+        card3.classList.remove("flipped");
+        var container = document.querySelector(".about-cards");
+        if (container) container.classList.remove("has-active");
+      }
+      // 3) 滚动到 私人星图 section
+      setTimeout(function () {
+        var target = document.querySelector(portfolio.target || "#hobbies");
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+        // 4) 等滚动完成后，直接打开 HobbyGallery 并传入返回上下文
+        if (portfolio.hobby && window.__hobbyGallery) {
+          setTimeout(function () {
+            var planet = document.querySelector(
+              ".hobby-" + portfolio.hobby + " .hobby-planet",
+            );
+            var titleText = planet ? planet.dataset.title : "";
+            window.__hobbyGallery.open(portfolio.hobby, titleText, {
+              label: "返回宇航员档案",
+              target: "#about",
+            });
+          }, 900);
+        }
+      }, 380);
     }
   }
 
@@ -645,9 +957,10 @@
     // 收集需要等待的图片：排除私人星图照片和 loading 星球自身
     const allImgs = Array.from(document.querySelectorAll("img"));
     const criticalImgs = allImgs.filter(
-      (img) => !img.classList.contains("hobby-card-img")
-            && !img.classList.contains("loading-sphere")
-            && img.src,
+      (img) =>
+        !img.classList.contains("hobby-card-img") &&
+        !img.classList.contains("loading-sphere") &&
+        img.src,
     );
 
     let loaded = 0;
@@ -657,7 +970,11 @@
       loaded++;
       const pct = Math.min(Math.round((loaded / total) * 100), 100);
       // 更新轨道环绘制进度
-      if (orbitSvg) orbitSvg.style.setProperty("--orbit-progress", (pct / 100 * 360) + "deg");
+      if (orbitSvg)
+        orbitSvg.style.setProperty(
+          "--orbit-progress",
+          (pct / 100) * 360 + "deg",
+        );
       if (percentEl) percentEl.textContent = pct + "%";
       if (loaded >= total) dismissLoader();
     }
@@ -679,15 +996,20 @@
           document.dispatchEvent(new Event("loaderDismissed"));
           if (overlay) overlay.classList.add("hidden");
           setTimeout(() => {
-            if (overlay && overlay.parentNode) overlay.parentNode.removeChild(overlay);
+            if (overlay && overlay.parentNode)
+              overlay.parentNode.removeChild(overlay);
           }, 700);
           preloadHobbyPhotos();
+          preloadSkillImages();
         }, 1200);
       }, 400);
     }
 
     function preloadHobbyPhotos() {
-      fetch("https://img.likangjue.space/assets/hobbies/photos.json?v=" + Date.now())
+      fetch(
+        "https://img.likangjue.space/assets/hobbies/photos.json?v=" +
+          Date.now(),
+      )
         .then((r) => r.json())
         .then((data) => {
           const urls = Object.values(data).flat();
@@ -697,6 +1019,27 @@
           });
         })
         .catch(() => {});
+    }
+
+    // 后台预加载「隐藏技能」抽屉里的图片，走 SKILL_DATA 同一个闭包
+    function preloadSkillImages() {
+      try {
+        Object.values(SKILL_DATA).forEach(function (cat) {
+          (cat.items || []).forEach(function (item) {
+            var urls = [];
+            if (item.src) urls.push(item.src);
+            if (item.images && item.images.length) {
+              item.images.forEach(function (u) {
+                urls.push(u);
+              });
+            }
+            urls.forEach(function (url) {
+              var img = new Image();
+              img.src = url;
+            });
+          });
+        });
+      } catch (e) {}
     }
 
     criticalImgs.forEach((img) => {
@@ -729,7 +1072,10 @@
     new ScrollAnimator();
 
     // Hobby gallery modal
-    new HobbyGallery();
+    window.__hobbyGallery = new HobbyGallery();
+
+    // Skill drawer (隐藏技能 卡片点击)
+    new SkillDrawer();
 
     // Draw hobby orbits — 等入场动画完成后再绘制，避免跳动
     window.addEventListener("load", () => {
@@ -2455,7 +2801,11 @@
       flipCards.forEach(function (card) {
         card.addEventListener("click", function (e) {
           // 翻转后点击彩蛋区域不翻回（让彩蛋优先）
-          if (card.classList.contains("flipped") && e.target.closest(".about-card-arc")) return;
+          if (
+            card.classList.contains("flipped") &&
+            e.target.closest(".about-card-arc")
+          )
+            return;
 
           var wasFlipped = card.classList.contains("flipped");
 
@@ -2489,7 +2839,9 @@
       });
 
       // 图标彩蛋自动触发（封面小图标上播放爱心/蒸汽/旗子动画）
-      var eggIcons = aboutSection.querySelectorAll(".cover-icon-wrap[data-egg]");
+      var eggIcons = aboutSection.querySelectorAll(
+        ".cover-icon-wrap[data-egg]",
+      );
 
       function triggerEgg(iconWrap) {
         if (iconWrap.classList.contains("egg-active")) return;
@@ -2521,16 +2873,19 @@
       }
 
       // 仅在 section 可见时自动触发
-      var eggObserver = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            if (!autoEggTimer) scheduleAutoEgg();
-          } else {
-            clearTimeout(autoEggTimer);
-            autoEggTimer = null;
-          }
-        });
-      }, { threshold: 0.3 });
+      var eggObserver = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              if (!autoEggTimer) scheduleAutoEgg();
+            } else {
+              clearTimeout(autoEggTimer);
+              autoEggTimer = null;
+            }
+          });
+        },
+        { threshold: 0.3 },
+      );
       eggObserver.observe(aboutSection);
     })();
 
