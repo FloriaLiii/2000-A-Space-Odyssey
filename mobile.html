@@ -80,11 +80,7 @@
             rgba(118, 70, 92, 0.18) 0%,
             transparent 50%
           ),
-          radial-gradient(
-            ellipse at 50% 50%,
-            #1f1428 0%,
-            #15091f 100%
-          );
+          radial-gradient(ellipse at 50% 50%, #1f1428 0%, #15091f 100%);
         pointer-events: none;
         z-index: 0;
       }
@@ -259,10 +255,11 @@
       }
 
       .card {
+        position: relative;
         background: var(--bg-card);
         backdrop-filter: blur(10px);
         -webkit-backdrop-filter: blur(10px);
-        border: 1px solid var(--border);
+        border: 1px solid rgba(243, 112, 67, 0.25);
         border-radius: 16px;
         padding: 24px 22px;
         opacity: 0;
@@ -278,6 +275,117 @@
       }
       .card:active {
         border-color: var(--border-hi);
+      }
+
+      /* ===== HUD Brief: 四角括号 + 状态徽章 + 分隔 + 章节标签 ===== */
+      .card::before,
+      .card::after,
+      .card-corner-bl,
+      .card-corner-br {
+        content: "";
+        position: absolute;
+        width: 14px;
+        height: 14px;
+        border: 1.5px solid var(--accent);
+        pointer-events: none;
+      }
+      .card::before {
+        top: -1px;
+        left: -1px;
+        border-right: none;
+        border-bottom: none;
+        border-top-left-radius: 6px;
+      }
+      .card::after {
+        top: -1px;
+        right: -1px;
+        border-left: none;
+        border-bottom: none;
+        border-top-right-radius: 6px;
+      }
+      .card-corner-bl {
+        bottom: -1px;
+        left: -1px;
+        border-right: none;
+        border-top: none;
+        border-bottom-left-radius: 6px;
+      }
+      .card-corner-br {
+        bottom: -1px;
+        right: -1px;
+        border-left: none;
+        border-top: none;
+        border-bottom-right-radius: 6px;
+      }
+
+      .card-badge {
+        position: absolute;
+        top: 14px;
+        right: 26px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-family: "Orbitron", monospace;
+        font-size: 0.58rem;
+        font-weight: 700;
+        color: var(--rose);
+        letter-spacing: 0.18em;
+        z-index: 3;
+      }
+      .card-badge::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #67d49e;
+        box-shadow: 0 0 8px rgba(103, 212, 158, 0.8);
+        animation: card-dot 1.6s ease-in-out infinite;
+      }
+      @keyframes card-dot {
+        0%,
+        100% {
+          opacity: 0.5;
+          transform: scale(0.9);
+        }
+        50% {
+          opacity: 1;
+          transform: scale(1.15);
+        }
+      }
+
+      .card-divider {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin: -4px 0 18px;
+      }
+      .card-divider-line {
+        flex: 1;
+        height: 1px;
+        background: repeating-linear-gradient(
+          90deg,
+          rgba(243, 112, 67, 0.4) 0,
+          rgba(243, 112, 67, 0.4) 4px,
+          transparent 4px,
+          transparent 8px
+        );
+      }
+      .card-divider-arrow {
+        font-family: "Orbitron", monospace;
+        color: var(--accent);
+        font-size: 0.8rem;
+      }
+
+      .card-chapter {
+        display: block;
+        margin-top: 18px;
+        padding-top: 2px;
+        text-align: right;
+        font-family: "Orbitron", monospace;
+        font-size: 0.62rem;
+        font-weight: 700;
+        color: var(--text-dim);
+        letter-spacing: 0.25em;
       }
 
       /* ===== Card Header (ported from desktop section headers) ===== */
@@ -622,6 +730,9 @@
     <main>
       <!-- 01 About -->
       <section class="card">
+        <span class="card-corner-bl"></span>
+        <span class="card-corner-br"></span>
+        <span class="card-badge">MISSION 01</span>
         <div class="card-header">
           <div class="card-header-planet">
             <img
@@ -632,6 +743,10 @@
             <span class="card-num">01</span>
           </div>
           <h2 class="card-title">宇航员档案</h2>
+        </div>
+        <div class="card-divider">
+          <span class="card-divider-line"></span>
+          <span class="card-divider-arrow">→</span>
         </div>
         <p>
           我是黎康珏，00
@@ -645,10 +760,14 @@
           <span class="trait">勇气</span>
         </div>
         <p class="slogan">想要的船我自己造，不怕风越大浪越高</p>
+        <span class="card-chapter">— CHAPTER I —</span>
       </section>
 
       <!-- 02 Timeline -->
       <section class="card">
+        <span class="card-corner-bl"></span>
+        <span class="card-corner-br"></span>
+        <span class="card-badge">MISSION 02</span>
         <div class="card-header">
           <div class="card-header-planet">
             <img
@@ -659,6 +778,10 @@
             <span class="card-num">02</span>
           </div>
           <h2 class="card-title">航行日志</h2>
+        </div>
+        <div class="card-divider">
+          <span class="card-divider-line"></span>
+          <span class="card-divider-arrow">→</span>
         </div>
         <ul class="timeline">
           <li>
@@ -678,10 +801,14 @@
             <span class="place">西南大学 · 计算机科学与技术</span>
           </li>
         </ul>
+        <span class="card-chapter">— CHAPTER II —</span>
       </section>
 
       <!-- 03 Project 1 -->
       <section class="card">
+        <span class="card-corner-bl"></span>
+        <span class="card-corner-br"></span>
+        <span class="card-badge">MISSION 03</span>
         <div class="card-header">
           <div class="card-header-planet">
             <img
@@ -693,6 +820,10 @@
           </div>
           <h2 class="card-title">派工智慧地图</h2>
         </div>
+        <div class="card-divider">
+          <span class="card-divider-line"></span>
+          <span class="card-divider-arrow">→</span>
+        </div>
         <p class="project-meta">前端核心开发 · 2024.11 — 2025.03</p>
         <div class="tags">
           <span>PAMap SDK</span>
@@ -702,7 +833,8 @@
         </div>
         <ul class="highlights">
           <li>
-            1 个月内对标第三方平台核心功能，完成派工区划管理、海量业务点位标注及空间数据分析
+            1
+            个月内对标第三方平台核心功能，完成派工区划管理、海量业务点位标注及空间数据分析
           </li>
           <li>
             零文档、紧周期下独立完成 PAMap SDK 摸索与业务功能落地，填补 GIS
@@ -711,10 +843,14 @@
           <li>DOM Marker → 瓦片图层渲染优化，支持 5 万+ 点位无卡顿</li>
           <li>跨平台底图融合方案，多图层叠加零成本解决底图数据过时问题</li>
         </ul>
+        <span class="card-chapter">— CHAPTER III —</span>
       </section>
 
       <!-- 04 Project 2 -->
       <section class="card">
+        <span class="card-corner-bl"></span>
+        <span class="card-corner-br"></span>
+        <span class="card-badge">MISSION 04</span>
         <div class="card-header">
           <div class="card-header-planet">
             <img
@@ -725,6 +861,10 @@
             <span class="card-num">04</span>
           </div>
           <h2 class="card-title">全球急难救援平台</h2>
+        </div>
+        <div class="card-divider">
+          <span class="card-divider-line"></span>
+          <span class="card-divider-arrow">→</span>
         </div>
         <p class="project-meta">前端核心开发 · 2025.08 — 2025.11</p>
         <p>
@@ -745,10 +885,14 @@
           <li>高德地图标准化接入及 SDK 深度封装，构建统一 GIS 交互底座</li>
           <li>WebSocket 实时通信 + 消息中心页面，保障救援指令即时触达</li>
         </ul>
+        <span class="card-chapter">— CHAPTER IV —</span>
       </section>
 
       <!-- 05 Contact -->
       <section class="card">
+        <span class="card-corner-bl"></span>
+        <span class="card-corner-br"></span>
+        <span class="card-badge">MISSION 05</span>
         <div class="card-header">
           <div class="card-header-planet">
             <img
@@ -760,11 +904,20 @@
           </div>
           <h2 class="card-title">通讯面板</h2>
         </div>
+        <div class="card-divider">
+          <span class="card-divider-line"></span>
+          <span class="card-divider-arrow">→</span>
+        </div>
         <ul class="contacts">
           <li>
             <a href="mailto:floriali802@163.com" class="contact-item">
               <span class="contact-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
                   <rect x="3" y="5" width="18" height="14" rx="2" />
                   <path d="M3 7l9 6 9-6" />
                 </svg>
@@ -779,8 +932,15 @@
           <li>
             <a href="tel:18923757089" class="contact-item">
               <span class="contact-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                  <path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7 12.8 12.8 0 00.7 2.8 2 2 0 01-.5 2.1L8 9.9a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.5 12.8 12.8 0 002.8.7 2 2 0 011.7 2z" />
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <path
+                    d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7 12.8 12.8 0 00.7 2.8 2 2 0 01-.5 2.1L8 9.9a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.5 12.8 12.8 0 002.8.7 2 2 0 011.7 2z"
+                  />
                 </svg>
               </span>
               <span class="contact-text">
@@ -799,7 +959,9 @@
             >
               <span class="contact-icon">
                 <svg viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.4.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.6-4.04-1.6-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.3 3.5 1 .1-.78.42-1.3.76-1.6-2.66-.3-5.46-1.33-5.46-5.93 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016 0C17.3 4.44 18.3 4.76 18.3 4.76c.66 1.66.25 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.93.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.82.58A12 12 0 0024 12c0-6.63-5.37-12-12-12z" />
+                  <path
+                    d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.2 11.4.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.6-4.04-1.6-.54-1.38-1.33-1.75-1.33-1.75-1.09-.74.08-.73.08-.73 1.2.08 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.3 3.5 1 .1-.78.42-1.3.76-1.6-2.66-.3-5.46-1.33-5.46-5.93 0-1.31.47-2.38 1.23-3.22-.12-.3-.53-1.52.12-3.18 0 0 1-.32 3.3 1.23a11.5 11.5 0 016 0C17.3 4.44 18.3 4.76 18.3 4.76c.66 1.66.25 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.8 5.63-5.48 5.93.43.37.81 1.1.81 2.22v3.29c0 .32.22.7.82.58A12 12 0 0024 12c0-6.63-5.37-12-12-12z"
+                  />
                 </svg>
               </span>
               <span class="contact-text">
@@ -812,7 +974,12 @@
           <li>
             <button type="button" class="contact-item" data-copy="xxyyyiiiii">
               <span class="contact-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
                   <path d="M8 12a4 4 0 108 0 4 4 0 00-8 0z" />
                   <path d="M3 12c0 4.97 4.03 9 9 9s9-4.03 9-9-4.03-9-9-9" />
                 </svg>
@@ -825,13 +992,14 @@
             </button>
           </li>
         </ul>
+        <span class="card-chapter">— CHAPTER V —</span>
       </section>
     </main>
 
     <footer>
       <p class="footer-quote">感谢光临这片小小星域</p>
       <a href="index.html" class="footer-cta">
-        <span>→ 在桌面端开启完整旅程</span>
+        <span>用电脑开启完整体验 →</span>
       </a>
       <span class="footer-sign">LIKANGJUE · 2026</span>
     </footer>
@@ -841,7 +1009,7 @@
         // ===== Starfield (ported from main site ParticleSystem) =====
         const canvas = document.getElementById("mobile-stars");
         const reduceMotion = window.matchMedia(
-          "(prefers-reduced-motion: reduce)"
+          "(prefers-reduced-motion: reduce)",
         ).matches;
         if (canvas) {
           const ctx = canvas.getContext("2d");
@@ -914,15 +1082,7 @@
               ctx.beginPath();
               ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
               ctx.fillStyle =
-                "rgba(" +
-                s.r +
-                "," +
-                s.g +
-                "," +
-                s.b +
-                "," +
-                s.opacity +
-                ")";
+                "rgba(" + s.r + "," + s.g + "," + s.b + "," + s.opacity + ")";
               ctx.fill();
             }
           }
@@ -952,7 +1112,7 @@
               }
             });
           },
-          { threshold: 0.12, rootMargin: "0px 0px -40px 0px" }
+          { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
         );
         document.querySelectorAll(".card").forEach(function (el) {
           io.observe(el);
@@ -973,18 +1133,21 @@
               }, 1800);
             };
             if (navigator.clipboard && navigator.clipboard.writeText) {
-              navigator.clipboard.writeText(text).then(done).catch(function () {
-                // fallback
-                const ta = document.createElement("textarea");
-                ta.value = text;
-                document.body.appendChild(ta);
-                ta.select();
-                try {
-                  document.execCommand("copy");
-                  done();
-                } catch (e) {}
-                document.body.removeChild(ta);
-              });
+              navigator.clipboard
+                .writeText(text)
+                .then(done)
+                .catch(function () {
+                  // fallback
+                  const ta = document.createElement("textarea");
+                  ta.value = text;
+                  document.body.appendChild(ta);
+                  ta.select();
+                  try {
+                    document.execCommand("copy");
+                    done();
+                  } catch (e) {}
+                  document.body.removeChild(ta);
+                });
             } else {
               const ta = document.createElement("textarea");
               ta.value = text;
