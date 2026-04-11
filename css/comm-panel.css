@@ -526,7 +526,7 @@
   transform: none;
 }
 .comm-monitor-main .comm-screen {
-  min-height: 200px;
+  min-height: 230px;
 }
 .comm-monitor-main .comm-pad {
   display: flex;
@@ -535,7 +535,7 @@
   justify-content: center;
   text-align: center;
   height: 100%;
-  min-height: 180px;
+  min-height: 210px;
 }
 .comm-main-sys {
   font-family: "Share Tech Mono", monospace;
@@ -799,6 +799,46 @@
   border: 1px solid #3d3350;
 }
 
+/* === 主屏微信二维码 === */
+.comm-main-qr {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 170px;
+  height: 170px;
+  border-radius: 6px;
+  background: #000;
+  image-rendering: crisp-edges;
+  filter: drop-shadow(0 0 16px rgba(165, 85, 94, 0.45));
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+.comm-main-qr.show {
+  display: block;
+  animation: commQrOn 0.5s ease-out;
+}
+.comm-main-qr.comm-hide {
+  display: none !important;
+}
+@keyframes commQrOn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scaleY(0.02);
+    filter: brightness(3) drop-shadow(0 0 16px rgba(165, 85, 94, 0.45));
+  }
+  40% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scaleY(1);
+    filter: brightness(2.2) drop-shadow(0 0 16px rgba(165, 85, 94, 0.45));
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scaleY(1);
+    filter: brightness(1) drop-shadow(0 0 16px rgba(165, 85, 94, 0.45));
+  }
+}
+
 /* === 响应式 === */
 @media (max-width: 680px) {
   .comm-screen-wall {
@@ -813,5 +853,9 @@
   }
   .comm-console {
     padding: 20px 16px 16px;
+  }
+  .comm-main-qr {
+    width: 150px;
+    height: 150px;
   }
 }

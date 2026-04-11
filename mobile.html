@@ -668,6 +668,64 @@
         letter-spacing: 0.2em;
       }
 
+      /* ===== WeChat QR Modal ===== */
+      .wechat-qr-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        padding: 24px;
+        background: rgba(10, 8, 15, 0.92);
+        backdrop-filter: blur(10px);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      .wechat-qr-modal.open {
+        display: flex;
+        opacity: 1;
+      }
+      .wechat-qr-modal img {
+        width: min(78vw, 320px);
+        height: auto;
+        aspect-ratio: 1 / 1;
+        border-radius: 14px;
+        box-shadow:
+          0 0 0 1px rgba(243, 112, 67, 0.2),
+          0 0 32px rgba(165, 85, 94, 0.3),
+          0 12px 40px rgba(0, 0, 0, 0.55);
+      }
+      .wechat-qr-caption {
+        font-family: "Orbitron", monospace;
+        font-size: 0.78rem;
+        color: var(--accent);
+        letter-spacing: 0.15em;
+        margin: 0;
+      }
+      .wechat-qr-close {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        border: 1px solid rgba(243, 112, 67, 0.35);
+        background: rgba(46, 34, 62, 0.85);
+        color: var(--accent);
+        font-size: 26px;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+      }
+      .wechat-qr-close:active {
+        background: rgba(243, 112, 67, 0.15);
+      }
+
       /* ===== Reduced Motion ===== */
       @media (prefers-reduced-motion: reduce) {
         *,
@@ -1021,7 +1079,7 @@
             </a>
           </li>
           <li>
-            <button type="button" class="contact-item" data-copy="xxyyyiiiii">
+            <button type="button" class="contact-item" data-qr="1">
               <span class="contact-icon">
                 <svg
                   viewBox="0 0 24 24"
@@ -1035,15 +1093,24 @@
               </span>
               <span class="contact-text">
                 <span class="contact-label">WECHAT</span>
-                <span class="contact-value">xxyyyiiiii</span>
+                <span class="contact-value">扫码添加好友</span>
               </span>
-              <span class="contact-hint">复制</span>
+              <span class="contact-hint">查看 →</span>
             </button>
           </li>
         </ul>
         <span class="card-chapter">— CHAPTER VI —</span>
       </section>
     </main>
+
+    <div class="wechat-qr-modal" id="wechatQrModal" aria-hidden="true">
+      <button type="button" class="wechat-qr-close" aria-label="关闭">×</button>
+      <img
+        src="https://img.likangjue.space/assets/contact/wechat-qr-dark.webp"
+        alt="WeChat QR"
+      />
+      <p class="wechat-qr-caption">扫码添加好友</p>
+    </div>
 
     <footer>
       <p class="footer-quote">感谢光临这片小小星域</p>
@@ -1210,6 +1277,34 @@
             }
           });
         });
+
+        // WeChat QR modal
+        const qrModal = document.getElementById("wechatQrModal");
+        if (qrModal) {
+          const openQr = function () {
+            qrModal.classList.add("open");
+            qrModal.setAttribute("aria-hidden", "false");
+            document.body.style.overflow = "hidden";
+          };
+          const closeQr = function () {
+            qrModal.classList.remove("open");
+            qrModal.setAttribute("aria-hidden", "true");
+            document.body.style.overflow = "";
+          };
+          document.querySelectorAll("[data-qr]").forEach(function (btn) {
+            btn.addEventListener("click", openQr);
+          });
+          qrModal.addEventListener("click", function (e) {
+            if (e.target === qrModal || e.target.closest(".wechat-qr-close")) {
+              closeQr();
+            }
+          });
+          document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape" && qrModal.classList.contains("open")) {
+              closeQr();
+            }
+          });
+        }
       })();
     </script>
   </body>

@@ -147,7 +147,16 @@
       "Bash(grep -n \"^\\\\\\\\..*{$\" /Users/likangjue/project/resume/css/style.css)",
       "Bash(wc -l /Users/likangjue/project/resume/css/*.css)",
       "Bash(grep -n \":focus\\\\|:focus-visible\" /Users/likangjue/project/resume/css/*.css)",
-      "Bash(find /Users/likangjue/project/resume -type f \\\\\\( -name \"*.css\" -o -name \"*.js\" -o -name \"*.html\" \\\\\\) -exec du -h {} +)"
+      "Bash(find /Users/likangjue/project/resume -type f \\\\\\( -name \"*.css\" -o -name \"*.js\" -o -name \"*.html\" \\\\\\) -exec du -h {} +)",
+      "Bash(ls -la ~/Desktop/qrcode*)",
+      "Bash(sips -g pixelWidth -g pixelHeight ~/Desktop/qrcode.jpg)",
+      "Bash(brew list:*)",
+      "Bash(rclone --config=/dev/null copyto /tmp/wechat-qr.webp R2:resume-assets/assets/contact/wechat-qr.webp --header-upload 'Content-Type: image/webp' --header-upload 'Cache-Control: public, max-age=31536000, immutable' -v)",
+      "Bash(curl -sI https://img.likangjue.space/assets/contact/wechat-qr.webp)",
+      "Bash(rclone --config=/dev/null copyto /tmp/wechat-qr-dark.webp R2:resume-assets/assets/contact/wechat-qr-dark.webp --header-upload 'Content-Type: image/webp' --header-upload 'Cache-Control: public, max-age=31536000, immutable' -v)",
+      "Bash(curl -sI https://img.likangjue.space/assets/contact/wechat-qr-dark.webp)",
+      "Bash(ls /tmp/wechat-qr*.webp)",
+      "Bash(rm -f /tmp/wechat-qr.webp /tmp/wechat-qr-dark.webp)"
     ]
   }
 }

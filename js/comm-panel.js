@@ -32,6 +32,8 @@ function closeCommPanel() {
       m.classList.remove("comm-on", "comm-turning-on");
       m.classList.add("comm-off");
     });
+  // 重置主屏二维码显示
+  hideCommMainQR();
 }
 
 // 点击遮罩关闭
@@ -133,6 +135,24 @@ function startCommTypewriter() {
   tick();
 }
 
+// === 主屏二维码显示/隐藏 ===
+function showCommMainQR() {
+  const qr = document.getElementById("commMainQr");
+  const prompt = document.querySelector(".comm-main-prompt");
+  const hint = document.querySelector(".comm-main-hint");
+  if (qr) qr.classList.add("show");
+  if (prompt) prompt.classList.add("comm-hide");
+  if (hint) hint.classList.add("comm-hide");
+}
+function hideCommMainQR() {
+  const qr = document.getElementById("commMainQr");
+  const prompt = document.querySelector(".comm-main-prompt");
+  const hint = document.querySelector(".comm-main-hint");
+  if (qr) qr.classList.remove("show");
+  if (prompt) prompt.classList.remove("comm-hide");
+  if (hint) hint.classList.remove("comm-hide");
+}
+
 // === 屏幕开关 ===
 function commToggle(el) {
   if (el.classList.contains("comm-monitor-main")) return;
@@ -163,6 +183,8 @@ function commToggle(el) {
       noise.style.opacity = ".7";
       commActiveNoise.add(noise);
     }
+    // 若关的是微信频道 → 同步隐藏主屏二维码
+    if (el.dataset.qr) hideCommMainQR();
   } else {
     // 开机
     el.classList.remove("comm-off");
@@ -179,17 +201,21 @@ function commToggle(el) {
       }
     }, 500);
 
-    // 自动复制 + 主屏提示
-    const copyText = el.dataset.copy;
-    if (copyText) {
-      navigator.clipboard
-        .writeText(copyText)
-        .then(() => {
-          showCommCopyMsg("✓ COPIED: " + copyText);
-        })
-        .catch(() => {
-          showCommCopyMsg("✓ " + copyText);
-        });
+    // 微信频道 → 主屏显示二维码,其他频道 → 复制 + 主屏提示
+    if (el.dataset.qr) {
+      showCommMainQR();
+    } else {
+      const copyText = el.dataset.copy;
+      if (copyText) {
+        navigator.clipboard
+          .writeText(copyText)
+          .then(() => {
+            showCommCopyMsg("✓ COPIED: " + copyText);
+          })
+          .catch(() => {
+            showCommCopyMsg("✓ " + copyText);
+          });
+      }
     }
   }
 }
@@ -199,10 +225,14 @@ function showCommCopyMsg(text) {
   const msgEl = document.getElementById("commCopyMsg");
   const promptEl = document.querySelector(".comm-main-prompt");
   const hintEl = document.querySelector(".comm-main-hint");
+  const qrEl = document.getElementById("commMainQr");
   if (!msgEl) return;
 
   if (promptEl) promptEl.classList.add("comm-hide");
   if (hintEl) hintEl.classList.add("comm-hide");
+  // 若主屏正展示二维码,复制提示时先临时隐藏,避免重叠
+  const qrWasShown = qrEl && qrEl.classList.contains("show");
+  if (qrWasShown) qrEl.classList.add("comm-hide");
 
   msgEl.classList.remove("comm-show");
   msgEl.textContent = text;
@@ -211,8 +241,13 @@ function showCommCopyMsg(text) {
 
   setTimeout(() => {
     msgEl.classList.remove("comm-show");
-    if (promptEl) promptEl.classList.remove("comm-hide");
-    if (hintEl) hintEl.classList.remove("comm-hide");
+    if (qrWasShown) {
+      // QR 仍然应该展示 → 保持 prompt/hint 隐藏,恢复 QR
+      qrEl.classList.remove("comm-hide");
+    } else {
+      if (promptEl) promptEl.classList.remove("comm-hide");
+      if (hintEl) hintEl.classList.remove("comm-hide");
+    }
   }, 2600);
 }
 
