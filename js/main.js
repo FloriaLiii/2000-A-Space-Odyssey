@@ -667,7 +667,7 @@
             "https://img.likangjue.space/assets/skills/poster.jpg",
           ],
           long: true,
-          desc: "慢慢铺一张长图是为了让努力都能被看见。",
+          desc: "敲得了代码,做得了海报。",
         },
       ],
     },
@@ -680,7 +680,7 @@
             "https://img.likangjue.space/assets/skills/team-chat.jpg",
           ],
           long: true,
-          desc: "接住所有琐碎是为了让大家只管尽兴。",
+          desc: "工作无小事，事事认真办",
         },
       ],
     },
@@ -2806,6 +2806,9 @@
             e.target.closest(".about-card-arc")
           )
             return;
+          // 翻转后点击人物专栏的问答区不翻回
+          if (card.classList.contains("flipped") && e.target.closest(".qa-box"))
+            return;
 
           var wasFlipped = card.classList.contains("flipped");
 
@@ -2837,6 +2840,70 @@
           }
         });
       });
+
+      // 人物专栏 · 问答打字机
+      (function setupQA() {
+        var qaBox = aboutSection.querySelector(".about-card-1 .qa-box");
+        if (!qaBox) return;
+        var display = qaBox.querySelector(".qa-display");
+        var btns = qaBox.querySelectorAll(".qa-btn");
+        var defaultText = display.getAttribute("data-default") || "";
+        var typingTimer = null;
+
+        function appendCursor() {
+          var c = document.createElement("span");
+          c.className = "qa-cursor";
+          display.appendChild(c);
+        }
+
+        function typeText(text) {
+          if (typingTimer) clearInterval(typingTimer);
+          display.textContent = "";
+          var i = 0;
+          typingTimer = setInterval(function () {
+            if (i >= text.length) {
+              clearInterval(typingTimer);
+              typingTimer = null;
+              appendCursor();
+              return;
+            }
+            display.append(text.charAt(i++));
+          }, 35);
+        }
+
+        btns.forEach(function (btn) {
+          btn.addEventListener("click", function (e) {
+            e.stopPropagation();
+            btns.forEach(function (b) {
+              b.classList.remove("active");
+            });
+            btn.classList.add("active");
+            typeText(btn.getAttribute("data-a") || "");
+          });
+        });
+
+        // 卡片翻回时重置为默认文案
+        var card1 = aboutSection.querySelector(".about-card-1");
+        if (card1) {
+          var observer = new MutationObserver(function () {
+            if (!card1.classList.contains("flipped")) {
+              if (typingTimer) {
+                clearInterval(typingTimer);
+                typingTimer = null;
+              }
+              btns.forEach(function (b) {
+                b.classList.remove("active");
+              });
+              display.textContent = defaultText;
+              appendCursor();
+            }
+          });
+          observer.observe(card1, {
+            attributes: true,
+            attributeFilter: ["class"],
+          });
+        }
+      })();
 
       // 图标彩蛋自动触发（封面小图标上播放爱心/蒸汽/旗子动画）
       var eggIcons = aboutSection.querySelectorAll(
