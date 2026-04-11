@@ -141,7 +141,13 @@
       "Bash(mkdir -p ~/Desktop/skills-to-upload)",
       "Bash(cp /Users/likangjue/project/resume/assets/skills/*.jpg ~/Desktop/skills-to-upload/)",
       "Bash(rclone cat:*)",
-      "Bash(xxd)"
+      "Bash(xxd)",
+      "Bash(find /Users/likangjue/project/resume/js -name \"*.js\" -exec wc -l {} +)",
+      "Bash(find /Users/likangjue/project/resume/assets -type f -exec ls -lh {} \\\\;)",
+      "Bash(grep -n \"^\\\\\\\\..*{$\" /Users/likangjue/project/resume/css/style.css)",
+      "Bash(wc -l /Users/likangjue/project/resume/css/*.css)",
+      "Bash(grep -n \":focus\\\\|:focus-visible\" /Users/likangjue/project/resume/css/*.css)",
+      "Bash(find /Users/likangjue/project/resume -type f \\\\\\( -name \"*.css\" -o -name \"*.js\" -o -name \"*.html\" \\\\\\) -exec du -h {} +)"
     ]
   }
 }
