@@ -69,6 +69,27 @@ body {
     auto;
 }
 
+/* === Keyboard Focus (a11y) === */
+:focus {
+  outline: none;
+}
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+  box-shadow: 0 0 0 4px rgba(243, 112, 67, 0.25);
+  transition:
+    outline-offset 0.15s ease,
+    box-shadow 0.15s ease;
+}
+a:focus-visible,
+button:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
 /* 尾焰粒子 */
 .cursor-trail {
   position: fixed;
