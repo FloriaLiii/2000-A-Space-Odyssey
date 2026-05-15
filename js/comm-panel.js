@@ -156,6 +156,17 @@ function hideCommMainQR() {
 // === 屏幕开关 ===
 function commToggle(el) {
   if (el.classList.contains("comm-monitor-main")) return;
+  if (el._commToggleLock) return;
+
+  // 清除上一次开机动画的残留 timeout
+  if (el._commTurnOnTimer) {
+    clearTimeout(el._commTurnOnTimer);
+    el._commTurnOnTimer = null;
+  }
+
+  // 短暂锁定，防止快速连点
+  el._commToggleLock = true;
+  setTimeout(() => { el._commToggleLock = false; }, 350);
 
   // 音效
   try {
@@ -193,7 +204,8 @@ function commToggle(el) {
       noise.style.opacity = ".8";
       commActiveNoise.add(noise);
     }
-    setTimeout(() => {
+    el._commTurnOnTimer = setTimeout(() => {
+      el._commTurnOnTimer = null;
       el.classList.remove("comm-turning-on");
       if (noise) {
         noise.style.opacity = "0";
