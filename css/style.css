@@ -3875,6 +3875,15 @@ html.is-loading {
   gap: 20px;
 }
 
+.mission-panel-title {
+  font-family: "Noto Serif SC", serif;
+  font-weight: 700;
+  font-size: clamp(18px, 1.8vw, 24px);
+  color: var(--white);
+  margin: 0;
+  letter-spacing: 0.02em;
+}
+
 .gis-meta {
   display: flex;
   align-items: center;
